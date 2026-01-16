@@ -3,242 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة إتقان التعليمية | الأستاذ عمران البراج</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>منصة إتقان | الأستاذ عمران البراج</title>
     <style>
         :root {
-            --main: #050b1a;
-            --accent: #38bdf8;
-            --neon: #6366f1;
+            --primary: #0a192f;
+            --accent: #64ffda;
+            --text-slate: #8892b0;
+            --white: #e6f1ff;
             --sidebar-w: 280px;
         }
 
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary);
+            color: var(--white);
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            background: var(--main);
-            color: #fff;
-            overflow-x: hidden;
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* خلفية متحركة احترافية */
-        #hero-bg {
+        /* خلفية جزيئات النيون المتحركة */
+        .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 80%);
             z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050b1a 100%);
-        }
-        
-        /* تأثير النجوم المتحركة */
-        .star {
-            position: absolute; background: white; border-radius: 50%;
-            opacity: 0.3; animation: moveStars 10s infinite linear;
-        }
-        @keyframes moveStars {
-            from { transform: translateY(0); }
-            to { transform: translateY(-100vh); }
         }
 
-        /* القائمة الجانبية */
+        /* Sidebar الاحترافي */
         .sidebar {
             width: var(--sidebar-w);
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            position: fixed; height: 100vh; right: 0; top: 0;
-            display: flex; flex-direction: column; padding: 40px 20px;
-            z-index: 1000;
+            background: rgba(2, 12, 27, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(100, 255, 218, 0.1);
+            position: fixed; height: 100vh; right: 0;
+            display: flex; flex-direction: column; padding: 40px 20px; z-index: 100;
         }
 
-        .sidebar-logo { text-align: center; margin-bottom: 40px; }
-        .sidebar-logo img { width: 140px; filter: drop-shadow(0 0 15px var(--accent)); transition: 0.5s; }
-        .sidebar-logo img:hover { transform: rotate(5deg) scale(1.1); }
+        .logo-container { text-align: center; margin-bottom: 50px; }
+        .logo-container img { 
+            width: 120px; border-radius: 20px; 
+            filter: drop-shadow(0 0 10px var(--accent));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         .nav-link {
-            padding: 18px 25px; margin: 12px 0; border-radius: 18px;
-            cursor: pointer; transition: 0.4s; font-weight: bold;
-            background: rgba(255,255,255,0.03); border: 1px solid transparent;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .nav-link:hover {
-            background: rgba(56, 189, 248, 0.15); border-color: var(--accent);
-            transform: translateX(-10px); color: var(--accent);
-        }
-        .nav-link.active {
-            background: linear-gradient(45deg, var(--accent), var(--neon));
-            color: #fff; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+            padding: 15px 20px; margin: 10px 0; border-radius: 12px;
+            cursor: pointer; font-weight: 600; color: var(--text-slate);
+            border: 1px solid transparent; display: flex; align-items: center; gap: 15px;
         }
 
-        /* المحتوى الرئيسي */
-        .content { margin-right: var(--sidebar-w); flex: 1; padding: 60px 40px; width: 100%; }
-        
-        .page { display: none; width: 100%; max-width: 1100px; margin: 0 auto; }
-        .active-page { display: block; animation: bounceInRight 0.8s; }
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent); background: rgba(100, 255, 218, 0.1);
+            border-color: var(--accent); transform: translateX(-10px);
+        }
 
-        /* البطاقات والأزرار */
+        /* Content Area */
+        .main-content {
+            margin-right: var(--sidebar-w); flex: 1; padding: 60px;
+            width: calc(100% - var(--sidebar-w));
+        }
+
+        .section { display: none; max-width: 1000px; margin: 0 auto; animation: slideIn 0.6s ease-out; }
+        .active-section { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* البطاقات الفاخرة */
         .glass-card {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            padding: 50px; border-radius: 35px; backdrop-filter: blur(10px);
-            text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            background: rgba(17, 34, 64, 0.7); border-radius: 20px;
+            padding: 40px; border: 1px solid rgba(100, 255, 218, 0.1);
+            box-shadow: 0 10px 30px rgba(2, 12, 27, 0.5);
         }
 
-        .subject-btn {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid var(--accent); color: white;
-            padding: 40px; border-radius: 25px; cursor: pointer;
-            font-size: 2rem; transition: 0.5s; position: relative;
-            overflow: hidden; margin-top: 30px;
-        }
-        .subject-btn::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: rgba(56, 189, 248, 0.1); transform: rotate(45deg); transition: 0.5s;
-        }
-        .subject-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px var(--accent); }
+        h1 { font-size: 3.5rem; color: var(--white); margin: 0; }
+        .highlight { color: var(--accent); }
 
-        /* الفيديوهات */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        .v-card {
-            background: rgba(255,255,255,0.03); border-radius: 25px; overflow: hidden;
-            transition: 0.4s; border: 1px solid rgba(255,255,255,0.05);
+        /* أزرار المواد المتحركة */
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .subject-card {
+            background: #112240; padding: 40px; border-radius: 15px;
+            text-align: center; cursor: pointer; border-bottom: 4px solid var(--accent);
+            position: relative; overflow: hidden;
         }
-        .v-card:hover { transform: translateY(-10px); border-color: var(--accent); }
-        .v-frame { position: relative; padding-bottom: 56.25%; height: 0; }
-        .v-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .v-title { padding: 20px; text-align: center; font-weight: bold; background: rgba(0,0,0,0.3); }
+        .subject-card:hover { transform: translateY(-10px); background: #1d3359; }
 
-        /* الإحصائيات */
-        .counter-badge {
-            margin-top: auto; background: rgba(0,0,0,0.4); padding: 15px;
-            border-radius: 15px; text-align: center; border: 1px solid rgba(56,189,248,0.2);
-        }
+        /* فيديوهات اليوتيوب */
+        .video-box { background: #020c1b; border-radius: 15px; overflow: hidden; margin-bottom: 30px; border: 1px solid rgba(100,255,218,0.1); }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:none; }
+        .video-title { padding: 15px; color: var(--accent); font-weight: bold; }
 
-        /* الفورم */
-        input, textarea {
-            width: 100%; padding: 20px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-            color: white; margin-bottom: 20px; transition: 0.3s;
-        }
-        input:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); outline: none; }
-        .send-btn {
-            background: var(--accent); color: var(--main); padding: 20px;
-            border: none; border-radius: 15px; width: 100%; font-weight: 800;
-            cursor: pointer; font-size: 1.2rem; transition: 0.4s;
-        }
-        .send-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--accent); }
-
-        @media (max-width: 900px) {
+        /* التجاوب مع الموبايل */
+        @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
-            .content { margin-right: 0; padding: 30px 20px; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; border-left: none; border-bottom: 1px solid var(--accent); }
+            .main-content { margin-right: 0; padding: 20px; width: 100%; }
+            h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="hero-bg"></div>
+    <div class="bg-overlay"></div>
 
     <aside class="sidebar">
-        <div class="sidebar-logo">
-            <img src="1708362624508.png" alt="Etqan Logo">
+        <div class="logo-container">
+            <img src="logo.png" alt="شعار إتقان">
+            <h3 style="color: var(--accent); margin-top: 15px;">منصة إتقان</h3>
         </div>
         <nav>
-            <div class="nav-link active" onclick="nav('home', this)">الرئيسية</div>
-            <div class="nav-link" onclick="nav('courses', this)">المواد التعليمية</div>
-            <div class="nav-link" onclick="nav('suggest', this)">اقترح مادة</div>
+            <div class="nav-link active" onclick="showSection('home', this)">الرئيسية</div>
+            <div class="nav-item-sub" style="margin-right: 15px; font-size: 0.8rem; color: var(--accent); opacity: 0.7;">المواد التعليمية:</div>
+            <div class="nav-link" onclick="showSection('subjects', this)">مواد جامعة البلقاء</div>
+            <div class="nav-link" onclick="showSection('suggest', this)">اقترح مادة</div>
         </nav>
-        <div class="counter-badge">
-            <small style="opacity:0.6">إجمالي الزيارات</small>
-            <div id="vits" style="font-size:1.5rem; color:var(--accent); font-weight:bold;">0</div>
+        <div style="margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-slate);">
+            زيارات المنصة: <span id="count" style="color: var(--accent);">0</span>
         </div>
     </aside>
 
-    <main class="content">
-        <section id="home" class="page active-page">
-            <div class="glass-card animate__animated animate__fadeInUp">
-                <h1 style="font-size: 3.5rem; margin-bottom: 10px;">جامعة البلقاء التطبيقية</h1>
-                <h2 style="color: var(--accent); font-weight: 400; margin-bottom: 30px;">شروحات الأستاذ عمران البراج</h2>
-                <p style="font-size: 1.3rem; line-height: 2; opacity: 0.9;">
-                    أهلاً بكم في المنصة التعليمية المتخصصة لطلابنا في البلقاء. <br>
-                    نقدم لكم محتوى تعليمي مصمم بدقة ليتناسب مع احتياجاتكم الدراسية، <br>
-                    مهمتنا هي تبسيط الرياضيات وجعل التميز في متناول يديك.
+    <main class="main-content">
+        <section id="home" class="section active-section">
+            <div class="glass-card">
+                <p class="highlight" style="font-family: monospace;">مرحباً بكم في</p>
+                <h1>منصة إتقان الرقمية</h1>
+                <h2 style="color: var(--text-slate);">بإشراف الأستاذ <span class="highlight">عمران البراج</span></h2>
+                <p style="line-height: 1.8; font-size: 1.1rem; color: var(--text-slate); margin-top: 20px;">
+                    هذه المنصة مخصصة لتقديم شروحات احترافية لمواد <strong>جامعة البلقاء التطبيقية</strong>. 
+                    هدفنا هو تبسيط المفاهيم الرياضية والهندسية لطلابنا بأحدث الوسائل التقنية.
                 </p>
             </div>
         </section>
 
-        <section id="courses" class="page">
-            <h1 style="text-align: center; margin-bottom: 50px;">اختر المادة التعليمية</h1>
-            <div class="subject-btn animate__animated animate__pulse animate__infinite" onclick="nav('videos', null)">
-                <div>التحليل الوسيط</div>
-                <div style="font-size: 1rem; opacity: 0.6; margin-top: 10px;">شرح كامل - ١٥ محاضرة</div>
+        <section id="subjects" class="section">
+            <h2 class="highlight">المواد المتوفرة حالياً</h2>
+            <div class="subject-grid">
+                <div class="subject-card" onclick="showSection('analysis-content', null)">
+                    <h2 style="margin:0;">التحليل الوسيط</h2>
+                    <p style="color: var(--text-slate);">دورة كاملة - ١٥ محاضرة مرئية</p>
+                    <span style="font-size: 0.8rem; color: var(--accent);">إضغط لمشاهدة المحاضرات ←</span>
+                </div>
             </div>
         </section>
 
-        <section id="videos" class="page">
-            <button onclick="nav('courses', null)" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:10px 25px; border-radius:15px; cursor:pointer; margin-bottom:30px;">← العودة للمواد</button>
-            <div class="video-grid" id="v-list"></div>
+        <section id="analysis-content" class="section">
+            <button onclick="showSection('subjects', null)" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:10px; border-radius:8px; cursor:pointer; margin-bottom:20px;">← العودة للمواد</button>
+            <div id="v-list"></div>
         </section>
 
-        <section id="suggest" class="page">
+        <section id="suggest" class="section">
             <div class="glass-card">
-                <h2>صندوق الاقتراحات</h2>
-                <p style="margin-bottom:40px; opacity:0.7;">أخبرنا ما هي المادة القادمة التي تود أن نقوم بشرحها؟</p>
-                <form action="https://formspree.io/f/Your_ID" method="POST" style="max-width: 600px; margin: 0 auto; text-align: right;">
-                    <input type="text" name="name" placeholder="الاسم الكامل" required>
-                    <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-                    <textarea name="msg" rows="5" placeholder="اكتب اسم المادة وتفاصيلها..." required></textarea>
-                    <button type="submit" class="send-btn">إرسال الاقتراح الآن</button>
+                <h2 class="highlight">صندوق المقترحات</h2>
+                <p>ما هي المادة التي تود شرحها في جامعة البلقاء؟</p>
+                <form action="https://formspree.io/f/Your_ID" method="POST">
+                    <input type="text" name="name" placeholder="الاسم" style="width:100%; padding:15px; margin-bottom:15px; background:#0a192f; border:1px solid var(--text-slate); color:white; border-radius:8px;">
+                    <textarea name="msg" placeholder="اسم المادة وتفاصيلها..." rows="5" style="width:100%; padding:15px; margin-bottom:15px; background:#0a192f; border:1px solid var(--text-slate); color:white; border-radius:8px;"></textarea>
+                    <button type="submit" style="width:100%; padding:15px; background:transparent; border:1px solid var(--accent); color:var(--accent); font-weight:bold; cursor:pointer; border-radius:8px;">إرسال الاقتراح</button>
                 </form>
             </div>
         </section>
     </main>
 
     <script>
-        // نظام التنقل السلس
-        function nav(pageId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active-page');
-            
-            if(el) el.classList.add('active');
-            else if(pageId === 'videos') document.querySelectorAll('.nav-link')[1].classList.add('active');
-            
+        function showSection(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById(id).classList.add('active-section');
+            if(btn) {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                btn.classList.add('active');
+            }
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         // عداد الزيارات
-        let v = localStorage.getItem('site_visits') || 0;
+        let v = localStorage.getItem('etqan_v') || 0;
         v++;
-        localStorage.setItem('site_visits', v);
-        document.getElementById('vits').innerText = v;
+        localStorage.setItem('etqan_v', v);
+        document.getElementById('count').innerText = v;
 
         // توليد الفيديوهات
         const ids = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
         const list = document.getElementById('v-list');
-        
         ids.forEach((id, i) => {
-            list.innerHTML += `
-                <div class="v-card animate__animated animate__fadeInUp">
-                    <div class="v-frame">
-                        <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
-                    </div>
-                    <div class="v-title">المحاضرة رقم ${i+1}</div>
-                </div>`;
+            list.innerHTML += `<div class="video-box"><div class="video-title">المحاضرة ${i+1}</div><div class="video-container"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe></div></div>`;
         });
-
-        // إضافة تأثير النجوم في الخلفية
-        const bg = document.getElementById('hero-bg');
-        for(let i=0; i<50; i++) {
-            let star = document.createElement('div');
-            star.className = 'star';
-            star.style.width = Math.random()*3+'px';
-            star.style.height = star.style.width;
-            star.style.left = Math.random()*100+'%';
-            star.style.top = Math.random()*100+'%';
-            star.style.animationDuration = (Math.random()*5 + 5)+'s';
-            bg.appendChild(star);
-        }
     </script>
 </body>
 </html>
