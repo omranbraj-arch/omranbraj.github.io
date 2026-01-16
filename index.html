@@ -6,174 +6,56 @@
     <title>منصة إتقان التعليمية | الأستاذ عمران البراج</title>
     <style>
         :root {
-            --primary: #003366; /* لون جامعة البلقاء الرسمي */
+            --primary: #003366; 
             --accent: #f39c12;
-            --sidebar-width: 280px;
-            --glass: rgba(255, 255, 255, 0.95);
+            --sidebar-width: 260px;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
             display: flex;
-            min-height: 100vh;
-            /* خلفية جامعة البلقاء التطبيقية - السلط */
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://albalqa.edu.jo/images/slider/1.jpg'); 
+            background: #2c3e50;
+            /* استخدام رابط صورة بديل ومستقر لجامعة البلقاء */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                              url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+            color: #333;
+            min-height: 100vh;
         }
 
         /* القائمة الجانبية */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--primary);
+            background: rgba(0, 51, 102, 0.95);
             color: white;
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
             right: 0;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            top: 0;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
             z-index: 1000;
         }
 
-        .sidebar h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; font-size: 1.5rem; }
-
         .nav-item {
             padding: 15px;
-            margin: 5px 0;
+            margin: 10px 0;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 10px;
             transition: 0.3s;
+            background: rgba(255,255,255,0.1);
+            text-align: center;
             font-weight: bold;
-            display: flex;
-            align-items: center;
         }
 
-        .nav-item:hover, .nav-item.active-nav { background: var(--accent); color: white; }
-
-        /* المحتوى الرئيسي */
-        .main-content {
-            margin-right: var(--sidebar-width);
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
+        .nav-item:hover, .nav-item.active-nav {
+            background: var(--accent);
+            color: white;
         }
 
-        .content-card {
-            background: var(--glass);
-            width: 100%;
-            max-width: 900px;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            display: none;
-            min-height: 400px;
-        }
-
-        .show { display: block; animation: slideIn 0.4s ease-out; }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* تنسيق الفيديوهات */
-        .video-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
-        .video-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #ddd; }
-        .video-card h4 { margin-top: 0; color: var(--primary); }
-        .iframe-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; }
-        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        /* العداد والاقتراحات */
-        .stats { position: absolute; bottom: 20px; font-size: 0.9rem; opacity: 0.8; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
-        .submit-btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
-
-        /* للموبايل */
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; }
-            .main-content { margin-right: 0; padding: 20px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="sidebar">
-        <h2>منصة إتقان</h2>
-        <p style="font-size: 0.8rem; color: #ddd;">الأستاذ عمران البراج</p>
-        <hr style="width: 100%; opacity: 0.3;">
-        
-        <div class="nav-item active-nav" onclick="showPage('home', this)">الرئيسية</div>
-        <div class="nav-item" onclick="showPage('videos', this)">محاضرات التحليل الوسيط</div>
-        <div class="nav-item" onclick="showPage('suggest', this)">اقترح مادة جديدة</div>
-        
-        <div class="stats">
-            <p>إحصائيات المنصة:</p>
-            <p>عدد الزيارات: <span id="v-count">1</span></p>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div id="home" class="content-card show">
-            <h1 style="color: var(--primary);">مرحباً بك في منصة إتقان التعليمية</h1>
-            <p style="font-size: 1.2rem;">هذه المنصة مخصصة لطلاب جامعة البلقاء التطبيقية، تهدف لتوفير أفضل الشروحات لمواد الرياضيات تحت إشراف الأستاذ عمران البراج.</p>
-            <img src="https://albalqa.edu.jo/images/logo.png" alt="Logo" style="width: 150px; margin-top: 20px;">
-        </div>
-
-        <div id="videos" class="content-card">
-            <h2 style="color: var(--primary);">قسم الرياضيات - التحليل الوسيط</h2>
-            <div class="video-grid" id="video-gallery">
-                </div>
-        </div>
-
-        <div id="suggest" class="content-card">
-            <h2>اقترح المادة المراد شرحها لاحقاً</h2>
-            <p>رأيك يهمنا، أخبرنا ما هي المواد التي تحتاج لشرحها مستقبلاً.</p>
-            <form action="https://formspree.io/f/Your_ID" method="POST">
-                <input type="text" name="name" placeholder="اسم الطالب">
-                <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-                <textarea name="suggestion" rows="5" placeholder="اكتب اسم المادة وتفاصيلها هنا..." required></textarea>
-                <button type="submit" class="submit-btn">إرسال الاقتراح</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // التبديل بين الصفحات
-        function showPage(pageId, element) {
-            document.querySelectorAll('.content-card').forEach(c => c.classList.remove('show'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            
-            document.getElementById(pageId).classList.add('show');
-            element.classList.add('active-nav');
-        }
-
-        // عداد الزيارات
-        let v = localStorage.getItem('site_visits') || 0;
-        v++;
-        localStorage.setItem('site_visits', v);
-        document.getElementById('v-count').innerText = v;
-
-        // توليد الفيديوهات الـ 15
-        const videoIDs = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
-        const gallery = document.getElementById('video-gallery');
-        
-        videoIDs.forEach((id, index) => {
-            gallery.innerHTML += `
-                <div class="video-card">
-                    <h4>المحاضرة ${index + 1}</h4>
-                    <div class="iframe-container">
-                        <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
-                    </div>
-                </div>
-            `;
-        });
-    </script>
-</body>
-</html>
+        /* المح
