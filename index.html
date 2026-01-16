@@ -6,137 +6,178 @@
     <title>منصة إتقان | الأستاذ عمران البراج</title>
     <style>
         :root {
-            --bg: #020c1b;
-            --accent: #64ffda;
-            --glass: rgba(17, 34, 64, 0.9);
+            --primary: #1a1c2c;
+            --accent: #4ecca3;
+            --glass-bg: rgba(255, 255, 255, 0.05);
             --sidebar-w: 280px;
         }
 
-        * { box-sizing: border-box; transition: 0.3s; }
+        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
         body {
-            background: var(--bg);
-            color: #e6f1ff;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--primary);
+            color: #eeeeee;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Sidebar */
+        /* أنيميشن الخلفية الجديد: جزيئات سحابية */
+        #particle-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: linear-gradient(45deg, #1a1c2c, #4a192c);
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute; bottom: -100px; width: 40px; height: 40px;
+            background: rgba(255, 255, 255, 0.1); border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+        }
+        @keyframes rise {
+            from { transform: translateY(0) rotate(0deg); opacity: 1; }
+            to { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Sidebar بتصميم زجاجي */
         .sidebar {
             width: var(--sidebar-w);
-            background: #020c1b;
-            border-left: 1px solid rgba(100, 255, 218, 0.1);
+            background: rgba(26, 28, 44, 0.8);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed; height: 100vh; right: 0;
             display: flex; flex-direction: column; padding: 40px 20px; z-index: 100;
         }
 
-        .logo-box { text-align: center; margin-bottom: 40px; }
+        .logo-box { text-align: center; margin-bottom: 50px; }
         .logo-box img { 
-            width: 140px; border-radius: 15px; 
-            filter: drop-shadow(0 0 10px var(--accent));
+            width: 160px; border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: soft-glow 3s infinite alternate;
         }
+        @keyframes soft-glow { from { filter: brightness(1); } to { filter: brightness(1.3); } }
 
         .nav-link {
-            padding: 15px; margin: 8px 0; border-radius: 10px;
-            cursor: pointer; font-weight: bold; color: #8892b0;
-            border: 1px solid transparent;
+            padding: 16px 20px; margin: 12px 0; border-radius: 15px;
+            cursor: pointer; font-weight: bold; color: #aaa;
+            background: var(--glass-bg); display: flex; align-items: center; gap: 15px;
         }
-
         .nav-link:hover, .nav-link.active {
-            color: var(--accent); background: rgba(100, 255, 218, 0.1);
-            border-color: var(--accent);
+            color: white; background: var(--accent);
+            transform: scale(1.05); box-shadow: 0 10px 20px rgba(78, 204, 163, 0.3);
         }
 
-        /* Content Area */
-        .main { margin-right: var(--sidebar-w); flex: 1; padding: 40px; width: 100%; }
-        .section { display: none; max-width: 900px; margin: 0 auto; animation: fadeInUp 0.5s; }
+        .main { margin-right: var(--sidebar-w); flex: 1; padding: 60px; width: 100%; }
+        .section { display: none; max-width: 1000px; margin: 0 auto; animation: fade-in 0.8s forwards; }
         .active-section { display: block; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* الكروت */
-        .card {
-            background: var(--glass); padding: 40px; border-radius: 20px;
-            border: 1px solid rgba(100, 255, 218, 0.1); text-align: center;
-            cursor: pointer; margin-bottom: 25px;
+        /* البطاقات */
+        .glass-card {
+            background: var(--glass-bg); padding: 50px; border-radius: 30px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        .card:hover { border-color: var(--accent); transform: scale(1.02); }
+
+        .step-card {
+            background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px;
+            cursor: pointer; border: 2px solid transparent; margin-top: 30px;
+        }
+        .step-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.1); }
 
         .btn-back {
-            background: none; border: 1px solid var(--accent); color: var(--accent);
-            padding: 10px 20px; border-radius: 10px; cursor: pointer; margin-bottom: 20px;
+            background: var(--accent); border: none; color: #1a1c2c;
+            padding: 12px 30px; border-radius: 12px; cursor: pointer; margin-bottom: 30px; font-weight: 800;
         }
 
         /* الفيديوهات */
-        .video-box { background: #112240; border-radius: 15px; margin-bottom: 30px; overflow: hidden; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-container iframe { position: absolute; width: 100%; height: 100%; border: none; right: 0; }
+        .video-box { background: rgba(0,0,0,0.4); border-radius: 25px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.05); }
+        .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; }
+        .iframe-wrap iframe { position: absolute; width: 100%; height: 100%; border: none; right: 0; }
 
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-left: none; }
-            .main { margin-right: 0; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
+            .main { margin-right: 0; padding: 30px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="particle-bg"></div>
 
     <aside class="sidebar">
         <div class="logo-box">
             <img src="IMG-20260117-WA0013.jpg" alt="Logo">
         </div>
         <nav>
-            <div class="nav-link active" onclick="go('home', this)">الرئيسية</div>
-            <div class="nav-link" onclick="go('courses', this)">المواد التعليمية</div>
-            <div class="nav-link" onclick="go('suggest', this)">اقترح مادة</div>
+            <div class="nav-link active" onclick="go('home', this)">🏠 الرئيسية</div>
+            <div class="nav-link" onclick="go('courses', this)">📚 المواد التعليمية</div>
+            <div class="nav-link" onclick="go('suggest', this)">💡 اقترح مادة</div>
         </nav>
     </aside>
 
     <main class="main">
         <section id="home" class="section active-section">
-            <div class="card">
-                <h1>منصة إتقان</h1>
-                <p>مرحباً بكم في الموقع الرسمي للأستاذ عمران البراج لطلاب جامعة البلقاء.</p>
+            <div class="glass-card">
+                <h1 style="font-size: 3rem; color: var(--accent);">منصة إتقان الرقمية</h1>
+                <p style="font-size: 1.3rem; line-height: 2;">
+                    مرحباً بكم في الموقع التعليمي المتطور للأستاذ <strong>عمران البراج</strong>.<br>
+                    نسعى لتقديم أفضل تجربة تعليمية لطلاب جامعة البلقاء التطبيقية.
+                </p>
             </div>
         </section>
 
         <section id="courses" class="section">
-            <h2 class="accent-text">اختر المادة:</h2>
-            <div class="card" onclick="go('teachers', null)">
-                <h2 style="color:var(--accent)">التحليل الوسيط</h2>
-                <p>اضغط لاختيار المدرس</p>
+            <h2 style="text-align: center;">اختر المادة</h2>
+            <div class="step-card" onclick="go('teachers', null)">
+                <h1 style="margin:0;">التحليل الوسيط</h1>
+                <p>سلسلة دروس مخصصة لطلاب البلقاء</p>
             </div>
         </section>
 
         <section id="teachers" class="section">
-            <button class="btn-back" onclick="go('courses', null)">← عودة للمواد</button>
-            <h2 class="accent-text">اختر المدرس لمادة التحليل الوسيط:</h2>
-            <div class="card" onclick="go('vids', null)">
-                <h2 style="color:var(--accent)">الأستاذ عمران البراج</h2>
-                <p>مشاهدة سلسلة المحاضرات (15 فيديو)</p>
+            <button class="btn-back" onclick="go('courses', null)">← العودة للمواد</button>
+            <h2 style="text-align: center;">اختر المدرس</h2>
+            <div class="step-card" onclick="go('videos', null)">
+                <h1 style="margin:0; color: var(--accent);">الأستاذ عمران البراج</h1>
+                <p>اضغط للدخول إلى قائمة الـ 15 محاضرة</p>
             </div>
         </section>
 
-        <section id="vids" class="section">
+        <section id="videos" class="section">
             <button class="btn-back" onclick="go('teachers', null)">← عودة لاختيار المدرس</button>
-            <div id="video-list"></div>
+            <div id="video-container"></div>
         </section>
 
         <section id="suggest" class="section">
-            <div class="card">
-                <h2>اقترح مادة</h2>
-                <form action="https://formspree.io/f/YourID" method="POST">
-                    <input type="text" placeholder="الاسم" style="width:100%; padding:15px; margin-bottom:15px; border-radius:8px;">
-                    <textarea placeholder="المادة..." rows="4" style="width:100%; padding:15px; margin-bottom:15px; border-radius:8px;"></textarea>
-                    <button type="submit" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:8px; font-weight:bold;">إرسال</button>
+            <div class="glass-card">
+                <h2>صندوق الاقتراحات</h2>
+                <form action="https://formspree.io/f/YourID" method="POST" style="margin-top:20px;">
+                    <input type="text" placeholder="اسمك الكامل" style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;">
+                    <textarea placeholder="المادة التي تقترحها..." rows="4" style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;"></textarea>
+                    <button type="submit" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">إرسال الآن</button>
                 </form>
             </div>
         </section>
     </main>
 
     <script>
+        // إنشاء فقاعات الخلفية المتحركة
+        const bg = document.getElementById('particle-bg');
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.width = Math.random() * 60 + 20 + 'px';
+            bubble.style.height = bubble.style.width;
+            bubble.style.animationDelay = Math.random() * 10 + 's';
+            bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
+            bg.appendChild(bubble);
+        }
+
         function go(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
@@ -147,13 +188,13 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        const videoIds = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
-        const grid = document.getElementById('video-list');
-        videoIds.forEach((id, i) => {
+        const ids = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
+        const grid = document.getElementById('video-container');
+        ids.forEach((id, i) => {
             grid.innerHTML += `
                 <div class="video-box">
-                    <div style="padding:15px; font-weight:bold;">المحاضرة ${i+1}</div>
-                    <div class="video-container">
+                    <div style="padding:15px; font-weight:bold; background:rgba(255,255,255,0.05);">محاضرة رقم ${i+1}</div>
+                    <div class="iframe-wrap">
                         <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
                     </div>
                 </div>`;
