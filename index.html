@@ -3,93 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة إتقان التعليمية | عمران البراج</title>
+    <title>منصة إتقان التعليمية | الأستاذ عمران البراج</title>
     <style>
-        :root { --primary: #004e92; --glass: rgba(255, 255, 255, 0.92); }
+        :root {
+            --primary: #003366; /* لون جامعة البلقاء الرسمي */
+            --accent: #f39c12;
+            --sidebar-width: 280px;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://amranbraj-arch.github.io/index.html'); /* سيتم استخدام صورتك المرفوعة */
-            background-size: cover; background-attachment: fixed; background-position: center;
+            display: flex;
+            min-height: 100vh;
+            /* خلفية جامعة البلقاء التطبيقية - السلط */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://albalqa.edu.jo/images/slider/1.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
         }
-        header { padding: 50px 20px; text-align: center; color: white; }
-        .container { max-width: 800px; margin: 0 auto 50px; padding: 15px; }
-        .card { background: var(--glass); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: none; text-align: center; }
-        .active { display: block; animation: fadeIn 0.5s; }
-        .btn { display: block; width: 100%; max-width: 400px; margin: 15px auto; padding: 18px; font-size: 1.2rem; font-weight: bold; color: white; background: var(--primary); border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
-        .btn:hover { transform: scale(1.03); background: #003666; }
-        .visitor-counter { color: white; margin-bottom: 20px; font-size: 1.1rem; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 15px; border-radius: 20px; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; box-sizing: border-box; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* القائمة الجانبية */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            right: 0;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .sidebar h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; font-size: 1.5rem; }
+
+        .nav-item {
+            padding: 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover, .nav-item.active-nav { background: var(--accent); color: white; }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-right: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-card {
+            background: var(--glass);
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: none;
+            min-height: 400px;
+        }
+
+        .show { display: block; animation: slideIn 0.4s ease-out; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* تنسيق الفيديوهات */
+        .video-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .video-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #ddd; }
+        .video-card h4 { margin-top: 0; color: var(--primary); }
+        .iframe-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* العداد والاقتراحات */
+        .stats { position: absolute; bottom: 20px; font-size: 0.9rem; opacity: 0.8; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
+        .submit-btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+
+        /* للموبايل */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-right: 0; padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="visitor-counter">عدد الزيارات: <span id="count">1</span></div>
-    <h1>منصة إتقان التعليمية</h1>
-    <p>بإشراف الأستاذ عمران البراج</p>
-</header>
-
-<div class="container">
-    <div id="step1" class="card active">
-        <h2>اختر التخصص</h2>
-        <button class="btn" onclick="go(2)">الرياضيات</button>
-        <button class="btn" style="background:#444" onclick="go('suggest')">اقترح مادة لشرحها لاحقاً</button>
+    <div class="sidebar">
+        <h2>منصة إتقان</h2>
+        <p style="font-size: 0.8rem; color: #ddd;">الأستاذ عمران البراج</p>
+        <hr style="width: 100%; opacity: 0.3;">
+        
+        <div class="nav-item active-nav" onclick="showPage('home', this)">الرئيسية</div>
+        <div class="nav-item" onclick="showPage('videos', this)">محاضرات التحليل الوسيط</div>
+        <div class="nav-item" onclick="showPage('suggest', this)">اقترح مادة جديدة</div>
+        
+        <div class="stats">
+            <p>إحصائيات المنصة:</p>
+            <p>عدد الزيارات: <span id="v-count">1</span></p>
+        </div>
     </div>
 
-    <div id="step2" class="card">
-        <h2>اختر المدرس</h2>
-        <button class="btn" onclick="go(3)">الأستاذ: عمران البراج</button>
-        <button onclick="go(1)">رجوع</button>
+    <div class="main-content">
+        <div id="home" class="content-card show">
+            <h1 style="color: var(--primary);">مرحباً بك في منصة إتقان التعليمية</h1>
+            <p style="font-size: 1.2rem;">هذه المنصة مخصصة لطلاب جامعة البلقاء التطبيقية، تهدف لتوفير أفضل الشروحات لمواد الرياضيات تحت إشراف الأستاذ عمران البراج.</p>
+            <img src="https://albalqa.edu.jo/images/logo.png" alt="Logo" style="width: 150px; margin-top: 20px;">
+        </div>
+
+        <div id="videos" class="content-card">
+            <h2 style="color: var(--primary);">قسم الرياضيات - التحليل الوسيط</h2>
+            <div class="video-grid" id="video-gallery">
+                </div>
+        </div>
+
+        <div id="suggest" class="content-card">
+            <h2>اقترح المادة المراد شرحها لاحقاً</h2>
+            <p>رأيك يهمنا، أخبرنا ما هي المواد التي تحتاج لشرحها مستقبلاً.</p>
+            <form action="https://formspree.io/f/Your_ID" method="POST">
+                <input type="text" name="name" placeholder="اسم الطالب">
+                <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
+                <textarea name="suggestion" rows="5" placeholder="اكتب اسم المادة وتفاصيلها هنا..." required></textarea>
+                <button type="submit" class="submit-btn">إرسال الاقتراح</button>
+            </form>
+        </div>
     </div>
 
-    <div id="step3" class="card">
-        <h2>اختر المادة</h2>
-        <button class="btn" onclick="go(4)">التحليل الوسيط</button>
-        <button onclick="go(2)">رجوع</button>
-    </div>
+    <script>
+        // التبديل بين الصفحات
+        function showPage(pageId, element) {
+            document.querySelectorAll('.content-card').forEach(c => c.classList.remove('show'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            
+            document.getElementById(pageId).classList.add('show');
+            element.classList.add('active-nav');
+        }
 
-    <div id="step4" class="card">
-        <h2>محاضرات التحليل الوسيط</h2>
-        <div id="gallery"></div>
-        <button class="btn" onclick="go(3)">رجوع لقائمة المواد</button>
-    </div>
+        // عداد الزيارات
+        let v = localStorage.getItem('site_visits') || 0;
+        v++;
+        localStorage.setItem('site_visits', v);
+        document.getElementById('v-count').innerText = v;
 
-    <div id="suggest" class="card">
-        <h2>اقترح مادة جديدة</h2>
-        <p>اكتب اسم المادة التي تريد شرحها وسأصلني طلبك فوراً</p>
-        <form action="https://formspree.io/f/Your_Email_ID" method="POST">
-            <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-            <textarea name="message" rows="4" placeholder="اسم المادة وتفاصيل إضافية" required></textarea>
-            <button type="submit" class="btn">إرسال الاقتراح</button>
-        </form>
-        <button onclick="go(1)">إلغاء</button>
-    </div>
-</div>
-
-<script>
-    // 1. عداد الزيارات (بسيط باستخدام التخزين المحلي)
-    let count = localStorage.getItem('visite_count') || 0;
-    count++;
-    localStorage.setItem('visite_count', count);
-    document.getElementById('count').innerText = count;
-
-    // 2. التنقل
-    function go(s) {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        document.getElementById(s === 'suggest' ? 'suggest' : 'step' + s).classList.add('active');
-        window.scrollTo(0,0);
-    }
-
-    // 3. المحاضرات
-    const ids = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
-    const gallery = document.getElementById('gallery');
-    ids.forEach((id, i) => {
-        gallery.innerHTML += `<div style="margin-bottom:30px"><h3>المحاضرة ${i+1}</h3><iframe width="100%" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`;
-    });
-</script>
-
+        // توليد الفيديوهات الـ 15
+        const videoIDs = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
+        const gallery = document.getElementById('video-gallery');
+        
+        videoIDs.forEach((id, index) => {
+            gallery.innerHTML += `
+                <div class="video-card">
+                    <h4>المحاضرة ${index + 1}</h4>
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
 </body>
 </html>
