@@ -3,215 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة إتقان | الأستاذ عمران البراج</title>
+    <title>منصة إتقان التعليمية | برو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg: #020c1b;
-            --accent: #64ffda;
-            --glass: rgba(17, 34, 64, 0.9);
-            --sidebar-w: 280px;
+            --deep-blue: #0a192f;
+            --royal-blue: #112240;
+            --electric-blue: #3a7bd5;
+            --cyan: #00d2ff;
+            --text-main: #e6f1ff;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
-        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
 
         body {
-            background: var(--bg);
-            color: #e6f1ff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background: radial-gradient(circle at top right, #1a2a6c, #b21f1f, #fdbb2d); /* خلفية ديناميكية */
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0; min-height: 100vh;
         }
 
-        /* أنيميشن خلفية متحركة خفيفة (نجوم تتحرك) */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 80%);
-            z-index: -1;
+        /* أنيميشن الخلفية */
+        .bg-animate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.1; z-index: -1;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-w);
-            background: #020c1b;
-            border-left: 1px solid rgba(100, 255, 218, 0.1);
-            position: fixed; height: 100vh; right: 0;
-            display: flex; flex-direction: column; padding: 40px 20px; z-index: 100;
+        /* شاشة تسجيل الدخول */
+        #auth-screen {
+            position: fixed; inset: 0; background: var(--deep-blue);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
         }
 
-        /* تم إلغاء شعار الزاوية ووضعه في المحتوى */
-        .sidebar-title {
-            color: var(--accent); font-size: 1.5rem; font-weight: bold;
-            text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px var(--accent);
+        .auth-card {
+            background: var(--royal-blue); padding: 40px; border-radius: 30px;
+            width: 90%; max-width: 450px; border: 1px solid var(--electric-blue);
+            text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: zoomIn 0.6s;
         }
 
-        .nav-link {
-            padding: 15px; margin: 8px 0; border-radius: 12px;
-            cursor: pointer; font-weight: bold; color: #8892b0;
-            border: 1px solid transparent; text-align: center;
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+        .auth-btn {
+            width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px;
+            cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-size: 1rem;
         }
 
-        .nav-link:hover, .nav-link.active {
-            color: var(--accent); background: rgba(100, 255, 218, 0.1);
-            border-color: var(--accent); transform: scale(1.05);
+        .google-btn { background: white; color: #444; }
+        .phone-btn { background: var(--electric-blue); color: white; }
+        .admin-btn { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); margin-top: 20px; }
+
+        /* الواجهة الرئيسية */
+        .wrapper { display: none; } /* تظهر بعد الدخول */
+
+        .header {
+            padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10, 25/ 47, 0.8); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass);
         }
 
-        /* Content Area */
-        .main { margin-right: var(--sidebar-w); flex: 1; padding: 40px; width: 100%; }
-        
-        /* مكان الشعار الجديد: في منتصف أعلى المحتوى */
-        .main-logo-header {
-            text-align: center; margin-bottom: 30px;
-            animation: float 3s ease-in-out infinite;
-        }
-        .main-logo-header img {
-            width: 180px; border-radius: 20px;
-            box-shadow: 0 0 30px rgba(100, 255, 218, 0.2);
-            border: 2px solid var(--accent);
-        }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--cyan); }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        /* نظام التقدم */
+        .progress-container {
+            background: var(--glass); height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden;
         }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--electric-blue), var(--cyan)); width: 0%; }
 
-        .section { display: none; max-width: 900px; margin: 0 auto; }
-        .active-section { 
-            display: block; 
-            animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(50px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* الكروت المطورة بأنيميشن */
+        /* الكروت */
+        .main-container { padding: 40px 5%; }
         .card {
-            background: var(--glass); padding: 40px; border-radius: 25px;
-            border: 1px solid rgba(100, 255, 218, 0.1); text-align: center;
-            cursor: pointer; margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative; overflow: hidden;
-        }
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(100, 255, 218, 0.15);
+            background: var(--royal-blue); border-radius: 25px; padding: 30px;
+            border: 1px solid var(--glass); margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
-        .btn-back {
-            background: none; border: 1px solid var(--accent); color: var(--accent);
-            padding: 12px 25px; border-radius: 12px; cursor: pointer; 
-            margin-bottom: 30px; font-weight: bold;
+        .video-item {
+            background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px;
+            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+            border-right: 4px solid transparent;
         }
-        .btn-back:hover { background: var(--accent); color: var(--bg); }
-/* الفيديوهات */
-        .video-box { 
-            background: #112240; border-radius: 20px; margin-bottom: 35px; 
-            overflow: hidden; border: 1px solid rgba(100, 255, 218, 0.05);
-        }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-container iframe { position: absolute; width: 100%; height: 100%; border: none; right: 0; }
+        .video-item.completed { border-right-color: #4CAF50; background: rgba(76, 175, 80, 0.05); }
 
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-left: none; padding: 20px; }
-            .main { margin-right: 0; padding: 20px; }
-            .main-logo-header img { width: 130px; }
+        .check-mark { color: #4CAF50; font-size: 1.5rem; display: none; }
+        .video-item.completed .check-mark { display: block; }
+
+        /* لوحة المدير */
+        #admin-panel { display: none; background: #000; color: #0f0; font-family: monospace; padding: 20px; border-radius: 10px; }
+
+        input[type="password"] {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333;
+            background: #050a15; color: white; margin-bottom: 15px;
         }
+
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-title">إتـقـان</div>
-        <nav>
-            <div class="nav-link active" onclick="go('home', this)">الرئيسية</div>
-            <div class="nav-link" onclick="go('courses', this)">المواد التعليمية</div>
-            <div class="nav-link" onclick="go('suggest', this)">اقترح مادة</div>
-        </nav>
-    </aside>
+    <div class="bg-animate"></div>
 
-    <main class="main">
-        <div class="main-logo-header">
-            <img src="IMG-20260117-WA0013.jpg" alt="Logo">
+    <div id="auth-screen">
+        <div class="auth-card">
+            <img src="IMG-20260117-WA0013.jpg" style="width: 120px; border-radius: 15px; margin-bottom: 20px;">
+            <h2>مرحباً بك في إتقان</h2>
+            <p style="color: #8892b0;">سجل دخولك لمتابعة تقدمك في المواد</p>
+            
+            <button class="auth-btn google-btn" onclick="login('student')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_Icons-09.svg" width="20">
+                الدخول عبر جوجل
+            </button>
+            
+            <button class="auth-btn phone-btn" onclick="alert('خدمة رقم الهاتف تتوفر قريباً')">
+                <i class="fas fa-phone"></i> الدخول عبر الهاتف
+            </button>
+
+            <button class="auth-btn admin-btn" onclick="showAdminPrompt()">
+                <i class="fas fa-user-shield"></i> دخول المدير
+            </button>
         </div>
+    </div>
 
-        <section id="home" class="section active-section">
+    <div class="wrapper" id="main-app">
+        <header class="header">
+            <div class="user-info">
+                <img id="u-img" src="" class="user-avatar">
+                <div>
+                    <div id="u-name" style="font-weight: bold;">طالب إتقان</div>
+                    <div style="font-size: 0.8rem; color: var(--cyan);">مستوى الإنجاز: <span id="p-text">0%</span></div>
+                </div>
+            </div>
+            <img src="IMG-20260117-WA0013.jpg" width="50" style="border-radius: 8px;">
+        </header>
+
+        <main class="main-container">
             <div class="card">
-                <h1 style="color: var(--accent);">منصة إتقان الرقمية</h1>
-                <p style="font-size: 1.2rem; line-height: 1.8;">مرحباً بكم في الفضاء التعليمي للأستاذ <strong style="color: var(--accent);">عمران البراج</strong>.<br>نحن هنا لتبسيط مواد جامعة البلقاء التطبيقية بأعلى معايير الجودة.</p>
+                <h3>مسار مادة التحليل الوسيط</h3>
+                <div class="progress-container"><div class="progress-bar" id="p-bar"></div></div>
+                
+                <div id="video-list">
+                    </div>
             </div>
-        </section>
 
-        <section id="courses" class="section">
-            <h2 class="accent-text" style="text-align: center; margin-bottom: 30px;">اختر المادة الدراسية:</h2>
-            <div class="card" onclick="go('subject-detail', null)">
-                <h2 style="font-size: 2rem;">التحليل الوسيط</h2>
-                <p style="color: #8892b0;">اضغط لمتابعة التفاصيل واختيار المدرس</p>
+            <div id="admin-panel">
+                <h3>نظام التحكم (المدير عمران)</h3>
+                <p>مرحباً بك.. يمكنك إضافة فيديو جديد هنا</p>
+                <input type="text" id="v-title" placeholder="عنوان الفيديو">
+                <input type="text" id="v-id" placeholder="ID فيديو يوتيوب">
+                <button onclick="addVideo()" style="background:#0f0; color:#000; border:none; padding:10px;">إضافة فيديو</button>
             </div>
-        </section>
-
-        <section id="subject-detail" class="section">
-            <button class="btn-back" onclick="go('courses', null)">← العودة للمواد</button>
-            <div class="card" onclick="go('teachers', null)">
-                <h2 style="color: var(--accent);">مادة التحليل الوسيط</h2>
-                <p>لقد اخترت مادة التحليل الوسيط. الآن اضغط لاختيار المدرس.</p>
-            </div>
-        </section>
-
-        <section id="teachers" class="section">
-            <button class="btn-back" onclick="go('subject-detail', null)">← العودة لتفاصيل المادة</button>
-            <h2 class="accent-text" style="text-align: center; margin-bottom: 30px;">المدرسون المتاحون:</h2>
-            <div class="card" onclick="go('vids', null)">
-                <div style="font-size: 0.9rem; color: var(--accent); margin-bottom: 10px;">المدرس المعتمد</div>
-                <h2 style="font-size: 2.2rem;">الأستاذ عمران البراج</h2>
-                <p style="color: #8892b0;">اضغط لمشاهدة الـ 15 محاضرة كاملة</p>
-            </div>
-        </section>
-
-        <section id="vids" class="section">
-            <button class="btn-back" onclick="go('teachers', null)">← العودة للمدرسين</button>
-            <div id="video-list"></div>
-        </section>
-
-        <section id="suggest" class="section">
-            <div class="card">
-                <h2 class="accent-text">صندوق الاقتراحات</h2>
-                <form action="https://formspree.io/f/YourID" method="POST">
-                    <input type="text" placeholder="الاسم" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; background: #0a192f; border: 1px solid #233554; color: white;">
-                    <textarea placeholder="ما هي المادة التي تود شرحها؟" rows="4" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; background: #0a192f; border: 1px solid #233554; color: white;"></textarea>
-<button type="submit" style="width:100%; padding:18px; background:var(--accent); border:none; border-radius:12px; font-weight:bold; cursor:pointer; color: var(--bg);">إرسال الاقتراح</button>
-                </form>
-            </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <script>
-        function go(id, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById(id).classList.add('active-section');
-            
-            if(btn) {
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                btn.classList.add('active');
+        let currentUser = null;
+        let completedVideos = JSON.parse(localStorage.getItem('completedVids')) || [];
+
+        function login(role) {
+            if(role === 'student') {
+                // محاكاة تسجيل دخول (في الواقع ستحتاج Firebase SDK هنا)
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('u-img').src = 'https://ui-avatars.com/api/?name=Student';
+                renderVideos();
             }
-            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        const videoIds = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
-        const grid = document.getElementById('video-list');
-        videoIds.forEach((id, i) => {
-            grid.innerHTML += 
-                <div class="video-box animate-v">
-                    <div style="padding:18px; font-weight:bold; color: var(--accent); border-bottom: 1px solid rgba(100,255,218,0.1);">المحاضرة ${i+1}</div>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
+        function showAdminPrompt() {
+            const pass = prompt("الرجاء إدخال كلمة سر المدير:");
+            if(pass === "Omran#05") {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('admin-panel').style.display = 'block';
+                document.getElementById('u-name').innerText = "المدير: عمران البراج";
+                document.getElementById('u-img').src = "IMG-20260117-WA0013.jpg";
+                renderVideos();
+            } else {
+                alert("كلمة سر خاطئة!");
+            }
+        }
+
+        const videos = [
+            {id: "euOqZKztxhE", title: "المحاضرة 1: مقدمة التحليل"},
+            {id: "cCQtBGM8TJE", title: "المحاضرة 2: القواعد الأساسية"},
+            {id: "4QtEFQ2iJVI", title: "المحاضرة 3: تطبيقات عملية"}
+        ];
+
+        function renderVideos() {
+            const list = document.getElementById('video-list');
+            list.innerHTML = '';
+            videos.forEach((vid, index) => {
+                const isDone = completedVideos.includes(vid.id);
+                list.innerHTML += `
+                    <div class="video-item ${isDone ? 'completed' : ''}" onclick="toggleVideo('${vid.id}')">
+                        <div>
+                            <i class="fas fa-play-circle" style="margin-left:10px;"></i>
+                            ${vid.title}
+                        </div>
+                        <i class="fas fa-check-circle check-mark"></i>
                     </div>
-                </div>;
-        });
+                `;
+            });
+            updateProgress();
+        }
+
+        function toggleVideo(id) {
+            if(completedVideos.includes(id)) {
+                completedVideos = completedVideos.filter(v => v !== id);
+            } else {
+                completedVideos.push(id);
+                // فتح الفيديو في نافذة جديدة عند الضغط (مثال)
+                window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
+            }
+            localStorage.setItem('completedVids', JSON.stringify(completedVideos));
+            renderVideos();
+        }
+
+        function updateProgress() {
+            const percent = (completedVideos.length / videos.length) * 100;
+            document.getElementById('p-bar').style.width = percent + '%';
+            document.getElementById('p-text').innerText = Math.round(percent) + '%';
+        }
+
+        function addVideo() {
+            const title = document.getElementById('v-title').value;
+            const id = document.getElementById('v-id').value;
+            if(title && id) {
+                videos.push({id: id, title: title});
+                renderVideos();
+                alert("تمت الإضافة بنجاح (سيتم الحفظ مؤقتاً في هذه النسخة)");
+            }
+        }
     </script>
 </body>
 </html>
