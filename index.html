@@ -2465,7 +2465,30 @@
                     if (this.title) {
                         // You can add tooltip implementation here if needed
                     }
-                });
+                });<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
+    authDomain: "itqan-platform-4b7cc.firebaseapp.com",
+    databaseURL: "https://itqan-platform-4b7cc-default-rtdb.firebaseio.com",
+    projectId: "itqan-platform-4b7cc",
+    storageBucket: "itqan-platform-4b7cc.firebasestorage.app",
+    messagingSenderId: "59657931493",
+    appId: "1:59657931493:web:695e8fb4053156aad1220c",
+    measurementId: "G-81TN8CX9ZH"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
             });
         });
     </script>
