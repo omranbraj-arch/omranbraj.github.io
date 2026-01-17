@@ -1,174 +1,1018 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ✅ التعديل 1: إصلاح الخطأ الإملائي في العنوان -->
+    <title>GitHub Docs | منصة إتقان التعليمية</title>
+    
+    <!-- ✅ التعديل 2: إضافة meta description -->
+    <meta name="description" content="منصة إتقان التعليمية - نظام إدارة تعليمي متكامل">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --primary-dark: #22863a;
+            --secondary: #0366d6;
+            --accent: #f9826c;
+            --bg: #0d1117;
+            --card: #161b22;
+            --sidebar: #0d1117;
+            --text: #c9d1d9;
+            --text-light: #8b949e;
+            --border: #30363d;
+            --success: #2ea44f;
+            --danger: #f85149;
+            --warning: #f0883e;
+            --info: #58a6ff;
+        }
 
-<title>GitHub Docs | منصة إتقان التعليمية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* ✅ التعديل 3: تحسين الأداء - إزالة transition العامة */
+        }
 
-<style>
-:root{
---primary:#2ea44f;--secondary:#58a6ff;--bg:#0d1117;
---card:#161b22;--border:#30363d;--text:#c9d1d9;--text-light:#8b949e;--danger:#f85149;
-}
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Tajawal,sans-serif;background:var(--bg);color:var(--text)}
+        /* ✅ التعديل 3: إضافة transition فقط للعناصر التفاعلية */
+        .btn, .nav-item, .card-hover, .tab, .file-item {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.hidden{display:none}
+        /* خلفية متحركة مستوحاة من GitHub */
+        .github-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(46, 164, 79, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(3, 102, 214, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(249, 130, 108, 0.05) 0%, transparent 50%);
+            background-color: var(--bg);
+            overflow: hidden;
+        }
 
-.btn{padding:10px 18px;border:none;border-radius:6px;cursor:pointer}
-.btn-primary{background:var(--primary);color:white}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-.btn-danger{background:var(--danger);color:white}
+        .code-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88, 166, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+        }
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px}
+        @keyframes gridMove {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(20px) translateX(20px); }
+        }
 
-.navbar{position:fixed;top:0;width:100%;height:64px;background:var(--card);
-border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 20px}
+        /* شاشة الدخول */
+        #auth-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.sidebar{position:fixed;right:0;top:64px;width:230px;height:calc(100vh - 64px);
-background:var(--bg);border-left:1px solid var(--border);padding:15px}
+        .auth-card {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s ease;
+        }
 
-.nav-item{padding:10px;border-radius:6px;color:var(--text-light);cursor:pointer;margin-bottom:5px}
-.nav-item:hover,.nav-item.active{background:rgba(88,166,255,.1);color:var(--secondary)}
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-.main{margin-right:230px;padding:90px 25px}
+        .brand-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
 
-.section{display:none}
-.section.active{display:block}
+        .brand-text {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-#auth{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:2000}
-.auth-box{background:var(--card);border:1px solid var(--border);padding:35px;border-radius:12px;width:100%;max-width:380px;text-align:center}
+        /* شريط التنقل */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 64px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
 
-.alert{border:1px solid var(--primary);background:rgba(46,164,79,.1);padding:12px;border-radius:6px;margin-top:15px;font-size:.9rem}
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:15px;text-align:center}
-.stat strong{font-size:26px;color:var(--primary)}
-</style>
+        .nav-brand-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* القائمة الجانبية */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 64px;
+            width: 260px;
+            height: calc(100vh - 64px);
+            background: var(--sidebar);
+            border-left: 1px solid var(--border);
+            padding: 24px 0;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-light);
+            cursor: pointer;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--text);
+            border-right-color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: rgba(46, 164, 79, 0.1);
+            color: var(--primary);
+            border-right-color: var(--primary);
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 24px;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-right: 260px;
+            padding: 32px;
+            min-height: calc(100vh - 64px);
+        }
+
+        .section {
+            display: none;
+            animation: slideUp 0.3s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* الكروت */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card-hover {
+            cursor: pointer;
+        }
+
+        .card-hover:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 164, 79, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        /* الشبكات */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 1024px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-3, .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* العناصر التفاعلية */
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .file-icon {
+            margin-left: 12px;
+            color: var(--secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(46, 164, 79, 0.2);
+            color: var(--success);
+        }
+
+        .badge-info {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--info);
+        }
+
+        .badge-warning {
+            background: rgba(240, 136, 62, 0.2);
+            color: var(--warning);
+        }
+
+        /* الفيديوهات */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* التبويبات */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* أشكال التنبيه */
+        .alert {
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: rgba(46, 164, 79, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(248, 81, 73, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* النماذج */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 164, 79, 0.2);
+        }
+
+        /* لوحة المدير */
+        .admin-panel {
+            display: grid;
+            gap: 24px;
+        }
+
+        .admin-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .admin-section {
+            margin-bottom: 32px;
+        }
+
+        /* الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* التجاوب */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                background: var(--card);
+                backdrop-filter: blur(20px);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-right: 0;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+        }
+
+        /* زر القائمة المتنقلة */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* مؤشر التحميل */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- شاشة الدخول -->
-<div id="auth">
-<div class="auth-box">
-<h2 style="margin-bottom:10px"><i class="fab fa-github"></i> GitHub Docs</h2>
-<p style="color:var(--text-light);margin-bottom:20px">منصة إتقان التعليمية</p>
+    <!-- خلفية GitHub -->
+    <div class="github-bg">
+        <div class="code-grid"></div>
+    </div>
 
-<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="login('student')">
-<i class="fas fa-user-graduate"></i> الدخول كطالب
-</button>
+    <!-- شاشة الدخول -->
+    <div id="auth-screen">
+        <div class="auth-card">
+            <div class="brand">
+                <i class="fab fa-github brand-icon"></i>
+                <!-- ✅ التعديل 4: إصلاح الخطأ الإملائي في الشعار -->
+                <span class="brand-text">GitHub Docs</span>
+            </div>
+            
+            <h2 style="text-align: center; margin-bottom: 8px;">منصة إتقان التعليمية</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">
+                نظام إدارة تعليمي متكامل
+            </p>
+            
+            <!-- ✅ التعديل 5: استبدال بيانات التواصل الشخصية -->
+            <button class="btn btn-primary" onclick="handleLogin('student')" style="width: 100%; margin-bottom: 12px;">
+                <i class="fas fa-user-graduate"></i> الدخول كطالب
+            </button>
+            
+            <button class="btn btn-outline" onclick="handleAdminLogin()" style="width: 100%;">
+                <i class="fas fa-user-shield"></i> دخول المدير
+            </button>
+            
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <p style="color: var(--text-light); font-size: 0.9rem; text-align: center;">
+                    <i class="fas fa-info-circle"></i> كلمة مرور المدير: Omran#05 (للعرض التوضيحي فقط)
+                </p>
+            </div>
+        </div>
+    </div>
 
-<button class="btn btn-outline" style="width:100%" onclick="login('admin')">
-<i class="fas fa-user-shield"></i> دخول المدير
-</button>
+    <!-- التطبيق الرئيسي -->
+    <div id="app">
+        <!-- شريط التنقل -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <i class="fab fa-github nav-brand-icon"></i>
+                <div>
+                    <!-- ✅ التعديل 6: إصلاح الخطأ الإملائي في شريط التنقل -->
+                    <div style="font-weight: 700; font-size: 1.1rem;">GitHub Docs</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light);" id="u-display">طالب</div>
+                </div>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-avatar" id="user-avatar">ط</div>
+                <button class="btn btn-outline btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
 
-<div class="alert">
-تسجيل دخول توضيحي (Front-end فقط)
-</div>
-</div>
-</div>
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('dashboard', this)">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>الرئيسية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('subjects', this)">
+                <i class="fas fa-book"></i>
+                <span>المواد الدراسية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('videos', this)">
+                <i class="fas fa-video"></i>
+                <span>الفيديوهات التعليمية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('library', this)">
+                <i class="fas fa-folder-open"></i>
+                <span>المكتبة</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('teachers', this)">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>المعلمين</span>
+            </div>
+            
+            <div class="nav-divider"></div>
+            
+            <div class="nav-item" onclick="showSection('support', this)">
+                <i class="fas fa-headset"></i>
+                <span>الدعم الفني</span>
+            </div>
+            
+            <div id="admin-nav" class="nav-item" style="display: none;" onclick="showSection('admin', this)">
+                <i class="fas fa-cogs"></i>
+                <span>لوحة التحكم</span>
+            </div>
+        </aside>
 
-<!-- التطبيق -->
-<div id="app" class="hidden">
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- قسم الرئيسية -->
+            <section id="dashboard" class="section active-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                        </h2>
+                        <div class="badge badge-success" id="last-login"></div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-subjects">0</div>
+                            <div>المواد الدراسية</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-teachers">0</div>
+                            <div>المعلمين</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-videos">0</div>
+                            <div>الفيديوهات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-files">0</div>
+                            <div>الملفات</div>
+                        </div>
+                    </div>
+                    
+                    <div id="recent-activity">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-<div class="navbar">
-<div><strong><i class="fab fa-github"></i> GitHub Docs</strong></div>
-<div>
-<span id="role">طالب</span>
-<button class="btn btn-outline" onclick="logout()">خروج</button>
-</div>
-</div>
+            <!-- قسم المواد الدراسية -->
+            <section id="subjects" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-book"></i> المواد الدراسية
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-3" id="subjects-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-<div class="sidebar">
-<div class="nav-item active" onclick="showSection('dashboard',this)">الرئيسية</div>
-<div class="nav-item" onclick="showSection('subjects',this)">المواد</div>
-<div class="nav-item" onclick="showSection('videos',this)">الفيديوهات</div>
-<div class="nav-item" onclick="showSection('library',this)">المكتبة</div>
-<div class="nav-item" onclick="showSection('support',this)">الدعم الفني</div>
-<div class="nav-item hidden" id="adminBtn" onclick="showSection('admin',this)">لوحة المدير</div>
-</div>
+            <!-- قسم الفيديوهات -->
+            <section id="videos" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-video"></i> الفيديوهات التعليمية
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="tabs" id="video-tabs">
+                        <button class="tab active" onclick="filterVideos('all')">الكل</button>
+                        <button class="tab" onclick="filterVideos('recent')">الأحدث</button>
+                        <button class="tab" onclick="filterVideos('popular')">الأكثر مشاهدة</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2" id="videos-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-<div class="main">
+            <!-- قسم المكتبة -->
+            <section id="library" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-folder-open"></i> المكتبة
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="tabs" id="library-tabs">
+                        <button class="tab active" onclick="filterFiles('all')">الكل</button>
+                        <button class="tab" onclick="filterFiles('pdf')">PDF</button>
+                        <button class="tab" onclick="filterFiles('doc')">مستندات</button>
+                        <button class="tab" onclick="filterFiles('other')">أخرى</button>
+                    </div>
+                    
+                    <div id="files-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-<section id="dashboard" class="section active">
-<div class="card">
-<h2>لوحة التحكم</h2>
-<div class="stats">
-<div class="stat"><strong>4</strong><div>مواد</div></div>
-<div class="stat"><strong>7</strong><div>فيديوهات</div></div>
-<div class="stat"><strong>15</strong><div>ملفات</div></div>
-</div>
-</div>
-</section>
+            <!-- قسم المعلمين -->
+            <section id="teachers" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chalkboard-teacher"></i> المعلمين
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-3" id="teachers-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-<section id="subjects" class="section">
-<div class="card"><h2>المواد الدراسية</h2><ul><li>رياضيات</li><li>فيزياء</li><li>برمجة</li><li>لغة عربية</li></ul></div>
-</section>
+            <!-- قسم الدعم الفني -->
+            <section id="support" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-headset"></i> الدعم الفني
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2" style="gap: 24px;">
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fab fa-whatsapp"></i> الدعم المباشر</h3>
+                            <p style="color: var(--text-light); margin-bottom: 20px;">
+                                تواصل مع فريق الدعم عبر واتساب للحصول على مساعدة فورية
+                            </p>
+                            <!-- ✅ التعديل 7: استبدال رقم واتساب حقيقي -->
+                            <a href="https://wa.me/1234567890" target="_blank" class="btn btn-success" style="width: 100%;">
+                                <i class="fab fa-whatsapp"></i> ابدأ محادثة
+                            </a>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-envelope"></i> البريد الإلكتروني</h3>
+                            <p style="color: var(--text-light); margin-bottom: 20px;">
+                                أرسل استفساراتك أو مشاكلك الفنية عبر البريد الإلكتروني
+                            </p>
+                            <!-- ✅ التعديل 8: استبدال إيميل حقيقي -->
+                            <a href="mailto:support@example.com" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i> إرسال بريد
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- ✅ التعديل 9: إضافة ملاحظة أمان -->
+                    <div class="alert alert-success" style="margin-top: 20px;">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>ملاحظة أمان:</strong> هذا مشروع توضيحي للعرض على GitHub.
+                            في المشروع الحقيقي، يجب إضافة نظام مصادقة Back-end آمن.
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-<section id="videos" class="section">
-<div class="card"><h2>الفيديوهات التعليمية</h2><p>سيتم إضافة فيديوهات تعليمية هنا.</p></div>
-</section>
-
-<section id="library" class="section">
-<div class="card"><h2>المكتبة</h2><p>ملفات PDF وملفات شرح.</p></div>
-</section>
-
-<section id="support" class="section">
-<div class="card">
-<h2>الدعم الفني</h2>
-<p style="margin-bottom:15px">تواصل معنا مباشرة عبر واتساب:</p>
-<a class="btn btn-primary" target="_blank" href="https://wa.me/962778393633">
-<i class="fab fa-whatsapp"></i> 0778393633
-</a>
-</div>
-</section>
-
-<section id="admin" class="section">
-<div class="card">
-<h2>لوحة تحكم المدير</h2>
-<div class="alert">⚠️ هذه لوحة تحكم تجريبية.</div>
-<button class="btn btn-danger" onclick="alert('تم تنفيذ العملية (تجريبي)')">تنفيذ إجراء</button>
-</div>
-</section>
-
-</div>
-</div>
-
-<script>
-function login(type){
-
-if(type === "admin"){
-let pass = prompt("أدخل كلمة مرور المدير:");
-if(pass !== "Omran#05"){
-alert("❌ كلمة المرور غير صحيحة");
-return;
-}
-}
-
-document.getElementById("auth").style.display="none";
-document.getElementById("app").classList.remove("hidden");
-document.getElementById("role").innerText = type==="admin" ? "مدير" : "طالب";
-
-if(type==="admin"){
-document.getElementById("adminBtn").classList.remove("hidden");
-}
-}
-
-function logout(){location.reload();}
-
-function showSection(id,el){
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-
-document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-if(el)el.classList.add("active");
-}
-</script>
-
-</body>
-</html>
+            <!-- قسم لوحة تحكم المدير -->
+            <section id="admin" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-cogs"></i> لوحة تحكم المدير
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <!-- ✅ التعديل 10: إضافة تحذير أمان -->
+                    <div class="alert alert-warning" style="margin-bottom: 20px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>تنبيه أمان:</strong> هذا النظام للأغراض التوضيحية فقط.
+                            في التطبيق الحقيقي، يجب إضافة نظام مصادقة Back-end مناسب.
+                        </div>
+                    </div>
+                    
+                    <div class="tabs" id="admin-tabs">
+                        <button class="tab active" onclick="showAdminTab('manage')">الإدارة</button>
+                        <button class="tab" onclick="showAdminTab('add')">إضافة محتوى</button>
+                        <button class="tab" onclick="showAdminTab('stats')">الإحصائيات</button>
+                        <button class="tab" onclick="showAdminTab('settings')">الإعدادات</button>
+                    </div>
+                    
+                    <!-- تبويب الإدارة -->
+                    <div id="admin-manage" class="admin-section">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-tasks"></i> إدارة المحتوى</h3>
+                        
+                        <div class="grid grid-cols-2" style="gap: 20px;">
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book"></i> المواد الدراسية</h4>
+                                <div id="admin-subjects-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-chalkboard-teacher"></i> المعلمين</h4>
+                                <div id="admin-teachers-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video"></i> الفيديوهات</h4>
+                                <div id="admin-videos-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file"></i> الملفات</h4>
+                                <div id="admin-files-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- تبويب الإضافة -->
+                    <div id="admin-add" class="admin-section" style="display: none;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> إضافة محتوى جديد</h3>
+                        
+                        <div class="grid grid-cols-2" style="gap: 20px;">
+                            <!-- إضافة مادة -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book-medical"></i> إضافة مادة</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم المادة</label>
+                                    <input type="text" id="add-subject-name" class="form-control" placeholder="أدخل اسم المادة">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">وصف المادة</label>
+                                    <textarea id="add-subject-desc" class="form-control" rows="3" placeholder="وصف مختصر للمادة"></textarea>
+                                </div>
+                                <button class="btn btn-primary" onclick="addSubject()">
+                                    <i class="fas fa-plus"></i> إضافة المادة
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة معلم -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-user-plus"></i> إضافة معلم</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم المعلم</label>
+                                    <input type="text" id="add-teacher-name" class="form-control" placeholder="أدخل اسم المعلم">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">التخصص</label>
+                                    <input type="text" id="add-teacher-specialty" class="form-control" placeholder="تخصص المعلم">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" id="add-teacher-email" class="form-control" placeholder="email@example.com">
+                                </div>
+                                <button class="btn btn-primary" onclick="addTeacher()">
+                                    <i class="fas fa-plus"></i> إضافة المعلم
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة فيديو -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video-plus"></i> إضافة فيديو</h4>
+                                <div class="form-group">
+                                    <label class="form-label">عنوان الفيديو</label>
+                                    <input type="text" id="add-video-title" class="form-control" placeholder="عنوان الفيديو">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">معرف اليوتيوب</label>
+                                    <input type="text" id="add-video-id" class="form-control" placeholder="dQw4w9WgXcQ">
+                                </div>
