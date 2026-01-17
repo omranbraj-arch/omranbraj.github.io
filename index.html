@@ -1020,3 +1020,61 @@
                                 </div>
                                 <button class="btn btn-primary" onclick="addFile()">
                                     <i class="fas fa-plus"></i> إضافة الملف
+                                    <script>
+    const ADMIN_PASSWORD = "Omran#05";
+
+    // إخفاء التطبيق إلى أن يتم تسجيل الدخول
+    document.getElementById("app").style.display = "none";
+
+    function handleLogin(type) {
+        document.getElementById("auth-screen").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        if (type === "student") {
+            document.getElementById("u-display").innerText = "طالب";
+            document.getElementById("user-avatar").innerText = "ط";
+            document.getElementById("admin-nav").style.display = "none";
+        }
+
+        document.getElementById("last-login").innerText =
+            "آخر تسجيل دخول: " + new Date().toLocaleString("ar-EG");
+    }
+
+    function handleAdminLogin() {
+        const password = prompt("أدخل كلمة مرور المدير:");
+
+        if (password === ADMIN_PASSWORD) {
+            handleLogin("admin");
+            document.getElementById("u-display").innerText = "مدير";
+            document.getElementById("user-avatar").innerText = "م";
+            document.getElementById("admin-nav").style.display = "flex";
+        } else {
+            alert("❌ كلمة المرور غير صحيحة");
+        }
+    }
+
+    function logout() {
+        location.reload();
+    }
+
+    function showSection(id, el) {
+        document.querySelectorAll(".section").forEach(section => {
+            section.classList.remove("active-section");
+        });
+        document.getElementById(id).classList.add("active-section");
+
+        document.querySelectorAll(".nav-item").forEach(item => {
+            item.classList.remove("active");
+        });
+        if (el) el.classList.add("active");
+
+        if (window.innerWidth <= 1024) {
+            document.getElementById("sidebar").classList.remove("active");
+        }
+    }
+
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("active");
+    }
+</script>
+
