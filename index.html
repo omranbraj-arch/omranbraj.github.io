@@ -1,186 +1,277 @@
-<!DOCTYPE html><html lang="ar">
+<!DOCTYPE html>
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة إتقان</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Firebase -->
     <script type="module">
-        // ====================
-        // Firebase Initialization
-        // ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";const firebaseConfig = {
-        apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
-        authDomain: "itqan-platform-4b7cc.firebaseapp.com",
-        databaseURL: "https://itqan-platform-4b7cc-default-rtdb.firebaseio.com",
-        projectId: "itqan-platform-4b7cc",
-        storageBucket: "itqan-platform-4b7cc.appspot.com",
-        messagingSenderId: "59657931493",
-        appId: "1:59657931493:web:695e8fb4053156aad1220c",
-        measurementId: "G-81TN8CX9ZH"
-    };
+        // Firebase App (the core Firebase SDK)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+        import { getFirestore, collection, doc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-</script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
+            authDomain: "itqan-platform-4b7cc.firebaseapp.com",
+            projectId: "itqan-platform-4b7cc",
+            storageBucket: "itqan-platform-4b7cc.appspot.com",
+            messagingSenderId: "59657931493",
+            appId: "1:59657931493:web:695e8fb4053156aad1220c",
+            measurementId: "G-81TN8CX9ZH"
+        };
 
-</head>
-<body>
-    <!-- Auth Screen -->
-    <div id="auth-screen">
-        <h2>مرحباً بك في منصة إتقان</h2>
-        <button onclick="handleLogin('student')">تسجيل دخول طالب</button>
-        <button onclick="handleAdminLogin()">تسجيل دخول المدير</button>
-    </div><!-- Main App -->
-<div id="app" style="display:none;">
-    <!-- Sidebar -->
-    <aside id="sidebar">
-        <ul>
-            <li class="nav-item active" onclick="showSection('dashboard')">الرئيسية</li>
-            <li class="nav-item" onclick="showSection('subjects')">المواد الدراسية</li>
-            <li class="nav-item" onclick="showSection('videos')">الفيديوهات التعليمية</li>
-            <li class="nav-item" onclick="showSection('files')">أوراقي وسنواتي</li>
-            <li class="nav-item" onclick="showSection('teachers')">المعلمين</li>
-            <li id="admin-nav-item" class="nav-item d-none" onclick="showSection('admin')">لوحة التحكم</li>
-            <li class="nav-item" onclick="logout()">تسجيل الخروج</li>
-        </ul>
-    </aside>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Sections will be dynamically loaded -->
-    </main>
-</div>
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        let platformData = { subjects: [], teachers: [], videos: [], files: [] };
+        let currentUser = null;
+        let isAdmin = false;
 
-<!-- JavaScript -->
-<script>
-    // ====================
-    // Data Management
-    // ====================
-    let platformData = {
-        subjects: [], teachers: [], videos: [], files: [], nextId: { subjects:1, teachers:1, videos:1, files:1 }
-    };
-    let currentUser = null;
-    let isAdmin = false;
+        // ============================================
+        // FIRESTORE FUNCTIONS
+        // ============================================
+        async function loadData() {
+            // Load subjects
+            const subjectsSnap = await getDocs(collection(db, "subjects"));
+            platformData.subjects = subjectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    function saveData() {
-        localStorage.setItem('itqan_platform_data', JSON.stringify(platformData));
-        updateStats();
-    }
+            // Load teachers
+            const teachersSnap = await getDocs(collection(db, "teachers"));
+            platformData.teachers = teachersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    function loadData() {
-        const saved = localStorage.getItem('itqan_platform_data');
-        if (saved) platformData = JSON.parse(saved);
-    }
+            // Load videos
+            const videosSnap = await getDocs(collection(db, "videos"));
+            platformData.videos = videosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    // ====================
-    // Authentication
-    // ====================
-    function handleLogin(role){
-        if(role==='student'){ currentUser={name:'طالب إتقان',role:'student',avatar:'ط'}; isAdmin=false; }
-        else if(role==='admin'){ currentUser={name:'المدير عمران',role:'admin',avatar:'م'}; isAdmin=true; document.getElementById('admin-nav-item').classList.remove('d-none'); }
-        document.getElementById('auth-screen').style.display='none';
-        document.getElementById('app').style.display='block';
-        document.getElementById('user-avatar').textContent=currentUser.avatar;
-        localStorage.setItem('currentUser',JSON.stringify(currentUser));
-        updateStats();
-        loadDashboardContent();
-        showAlert(`مرحباً ${currentUser.name}!`,'success');
-    }
-
-    function handleAdminLogin(){
-        const password=prompt('🔐 أدخل كلمة مرور المدير:');
-        if(password==='Omran#05') handleLogin('admin');
-        else if(password!==null) showAlert('كلمة المرور غير صحيحة!','danger');
-    }
-
-    function logout(){
-        if(confirm('هل أنت متأكد من تسجيل الخروج؟')){
-            localStorage.removeItem('currentUser'); location.reload();
+            // Load files
+            const filesSnap = await getDocs(collection(db, "files"));
+            platformData.files = filesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         }
-    }
 
-    window.onload=function(){
-        loadData();
-        const saved=localStorage.getItem('currentUser');
-        if(saved){
-            currentUser=JSON.parse(saved);
-            isAdmin=currentUser.role==='admin';
-            document.getElementById('auth-screen').style.display='none';
-            document.getElementById('app').style.display='block';
-            if(isAdmin) document.getElementById('admin-nav-item').classList.remove('d-none');
+        async function saveSubject(subject) {
+            const docRef = doc(db, "subjects", subject.id || generateId());
+            await setDoc(docRef, subject);
+            await loadData();
+        }
+
+        async function saveTeacher(teacher) {
+            const docRef = doc(db, "teachers", teacher.id || generateId());
+            await setDoc(docRef, teacher);
+            await loadData();
+        }
+
+        async function saveVideo(video) {
+            const docRef = doc(db, "videos", video.id || generateId());
+            await setDoc(docRef, video);
+            await loadData();
+        }
+
+        async function saveFile(file) {
+            const docRef = doc(db, "files", file.id || generateId());
+            await setDoc(docRef, file);
+            await loadData();
+        }
+
+        async function deleteSubject(id) {
+            await deleteDoc(doc(db, "subjects", id));
+            // Also delete related videos and files
+            platformData.videos.filter(v => v.subjectId === id).forEach(async v => await deleteDoc(doc(db, "videos", v.id)));
+            platformData.files.filter(f => f.subjectId === id).forEach(async f => await deleteDoc(doc(db, "files", f.id)));
+            await loadData();
+        }
+
+        async function deleteTeacher(id) {
+            await deleteDoc(doc(db, "teachers", id));
+            // Remove teacherId from videos
+            platformData.videos.filter(v => v.teacherId === id).forEach(async v => {
+                const docRef = doc(db, "videos", v.id);
+                await updateDoc(docRef, { teacherId: null });
+            });
+            await loadData();
+        }
+
+        async function deleteVideo(id) {
+            await deleteDoc(doc(db, "videos", id));
+            await loadData();
+        }
+
+        async function deleteFile(id) {
+            await deleteDoc(doc(db, "files", id));
+            await loadData();
+        }
+
+        function generateId() {
+            return Math.random().toString(36).substring(2, 15);
+        }
+
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
+        function handleLogin(role) {
+            if (role === 'student') {
+                currentUser = { name: "طالب إتقان", role: "student", avatar: "ط" };
+                isAdmin = false;
+            } else if (role === 'admin') {
+                currentUser = { name: "المدير عمران", role: "admin", avatar: "م" };
+                isAdmin = true;
+                document.getElementById('admin-nav-item').classList.remove('d-none');
+            }
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('user-avatar').textContent = currentUser.avatar;
+
+            showAlert(`مرحباً ${currentUser.name}!`, 'success');
             updateStats();
             loadDashboardContent();
         }
-    };
 
-    // ====================
-    // Alerts & UI
-    // ====================
-    function showAlert(msg,type='info'){
-        const alertDiv=document.createElement('div');
-        alertDiv.className=`alert alert-${type} alert-toast`;
-        alertDiv.style.position='fixed'; alertDiv.style.top='80px'; alertDiv.style.right='20px'; alertDiv.style.zIndex='9999';
-        alertDiv.innerHTML=`<i class='fas fa-${type==='success'?'check-circle':type==='danger'?'exclamation-circle':'info-circle'}'></i><div>${msg}</div>`;
-        document.body.appendChild(alertDiv);
-        setTimeout(()=>{ alertDiv.remove(); },5000);
-    }
+        function handleAdminLogin() {
+            const password = prompt("🔐 أدخل كلمة مرور المدير:");
+            if (password === "Omran#05") handleLogin('admin');
+            else if (password !== null) showAlert("كلمة المرور غير صحيحة!", 'danger');
+        }
 
-    // ====================
-    // Stats
-    // ====================
-    function updateStats(){
-        // Example: update dashboard stats dynamically if HTML elements exist
-    }
+        function logout() {
+            if (confirm("هل أنت متأكد من تسجيل الخروج؟")) location.reload();
+        }
 
-    function loadDashboardContent(){
-        // Example dashboard loader
-    }
+        // ============================================
+        // UI FUNCTIONS
+        // ============================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
 
-    // ====================
-    // Admin & CRUD functions (Subjects, Teachers, Videos, Files)
-    // Implement all functions like adminAddSubject, adminDeleteSubject, adminAddVideo etc.
-    // All functions save to localStorage using saveData() and update UI
-    // ====================
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-toast`;
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
 
-    // ====================
-    // Backup / Import & Export
-    // ====================
-    function exportData(){
-        const dataStr=JSON.stringify(platformData,null,2);
-        const dataUri='data:application/json;charset=utf-8,'+encodeURIComponent(dataStr);
-        const link=document.createElement('a');
-        link.setAttribute('href',dataUri);
-        link.setAttribute('download',`itqan_backup_${new Date().toISOString().slice(0,10)}.json`);
-        link.click(); showAlert('تم تصدير البيانات بنجاح','success');
-    }
+        // ============================================
+        // DATA DISPLAY FUNCTIONS (Dashboard)
+        // ============================================
+        function updateStats() {
+            document.getElementById('stats-subjects').textContent = platformData.subjects.length;
+            document.getElementById('stats-teachers').textContent = platformData.teachers.length;
+            document.getElementById('stats-videos').textContent = platformData.videos.length;
+            document.getElementById('stats-files').textContent = platformData.files.length;
+        }
 
-    function importData(event){
-        const file=event.target.files[0]; if(!file) return;
-        const reader=new FileReader();
-        reader.onload=function(e){
-            try{
-                const importedData=JSON.parse(e.target.result);
-                if(!importedData.subjects||!importedData.teachers||!importedData.videos||!importedData.files) throw new Error('ملف بيانات غير صالح');
-                if(confirm('هل تريد استبدال البيانات الحالية؟')){
-                    platformData=importedData; saveData(); showAlert('تم استيراد البيانات بنجاح','success');
-                }
-            }catch(err){ showAlert('خطأ في ملف البيانات: '+err.message,'danger'); }
-        };
-        reader.readAsText(file);
-        event.target.value='';
-    }
+        async function loadDashboardContent() {
+            await loadData();
+            updateStats();
+        }
 
-    // ====================
-    // Sidebar toggle & section show
-    // ====================
-    function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('active'); }
-    function showSection(id){
-        // Logic to hide all sections, show selected, update nav active
-    }
+        // ============================================
+        // ADMIN ADD FUNCTIONS
+        // ============================================
+        async function adminAddSubject() {
+            const name = document.getElementById('admin-subject-name').value.trim();
+            const desc = document.getElementById('admin-subject-desc').value.trim();
+            if (!name) return showAlert('الرجاء إدخال اسم المادة', 'danger');
 
-</script>
+            const newSubject = { name, description: desc, created: new Date().toISOString() };
+            await saveSubject(newSubject);
+            showAlert('تم إضافة المادة بنجاح', 'success');
+        }
 
+        async function adminAddTeacher() {
+            const name = document.getElementById('admin-teacher-name').value.trim();
+            if (!name) return showAlert('الرجاء إدخال اسم المعلم', 'danger');
+            const newTeacher = {
+                name,
+                specialty: document.getElementById('admin-teacher-specialty').value.trim(),
+                email: document.getElementById('admin-teacher-email').value.trim(),
+                description: document.getElementById('admin-teacher-desc').value.trim(),
+                created: new Date().toISOString()
+            };
+            await saveTeacher(newTeacher);
+            showAlert('تم إضافة المعلم بنجاح', 'success');
+        }
+
+        async function adminAddVideo() {
+            const title = document.getElementById('admin-video-title').value.trim();
+            const youtubeId = document.getElementById('admin-video-id').value.trim();
+            if (!title || !youtubeId) return showAlert('الرجاء إدخال عنوان الفيديو ومعرف اليوتيوب', 'danger');
+
+            const newVideo = {
+                title, youtubeId,
+                subjectId: document.getElementById('admin-video-subject').value || null,
+                teacherId: document.getElementById('admin-video-teacher').value || null,
+                views: 0,
+                created: new Date().toISOString()
+            };
+            await saveVideo(newVideo);
+            showAlert('تم إضافة الفيديو بنجاح', 'success');
+        }
+
+        async function adminAddFile() {
+            const name = document.getElementById('admin-file-name').value.trim();
+            const url = document.getElementById('admin-file-url').value.trim();
+            if (!name || !url) return showAlert('الرجاء إدخال اسم الملف ورابطه', 'danger');
+
+            const newFile = {
+                name, url,
+                type: document.getElementById('admin-file-type').value,
+                subjectId: document.getElementById('admin-file-subject').value || null,
+                size: 'غير معروف',
+                downloads: 0,
+                created: new Date().toISOString()
+            };
+            await saveFile(newFile);
+            showAlert('تم إضافة الملف بنجاح', 'success');
+        }
+
+        // ============================================
+        // INITIALIZE APP
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadData();
+        });
+    </script>
+</head>
+<body>
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen">
+        <button onclick="handleLogin('student')">تسجيل دخول طالب</button>
+        <button onclick="handleAdminLogin()">تسجيل دخول المدير</button>
+    </div>
+
+    <!-- APP -->
+    <div id="app" style="display:none;">
+        <header>
+            <div id="user-avatar"></div>
+            <button onclick="logout()">تسجيل الخروج</button>
+        </header>
+
+        <aside id="sidebar">
+            <ul>
+                <li id="admin-nav-item" class="d-none">لوحة التحكم</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section id="dashboard" class="section active">
+                <h2>الرئيسية</h2>
+                <div>
+                    <span id="stats-subjects">0</span> المواد
+                    <span id="stats-teachers">0</span> المعلمين
+                    <span id="stats-videos">0</span> الفيديوهات
+                    <span id="stats-files">0</span> الملفات
+                </div>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
