@@ -7,257 +7,256 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #000b18;
+            --primary: #0a192f;
             --accent: #00d2ff;
             --royal: #3a7bd5;
-            --card-bg: rgba(16, 33, 62, 0.9);
+            --glass: rgba(16, 33, 62, 0.95);
         }
 
-        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
             background: var(--primary);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0; overflow-x: hidden;
+            background: linear-gradient(135deg, #020c1b 0%, #0a192f 100%);
+            min-height: 100vh;
         }
 
-        /* خلفية الأنيميشن المتحركة (شبكة من الأضواء) */
-        .bg-gradient {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #10213e 0%, #000b18 100%);
-            z-index: -2;
-        }
-        .moving-glow {
-            position: fixed; width: 500px; height: 500px;
+        /* أنيميشن الخلفية */
+        .glow {
+            position: fixed; width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
-            border-radius: 50%; z-index: -1; animation: move 20s infinite alternate;
+            border-radius: 50%; z-index: -1; animation: move 15s infinite alternate;
         }
-        @keyframes move { from { top: -200px; left: -200px; } to { top: 80%; left: 80%; } }
+        @keyframes move { from { top: 0; left: 0; } to { top: 70%; left: 70%; } }
 
-        /* شاشة تسجيل الدخول */
-        #auth-page {
+        /* شاشة الدخول */
+        #auth-screen {
             position: fixed; inset: 0; z-index: 2000; background: var(--primary);
             display: flex; align-items: center; justify-content: center;
         }
-        .login-card {
-            background: var(--card-bg); padding: 40px; border-radius: 30px;
-            width: 90%; max-width: 420px; text-align: center;
-            border: 1px solid rgba(0, 210, 255, 0.3); backdrop-filter: blur(20px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-
-        .input-group { margin-bottom: 20px; text-align: right; }
-        .input-group label { display: block; margin-bottom: 8px; color: var(--accent); font-size: 0.9rem; }
-        .input-group input { 
-            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #1a3a5a;
-            background: rgba(0,0,0,0.3); color: white; outline: none;
+        .auth-card {
+            background: var(--glass); padding: 40px; border-radius: 30px;
+            text-align: center; border: 1px solid var(--accent); width: 90%; max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
         }
 
         .btn {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-bottom: 15px;
+            width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold;
+            cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-google { background: #fff; color: #333; }
-        .btn-google:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
-        .btn-primary { background: linear-gradient(90deg, #3a7bd5, #00d2ff); color: white; }
+        .btn-google { background: white; color: #333; }
+        .btn-phone { background: var(--royal); color: white; }
         .btn-admin { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
 
-        /* الصفحة الرئيسية */
+        /* الواجهة الرئيسية */
         #main-app { display: none; }
         .navbar {
-            padding: 15px 5%; background: rgba(0, 11, 24, 0.9);
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(0, 210, 255, 0.2); position: sticky; top: 0; z-index: 100;
+            position: fixed; top: 0; width: 100%; height: 70px; background: rgba(10, 25, 47, 0.9);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 5%;
+            z-index: 1000; border-bottom: 1px solid rgba(0, 210, 255, 0.1); backdrop-filter: blur(10px);
         }
 
-        .profile-area { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); background: #1a3a5a; }
+        /* القائمة الجانبية */
+        .sidebar {
+            position: fixed; right: 0; width: 260px; height: 100vh; background: rgba(10, 25, 47, 0.95);
+            padding: 90px 20px 20px; border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
+        }
+        .nav-item {
+            padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 12px; color: #8892b0; font-weight: bold;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 210, 255, 0.1); color: var(--accent); transform: translateX(-5px); }
+
+        .content { margin-right: 260px; padding: 100px 40px 40px; }
+        .section { display: none; animation: slideUp 0.6s ease; }
+        .active-section { display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* الكروت */
+        .card {
+            background: #112240; border-radius: 20px; padding: 25px; margin-bottom: 25px;
+            border: 1px solid rgba(0, 210, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .video-box { border-radius: 15px; overflow: hidden; background: #020c1b; margin-top: 15px; }
+        .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; }
+        .iframe-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
         /* شريط التقدم */
-        .progress-box {
-            background: var(--card-bg); padding: 25px; border-radius: 20px;
-            margin: 30px 5%; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .bar-bg { background: #0a192f; height: 12px; border-radius: 10px; margin-top: 15px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, #3a7bd5, #00d2ff); width: 0%; transition: 1s; }
+        .progress-container { background: #020c1b; height: 10px; border-radius: 5px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--royal), var(--accent)); width: 0%; transition: 1s; }
 
-        /* دروس الفيديو */
-        .video-grid { padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 50px; }
-        .video-card {
-            background: var(--card-bg); border-radius: 20px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05); position: relative;
-        }
-        .video-card.watched { border-color: #4CAF50; }
-        .video-card.watched::after {
-            content: "✓ تم الإنجاز"; position: absolute; top: 10px; left: 10px;
-            background: #4CAF50; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem;
+        /* لوحة المدير */
+        .admin-panel { border: 2px dashed var(--accent); padding: 20px; border-radius: 20px; background: rgba(0, 210, 255, 0.02); }
+        input, select { 
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; 
+            background: #020c1b; border: 1px solid #1a3a5a; color: white; 
         }
 
-        .iframe-container { position: relative; padding-bottom: 56.25%; height: 0; }
-        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
-        .video-info { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .watch-btn { background: var(--accent); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* لوحة التحكم للمدير */
-        #admin-panel { display: none; padding: 30px; background: #000; margin: 20px 5%; border-radius: 20px; border: 1px dashed var(--accent); }
-
-        @media (max-width: 768px) { .video-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 850px) {
+            .sidebar { display: none; }
+            .content { margin-right: 0; padding: 90px 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="bg-gradient"></div>
-    <div class="moving-glow"></div>
+    <div class="glow"></div>
 
-    <div id="auth-page">
-        <div class="login-card">
-            <img src="IMG-20260117-WA0013.jpg" width="100" style="border-radius: 20px; margin-bottom: 20px;">
-            <h2 style="margin: 0;">منصة إتقان</h2>
-            <p style="color: #8892b0; margin-bottom: 30px;">بوابة الأستاذ عمران البراج</p>
-
-            <div id="login-form">
-                <button class="btn btn-google" onclick="handleAuth('google')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_Icons-09.svg" width="20">
-                    تسجيل الدخول بجوجل
-                </button>
-                
-                <div class="input-group">
-                    <label>رقم الهاتف</label>
-                    <input type="tel" id="user-phone" placeholder="07XXXXXXXX">
-                </div>
-                <button class="btn btn-primary" onclick="handleAuth('phone')">دخول برقم الهاتف</button>
-                
-                <hr style="border: 0; border-top: 1px solid #1a3a5a; margin: 20px 0;">
-                <button class="btn btn-admin" onclick="adminLogin()">دخول المدير</button>
-            </div>
+    <div id="auth-screen">
+        <div class="auth-card">
+            <img src="IMG-20260117-WA0013.jpg" width="120" style="border-radius: 20px; margin-bottom: 20px;">
+            <h2 style="margin:0">مرحباً بك في إتقان</h2>
+            <p style="color:#8892b0">المنصة الرسمية للأستاذ عمران البراج</p>
+            
+            <button class="btn btn-google" onclick="enterApp('طالب جوجل')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_Icons-09.svg" width="20">
+                تسجيل الدخول بجوجل
+            </button>
+            <button class="btn btn-phone" onclick="let p=prompt('أدخل رقم هاتفك:'); if(p) enterApp('طالب: '+p)">
+                <i class="fas fa-phone"></i> دخول برقم الهاتف
+            </button>
+            <button class="btn btn-admin" onclick="adminLogin()">
+                <i class="fas fa-user-shield"></i> دخول المدير
+            </button>
         </div>
     </div>
 
     <div id="main-app">
         <nav class="navbar">
-            <div class="profile-area">
-                <div class="avatar" id="user-avatar"></div>
-                <div>
-                    <div id="display-name" style="font-weight: bold; font-size: 0.9rem;">طالب علم</div>
-                    <div id="user-status" style="font-size: 0.7rem; color: var(--accent);">حساب طالب نشط</div>
-                </div>
+            <div style="display:flex; align-items:center; gap:12px">
+                <div id="u-avatar" style="width:40px; height:40px; background:var(--royal); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold">ع</div>
+                <div id="u-name">عمران البراج</div>
             </div>
-            <img src="IMG-20260117-WA0013.jpg" width="45" style="border-radius: 10px;">
+            <img src="IMG-20260117-WA0013.jpg" width="45" style="border-radius:10px">
         </nav>
 
-        <div id="admin-panel">
-            <h3 style="color: var(--accent);">مرحباً أيها القائد عمران!</h3>
-            <p>أنت الآن تملك صلاحيات التعديل الكاملة.</p>
-            <button class="btn-primary btn" style="width: auto; padding: 10px 20px;">إضافة فيديو جديد +</button>
-        </div>
+        <aside class="sidebar">
+            <div class="nav-item active" onclick="showSection('courses', this)"><i class="fas fa-book"></i> المواد الدراسية</div>
+            <div class="nav-item" onclick="showSection('library', this)"><i class="fas fa-file-pdf"></i> أوراقي وسنواتي</div>
+            <div class="nav-item" onclick="showSection('support', this)"><i class="fas fa-headset"></i> الدعم الفني</div>
+            <div id="admin-tab" class="nav-item" style="display:none; color:var(--accent)" onclick="showSection('admin', this)"><i class="fas fa-tools"></i> لوحة المدير</div>
+        </aside>
 
-        <div class="progress-box">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0;">تقدمك في مادة التحليل الوسيط</h3>
-                <span id="progress-percent" style="color: var(--accent); font-weight: bold; font-size: 1.2rem;">0%</span>
-            </div>
-            <div class="bar-bg"><div class="bar-fill" id="progress-bar"></div></div>
-            <p style="font-size: 0.8rem; color: #8892b0; margin-top: 10px;">أكمل مشاهدة الفيديوهات لتصل لدرجة الإتقان.</p>
-        </div>
+        <main class="content">
+            <section id="courses" class="section active-section">
+                <div class="card">
+                    <h2 style="color:var(--accent); margin:0">التحليل الوسيط</h2>
+                    <p style="color:#8892b0">نسبة إنجازك في هذه المادة:</p>
+                    <div class="progress-container"><div class="progress-fill" id="p-bar" style="width: 0%;"></div></div>
+                    <p id="p-text">0% مكتمل</p>
+                </div>
+                <div id="video-list"></div>
+            </section>
 
-        <div class="video-grid" id="video-grid">
-            </div>
+            <section id="library" class="section">
+                <h2>المكتبة الرقمية (PDF)</h2>
+                <div id="file-list">
+                    <div class="card" style="display:flex; justify-content:space-between; align-items:center">
+                        <span><i class="fas fa-file-pdf" style="color:#ff4d4d"></i> سنوات سابقة - ميد</span>
+                        <button class="btn btn-primary" style="width:auto; margin:0">تحميل</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="support" class="section">
+                <div class="card" style="text-align:center">
+                    <i class="fas fa-headset fa-3x" style="color:var(--accent)"></i>
+                    <h2>الدعم الفني المباشر</h2>
+                    <p>هل تواجه مشكلة؟ تواصل مع الأستاذ عمران مباشرة عبر الواتساب</p>
+                    <a href="https://wa.me/XXXXXXXX" class="btn btn-phone" style="width:200px; margin:20px auto">مراسلة الآن</a>
+                </div>
+            </section>
+
+            <section id="admin" class="section">
+                <div class="admin-panel">
+                    <h2>لوحة التحكم (عمران)</h2>
+                    <div class="card">
+                        <h4>إضافة فيديو جديد</h4>
+                        <input type="text" id="new-v-title" placeholder="عنوان المحاضرة">
+                        <input type="text" id="new-v-id" placeholder="ID فيديو يوتيوب (مثال: euOqZKztxhE)">
+                        <button class="btn btn-primary" onclick="addNewVideo()">نشر الفيديو للطلاب</button>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script>
-        // قاعدة بيانات الـ 15 محاضرة
-        const lectures = [
-            { id: "euOqZKztxhE", title: "المحاضرة 1: النهايات والاتصال" },
-            { id: "cCQtBGM8TJE", title: "المحاضرة 2: تطبيقات الاشتقاق" },
-            { id: "4QtEFQ2iJVI", title: "المحاضرة 3: التكامل المحدود" },
-            { id: "pCmGHpZsdC0", title: "المحاضرة 4: المتسلسلات الزوجية" },
-            { id: "lTyhd6WhuK0", title: "المحاضرة 5: القيم القصوى" },
-            { id: "6iyrEw2GDtU", title: "المحاضرة 6: المتجهات في الفضاء" },
-            { id: "L8fuoXreP94", title: "المحاضرة 7: الضرب التقاطعي" },
-            { id: "UDa4WFNVU-E", title: "المحاضرة 8: الخطوط والمستويات" },
-            { id: "wn8G3KwmTlc", title: "المحاضرة 9: الدوال المتجهة" },
-            { id: "eb82juAI9m8", title: "المحاضرة 10: طول القوس والانحناء" },
-            { id: "jPsr-q-ylvU", title: "المحاضرة 11: الدوال بعدة متغيرات" },
-            { id: "MSlKNS6kfeg", title: "المحاضرة 12: المشتقات الجزئية" },
-            { id: "ZZ5cdT9AixQ", title: "المحاضرة 13: قاعدة السلسلة" },
-            { id: "cihOdR8e3yc", title: "المحاضرة 14: المتجهات المتدرجة" },
-            { id: "QQbrdNU0mPw", title: "المحاضرة 15: مراجعة نهائية" }
+        let videos = JSON.parse(localStorage.getItem('itqan_vids')) || [
+            {id: "euOqZKztxhE", title: "المحاضرة 1: النهايات"},
+            {id: "cCQtBGM8TJE", title: "المحاضرة 2: الاتصال"}
         ];
+        let watched = JSON.parse(localStorage.getItem('watched')) || [];
 
-        let watchedVids = JSON.parse(localStorage.getItem('watched_vids')) || [];
-
-        function handleAuth(type) {
-            const phone = document.getElementById('user-phone').value;
-            if(type === 'phone' && phone.length < 10) {
-                alert("يرجى إدخال رقم هاتف صحيح");
-                return;
-            }
-            
-            // محاكاة تسجيل دخول ناجح
-            document.getElementById('auth-page').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('auth-page').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                if(type === 'phone') {
-                    document.getElementById('display-name').innerText = "طالب: " + phone;
-                } else {
-                    document.getElementById('display-name').innerText = "طالب جوجل";
-                }
-                renderLectures();
-            }, 500);
+        function enterApp(name) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('u-name').innerText = name;
+            renderVideos();
         }
 
         function adminLogin() {
             const pass = prompt("كلمة سر المدير:");
             if(pass === "Omran#05") {
-                document.getElementById('auth-page').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                document.getElementById('admin-panel').style.display = 'block';
-                document.getElementById('display-name').innerText = "المدير عمران البراج";
-                document.getElementById('user-status').innerText = "مسؤول المنصة";
-                renderLectures();
-            } else {
-                alert("خطأ في كلمة السر!");
-            }
+                enterApp("المدير عمران البراج");
+                document.getElementById('admin-tab').style.display = 'flex';
+                document.getElementById('u-avatar').style.background = "gold";
+                document.getElementById('u-avatar').innerText = "M";
+            } else { alert("كلمة السر خاطئة!"); }
         }
 
-        function renderLectures() {
-            const grid = document.getElementById('video-grid');
-            grid.innerHTML = '';
-            lectures.forEach((lec, index) => {
-                const isWatched = watchedVids.includes(lec.id);
-                grid.innerHTML += `
-                    <div class="video-card ${isWatched ? 'watched' : ''}">
-                        <div class="iframe-container">
-                            <iframe src="https://www.youtube.com/embed/${lec.id}" allowfullscreen></iframe>
-                        </div>
-                        <div class="video-info">
-                            <div style="font-weight:bold; font-size:0.9rem;">${lec.title}</div>
-                            <button class="watch-btn" onclick="markWatched('${lec.id}')">
-                                ${isWatched ? 'مكتمل' : 'تممت المشاهدة؟'}
+        function showSection(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
+        }
+
+        function renderVideos() {
+            const list = document.getElementById('video-list');
+            list.innerHTML = '';
+            videos.forEach(v => {
+                const isDone = watched.includes(v.id);
+                list.innerHTML += `
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between">
+                            <h4>${v.title}</h4>
+                            <button onclick="toggleWatch('${v.id}')" style="background:none; border:none; color:${isDone?'#4CAF50':'#8892b0'}; cursor:pointer">
+                                <i class="fas fa-${isDone?'check-circle':'circle'}"></i> ${isDone?'تمت المشاهدة':'تحديد كمكتمل'}
                             </button>
                         </div>
-                    </div>
-                `;
+                        <div class="video-box"><div class="iframe-wrap"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div></div>
+                    </div>`;
             });
-            updateUI();
+            updateProgress();
         }
 
-        function markWatched(id) {
-            if(!watchedVids.includes(id)) {
-                watchedVids.push(id);
-                localStorage.setItem('watched_vids', JSON.stringify(watchedVids));
-                renderLectures();
+        function toggleWatch(id) {
+            if(watched.includes(id)) watched = watched.filter(i => i !== id);
+            else watched.push(id);
+            localStorage.setItem('watched', JSON.stringify(watched));
+            renderVideos();
+        }
+
+        function updateProgress() {
+            const p = (watched.length / videos.length) * 100 || 0;
+            document.getElementById('p-bar').style.width = p + '%';
+            document.getElementById('p-text').innerText = Math.round(p) + '% مكتمل';
+        }
+
+        function addNewVideo() {
+            const t = document.getElementById('new-v-title').value;
+            const i = document.getElementById('new-v-id').value;
+            if(t && i) {
+                videos.push({id: i, title: t});
+                localStorage.setItem('itqan_vids', JSON.stringify(videos));
+                renderVideos();
+                alert("تمت إضافة المحاضرة بنجاح!");
             }
-        }
-
-        function updateUI() {
-            const percent = (watchedVids.length / lectures.length) * 100;
-            document.getElementById('progress-bar').style.width = percent + '%';
-            document.getElementById('progress-percent').innerText = Math.round(percent) + '%';
         }
     </script>
 </body>
