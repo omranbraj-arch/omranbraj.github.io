@@ -5,36 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Githup Docs | منصة إتقان التعليمية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2ea44f;
             --primary-dark: #22863a;
+            --secondary: #0366d6;
+            --accent: #f9826c;
             --bg: #0d1117;
             --card: #161b22;
+            --sidebar: #0d1117;
             --text: #c9d1d9;
+            --text-light: #8b949e;
             --border: #30363d;
+            --success: #2ea44f;
+            --danger: #f85149;
+            --warning: #f0883e;
+            --info: #58a6ff;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* خلفية متحركة مستوحاة من GitHub */
+        .github-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(46, 164, 79, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(3, 102, 214, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(249, 130, 108, 0.05) 0%, transparent 50%);
+            background-color: var(--bg);
+            overflow: hidden;
+        }
+
+        .code-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88, 166, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(20px) translateX(20px); }
         }
 
         /* شاشة الدخول */
         #auth-screen {
-            width: 100%;
-            max-width: 400px;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
 
@@ -43,8 +87,10 @@
             padding: 40px;
             border-radius: 12px;
             border: 1px solid var(--border);
-            text-align: center;
+            width: 100%;
+            max-width: 400px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s ease;
         }
 
         .brand {
@@ -63,24 +109,174 @@
         .brand-text {
             font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), #0366d6);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .btn {
+        /* شريط التنقل */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 64px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-brand-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* القائمة الجانبية */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 64px;
+            width: 260px;
+            height: calc(100vh - 64px);
+            background: var(--sidebar);
+            border-left: 1px solid var(--border);
+            padding: 24px 0;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .nav-item {
             padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-light);
+            cursor: pointer;
+            border-right: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--text);
+            border-right-color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: rgba(46, 164, 79, 0.1);
+            color: var(--primary);
+            border-right-color: var(--primary);
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 24px;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-right: 260px;
+            padding: 32px;
+            min-height: calc(100vh - 64px);
+        }
+
+        .section {
+            display: none;
+            animation: slideUp 0.3s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* الكروت */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card-hover {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .card-hover:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 10px 20px;
             border-radius: 6px;
             border: none;
-            font-size: 1rem;
+            font-family: inherit;
             font-weight: 500;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            width: 100%;
-            margin: 8px 0;
+            font-size: 0.95rem;
             transition: all 0.2s;
         }
 
@@ -92,6 +288,7 @@
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 164, 79, 0.3);
         }
 
         .btn-outline {
@@ -102,44 +299,336 @@
 
         .btn-outline:hover {
             background: rgba(88, 166, 255, 0.1);
-            border-color: #0366d6;
-            color: #0366d6;
+            border-color: var(--secondary);
+            color: var(--secondary);
         }
 
-        /* التطبيق الرئيسي */
-        #app {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
+        .btn-danger {
+            background: var(--danger);
+            color: white;
         }
 
-        .navbar {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 20px;
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        /* الشبكات */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 1024px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-3, .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* العناصر التفاعلية */
+        .file-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
         }
 
-        .sidebar {
-            width: 260px;
-            background: var(--card);
-            border-left: 1px solid var(--border);
-            padding: 20px;
-            position: fixed;
-            right: 0;
+        .file-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .file-icon {
+            margin-left: 12px;
+            color: var(--secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(46, 164, 79, 0.2);
+            color: var(--success);
+        }
+
+        .badge-info {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--info);
+        }
+
+        .badge-warning {
+            background: rgba(240, 136, 62, 0.2);
+            color: var(--warning);
+        }
+
+        /* الفيديوهات */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        .video-container iframe {
+            position: absolute;
             top: 0;
-            height: 100vh;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
-        .main-content {
-            margin-right: 260px;
-            padding: 30px;
+        /* التبويبات */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* أشكال التنبيه */
+        .alert {
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: rgba(46, 164, 79, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(248, 81, 73, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* النماذج */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 164, 79, 0.2);
+        }
+
+        /* لوحة المدير */
+        .admin-panel {
+            display: grid;
+            gap: 24px;
+        }
+
+        .admin-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .admin-section {
+            margin-bottom: 32px;
+        }
+
+        /* الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* التجاوب */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                background: var(--card);
+                backdrop-filter: blur(20px);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-right: 0;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+        }
+
+        /* زر القائمة المتنقلة */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* مؤشر التحميل */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
     </style>
 </head>
 <body>
+
+    <!-- خلفية GitHub -->
+    <div class="github-bg">
+        <div class="code-grid"></div>
+    </div>
 
     <!-- شاشة الدخول -->
     <div id="auth-screen">
@@ -149,15 +638,16 @@
                 <span class="brand-text">Githup Docs</span>
             </div>
             
-            <h2 style="margin-bottom: 8px;">منصة إتقان التعليمية</h2>
-            <p style="color: #8b949e; margin-bottom: 30px;">نظام إدارة تعليمي متكامل</p>
+            <h2 style="text-align: center; margin-bottom: 8px;">منصة إتقان التعليمية</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">
+                نظام إدارة تعليمي متكامل
+            </p>
             
-            <!-- أزرار الدخول -->
-            <button class="btn btn-primary" onclick="handleLogin('student')">
+            <button class="btn btn-primary" onclick="handleLogin('student')" style="width: 100%; margin-bottom: 12px;">
                 <i class="fas fa-user-graduate"></i> الدخول كطالب
             </button>
             
-            <button class="btn btn-outline" onclick="handleAdminLogin()">
+            <button class="btn btn-outline" onclick="handleAdminLogin()" style="width: 100%;">
                 <i class="fas fa-user-shield"></i> دخول المدير
             </button>
         </div>
@@ -165,96 +655,368 @@
 
     <!-- التطبيق الرئيسي -->
     <div id="app">
+        <!-- شريط التنقل -->
         <nav class="navbar">
-            <div>
-                <i class="fab fa-github"></i>
-                <span style="font-weight: bold; margin-right: 10px;">Githup Docs</span>
-                <span id="u-display">طالب</span>
+            <div class="nav-brand">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <i class="fab fa-github nav-brand-icon"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">Githup Docs</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light);" id="u-display">طالب</div>
+                </div>
             </div>
-            <button class="btn btn-outline" onclick="logout()" style="width: auto; padding: 8px 16px;">
-                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
-            </button>
+            
+            <div class="user-menu">
+                <div class="user-avatar" id="user-avatar">ط</div>
+                <button class="btn btn-outline btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
         </nav>
 
-        <aside class="sidebar">
-            <h3 style="margin-bottom: 20px;">القائمة</h3>
-            <div style="color: #8b949e; padding: 10px;">
-                <p>✓ تم تسجيل الدخول بنجاح</p>
-                <p>يمكنك الآن استخدام المنصة</p>
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('dashboard', this)">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>الرئيسية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('subjects', this)">
+                <i class="fas fa-book"></i>
+                <span>المواد الدراسية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('videos', this)">
+                <i class="fas fa-video"></i>
+                <span>الفيديوهات التعليمية</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('library', this)">
+                <i class="fas fa-folder-open"></i>
+                <span>المكتبة</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSection('teachers', this)">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>المعلمين</span>
+            </div>
+            
+            <div class="nav-divider"></div>
+            
+            <div class="nav-item" onclick="showSection('support', this)">
+                <i class="fas fa-headset"></i>
+                <span>الدعم الفني</span>
+            </div>
+            
+            <div id="admin-nav" class="nav-item" style="display: none;" onclick="showSection('admin', this)">
+                <i class="fas fa-cogs"></i>
+                <span>لوحة التحكم</span>
             </div>
         </aside>
 
+        <!-- المحتوى الرئيسي -->
         <main class="main-content">
-            <h1>مرحباً بك في منصة إتقان التعليمية</h1>
-            <p style="color: #8b949e; margin-top: 20px;">تم تصميم هذه المنصة خصيصاً لتسهيل العملية التعليمية</p>
-        </main>
-    </div>
+            <!-- قسم الرئيسية -->
+            <section id="dashboard" class="section active-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                        </h2>
+                        <div class="badge badge-success" id="last-login"></div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-subjects">0</div>
+                            <div>المواد الدراسية</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-teachers">0</div>
+                            <div>المعلمين</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-videos">0</div>
+                            <div>الفيديوهات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-files">0</div>
+                            <div>الملفات</div>
+                        </div>
+                    </div>
+                    
+                    <div id="recent-activity">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-    <script>
-        // دالة الدخول كطالب
-        function handleLogin(role) {
-            console.log('محاولة الدخول كـ:', role);
-            
-            // إخفاء شاشة الدخول
-            document.getElementById('auth-screen').style.display = 'none';
-            
-            // إظهار التطبيق
-            document.getElementById('app').style.display = 'block';
-            
-            // تحديث الاسم المعروض
-            if (role === 'student') {
-                document.getElementById('u-display').textContent = 'طالب';
-            } else if (role === 'admin') {
-                document.getElementById('u-display').textContent = 'المدير';
-            }
-            
-            // تخزين حالة الدخول
-            localStorage.setItem('loggedIn', role);
-            
-            alert('تم تسجيل الدخول بنجاح!');
-        }
+            <!-- قسم المواد الدراسية -->
+            <section id="subjects" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-book"></i> المواد الدراسية
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-3" id="subjects-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-        // دالة دخول المدير
-        function handleAdminLogin() {
-            const password = prompt("أدخل كلمة مرور المدير:");
-            
-            if (password === "Omran#05") {
-                handleLogin('admin');
-            } else if (password === null) {
-                // المستخدم ضغط إلغاء
-                return;
-            } else {
-                alert("كلمة المرور غير صحيحة!");
-            }
-        }
+            <!-- قسم الفيديوهات -->
+            <section id="videos" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-video"></i> الفيديوهات التعليمية
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="tabs" id="video-tabs">
+                        <button class="tab active" onclick="filterVideos('all')">الكل</button>
+                        <button class="tab" onclick="filterVideos('recent')">الأحدث</button>
+                        <button class="tab" onclick="filterVideos('popular')">الأكثر مشاهدة</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2" id="videos-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-        // دالة تسجيل الخروج
-        function logout() {
-            if (confirm("هل تريد تسجيل الخروج؟")) {
-                localStorage.removeItem('loggedIn');
-                location.reload();
-            }
-        }
+            <!-- قسم المكتبة -->
+            <section id="library" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-folder-open"></i> المكتبة
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="tabs" id="library-tabs">
+                        <button class="tab active" onclick="filterFiles('all')">الكل</button>
+                        <button class="tab" onclick="filterFiles('pdf')">PDF</button>
+                        <button class="tab" onclick="filterFiles('doc')">مستندات</button>
+                        <button class="tab" onclick="filterFiles('other')">أخرى</button>
+                    </div>
+                    
+                    <div id="files-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
 
-        // التحقق من تسجيل الدخول عند تحميل الصفحة
-        window.onload = function() {
-            const loggedIn = localStorage.getItem('loggedIn');
-            if (loggedIn) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                document.getElementById('u-display').textContent = 
-                    loggedIn === 'admin' ? 'المدير' : 'طالب';
-            }
-            
-            // إضافة event listeners للأزرار (كإجراء احتياطي)
-            document.querySelector('.btn-primary').onclick = function() {
-                handleLogin('student');
-            };
-            
-            document.querySelector('.btn-outline').onclick = function() {
-                handleAdminLogin();
-            };
-        };
-    </script>
-</body>
-</html>
+            <!-- قسم المعلمين -->
+            <section id="teachers" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chalkboard-teacher"></i> المعلمين
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-3" id="teachers-container">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم الدعم الفني -->
+            <section id="support" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-headset"></i> الدعم الفني
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2" style="gap: 24px;">
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fab fa-whatsapp"></i> الدعم المباشر</h3>
+                            <p style="color: var(--text-light); margin-bottom: 20px;">
+                                تواصل مع فريق الدعم عبر واتساب للحصول على مساعدة فورية
+                            </p>
+                            <a href="https://wa.me/962778393633" target="_blank" class="btn btn-success" style="width: 100%;">
+                                <i class="fab fa-whatsapp"></i> ابدأ محادثة
+                            </a>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-envelope"></i> البريد الإلكتروني</h3>
+                            <p style="color: var(--text-light); margin-bottom: 20px;">
+                                أرسل استفساراتك أو مشاكلك الفنية عبر البريد الإلكتروني
+                            </p>
+                            <a href="mailto:support@itqan.com" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i> إرسال بريد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم لوحة تحكم المدير -->
+            <section id="admin" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-cogs"></i> لوحة تحكم المدير
+                        </h2>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i> عودة
+                        </button>
+                    </div>
+                    
+                    <div class="tabs" id="admin-tabs">
+                        <button class="tab active" onclick="showAdminTab('manage')">الإدارة</button>
+                        <button class="tab" onclick="showAdminTab('add')">إضافة محتوى</button>
+                        <button class="tab" onclick="showAdminTab('stats')">الإحصائيات</button>
+                        <button class="tab" onclick="showAdminTab('settings')">الإعدادات</button>
+                    </div>
+                    
+                    <!-- تبويب الإدارة -->
+                    <div id="admin-manage" class="admin-section">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-tasks"></i> إدارة المحتوى</h3>
+                        
+                        <div class="grid grid-cols-2" style="gap: 20px;">
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book"></i> المواد الدراسية</h4>
+                                <div id="admin-subjects-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-chalkboard-teacher"></i> المعلمين</h4>
+                                <div id="admin-teachers-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video"></i> الفيديوهات</h4>
+                                <div id="admin-videos-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                            
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file"></i> الملفات</h4>
+                                <div id="admin-files-list">
+                                    <!-- سيتم ملؤه بالجافاسكربت -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- تبويب الإضافة -->
+                    <div id="admin-add" class="admin-section" style="display: none;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> إضافة محتوى جديد</h3>
+                        
+                        <div class="grid grid-cols-2" style="gap: 20px;">
+                            <!-- إضافة مادة -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book-medical"></i> إضافة مادة</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم المادة</label>
+                                    <input type="text" id="add-subject-name" class="form-control" placeholder="أدخل اسم المادة">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">وصف المادة</label>
+                                    <textarea id="add-subject-desc" class="form-control" rows="3" placeholder="وصف مختصر للمادة"></textarea>
+                                </div>
+                                <button class="btn btn-primary" onclick="addSubject()">
+                                    <i class="fas fa-plus"></i> إضافة المادة
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة معلم -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-user-plus"></i> إضافة معلم</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم المعلم</label>
+                                    <input type="text" id="add-teacher-name" class="form-control" placeholder="أدخل اسم المعلم">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">التخصص</label>
+                                    <input type="text" id="add-teacher-specialty" class="form-control" placeholder="تخصص المعلم">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" id="add-teacher-email" class="form-control" placeholder="email@example.com">
+                                </div>
+                                <button class="btn btn-primary" onclick="addTeacher()">
+                                    <i class="fas fa-plus"></i> إضافة المعلم
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة فيديو -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video-plus"></i> إضافة فيديو</h4>
+                                <div class="form-group">
+                                    <label class="form-label">عنوان الفيديو</label>
+                                    <input type="text" id="add-video-title" class="form-control" placeholder="عنوان الفيديو">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">معرف اليوتيوب</label>
+                                    <input type="text" id="add-video-id" class="form-control" placeholder="dQw4w9WgXcQ">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">المادة</label>
+                                    <select id="add-video-subject" class="form-control">
+                                        <option value="">اختر المادة</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">المعلم</label>
+                                    <select id="add-video-teacher" class="form-control">
+                                        <option value="">اختر المعلم</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="addVideo()">
+                                    <i class="fas fa-plus"></i> إضافة الفيديو
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة ملف -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file-upload"></i> إضافة ملف</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم الملف</label>
+                                    <input type="text" id="add-file-name" class="form-control" placeholder="اسم الملف">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">رابط الملف</label>
+                                    <input type="text" id="add-file-url" class="form-control" placeholder="https://example.com/file.pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">نوع الملف</label>
+                                    <select id="add-file-type" class="form-control">
+                                        <option value="pdf">PDF</option>
+                                        <option value="doc">مستند Word</option>
+                                        <option value="ppt">عرض تقديمي</option>
+                                        <option value="zip">ملف مضغوط</option>
+                                        <option value="other">أخرى</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="addFile()">
+                                    <i class="fas fa-plus"></i> إضافة الملف
