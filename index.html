@@ -10,7 +10,7 @@
             --bg: #020c1b;
             --primary: #3a7bd5;
             --accent: #00d2ff;
-            --glass: rgba(17, 34, 64, 0.9);
+            --glass: rgba(17, 34, 64, 0.95);
             --text: #e6f1ff;
         }
 
@@ -20,8 +20,7 @@
             background: var(--bg);
             color: var(--text);
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0; min-height: 100vh;
-            overflow-x: hidden;
+            margin: 0; min-height: 100vh; overflow-x: hidden;
         }
 
         /* خلفية الأنيميشن */
@@ -31,10 +30,10 @@
         }
         .glow-sphere {
             position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
             border-radius: 50%; animation: float 15s infinite alternate;
         }
-        @keyframes float { from { transform: translate(-10%, -10%); } to { transform: translate(10%, 15%); } }
+        @keyframes float { from { transform: translate(-10%, -10%); } to { transform: translate(15%, 20%); } }
 
         /* شاشة الدخول */
         #auth-screen {
@@ -44,54 +43,59 @@
         .auth-card {
             background: var(--glass); padding: 40px; border-radius: 35px;
             text-align: center; border: 1px solid rgba(0, 210, 255, 0.3);
-            width: 90%; max-width: 400px; backdrop-filter: blur(15px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 90%; max-width: 420px; backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
 
-        /* الواجهة الرئيسية */
-        #app { display: none; padding-top: 80px; }
+        /* الهيكل العام */
+        #app { display: none; padding-top: 85px; }
         .navbar {
-            position: fixed; top: 0; width: 100%; height: 70px; background: rgba(2, 12, 27, 0.95);
+            position: fixed; top: 0; width: 100%; height: 75px; background: rgba(2, 12, 27, 0.98);
             display: flex; justify-content: space-between; align-items: center; padding: 0 5%;
-            z-index: 1000; border-bottom: 1px solid rgba(0, 210, 255, 0.15);
+            z-index: 1000; border-bottom: 1px solid rgba(0, 210, 255, 0.2);
         }
 
         .sidebar {
             position: fixed; right: 0; width: 260px; height: 100vh; background: rgba(10, 25, 47, 0.98);
-            padding: 90px 20px 20px; border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
+            padding: 100px 20px 20px; border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
         }
         .nav-item {
-            padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 12px; color: #8892b0;
+            padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 12px; color: #8892b0; font-weight: 600;
         }
-        .nav-item.active { background: rgba(0, 210, 255, 0.1); color: var(--accent); }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 210, 255, 0.12); color: var(--accent); }
 
         .main-content { margin-right: 260px; padding: 30px; }
-        .section { display: none; animation: slideUp 0.6s ease; max-width: 900px; margin: 0 auto; }
+        .section { display: none; animation: slideUp 0.5s ease; max-width: 900px; margin: 0 auto; }
         .active-section { display: block; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* الكروت */
         .card {
-            background: #112240; border-radius: 20px; padding: 25px; margin-bottom: 20px;
-            border: 1px solid rgba(0, 210, 255, 0.1); cursor: pointer;
+            background: #112240; border-radius: 25px; padding: 30px; margin-bottom: 25px;
+            border: 1px solid rgba(0, 210, 255, 0.1); position: relative;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .card-clickable { cursor: pointer; }
+        .card-clickable:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
 
-        /* أزرار */
+        /* الأزرار */
         .btn {
-            width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: bold;
-            cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 25px; border-radius: 12px; border: none; font-weight: bold;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            font-size: 1rem; text-decoration: none; width: 100%; margin-top: 10px;
         }
         .btn-primary { background: linear-gradient(90deg, #3a7bd5, #00d2ff); color: white; }
-        .btn-whatsapp { background: #25D366; color: white; text-decoration: none; }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-whatsapp { background: #25D366; color: white; }
+
+        /* لوحة المدير */
+        .admin-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; margin-top: 20px; border: 1px dashed var(--accent); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; background: #020c1b; border: 1px solid #1a3a5a; color: white; }
 
         /* الفيديوهات */
-        .video-item { background: #0a192f; border-radius: 15px; overflow: hidden; margin-top: 15px; border: 1px solid #1a3a5a; }
-        .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-box { border-radius: 20px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-top: 15px; border: 1px solid #1a3a5a; }
+        .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
         @media (max-width: 850px) { .sidebar { display: none; } .main-content { margin-right: 0; } }
     </style>
@@ -103,112 +107,149 @@
     <div id="auth-screen">
         <div class="auth-card">
             <img src="IMG-20260117-WA0013.jpg" width="120" style="border-radius: 20px; margin-bottom: 20px; border: 2px solid var(--accent);">
-            <h2>منصة إتقان</h2>
-            <button class="btn btn-primary" onclick="enterApp('طالب إتقان')">تسجيل الدخول</button>
-            <button class="btn btn-outline" onclick="adminLogin()">دخول المدير (عمران)</button>
+            <h2>منصة إتقان التعليمية</h2>
+            <p style="color:#8892b0; margin-bottom: 25px;">مع الأستاذ عمران البراج</p>
+            <button class="btn btn-primary" onclick="handleLogin('student')">الدخول كطالب</button>
+            <button class="btn btn-outline" onclick="handleAdminLogin()">لوحة المدير</button>
         </div>
     </div>
 
     <div id="app">
         <nav class="navbar">
-            <div id="u-display" style="font-weight:bold;">عمران البراج</div>
-            <img src="IMG-20260117-WA0013.jpg" width="45" style="border-radius: 10px;">
+            <div id="u-display" style="font-weight:bold; color:var(--accent)">عمران البراج</div>
+            <div style="display:flex; align-items:center; gap:10px">
+                <button onclick="logout()" style="background:none; border:none; color:#ff4d4d; cursor:pointer;"><i class="fas fa-sign-out-alt"></i></button>
+                <img src="IMG-20260117-WA0013.jpg" width="45" style="border-radius: 10px;">
+            </div>
         </nav>
 
         <aside class="sidebar">
-            <div class="nav-item active" onclick="showTab('subjects', this)"><i class="fas fa-book"></i> المواد الدراسية</div>
-            <div class="nav-item" onclick="showTab('library', this)"><i class="fas fa-file-pdf"></i> أوراقي وسنواتي</div>
-            <div class="nav-item" onclick="showTab('support', this)"><i class="fas fa-headset"></i> الدعم الفني</div>
-            <div id="adm-nav" class="nav-item" style="display:none; color:var(--accent)" onclick="showTab('admin', this)"><i class="fas fa-tools"></i> لوحة المدير</div>
+            <div class="nav-item active" onclick="showSection('subjects-sec', this)"><i class="fas fa-book"></i> المواد الدراسية</div>
+            <div class="nav-item" onclick="showSection('library-sec', this)"><i class="fas fa-file-pdf"></i> أوراقي وسنواتي</div>
+            <div class="nav-item" onclick="showSection('support-sec', this)"><i class="fas fa-headset"></i> الدعم الفني</div>
+            <div id="admin-tab" class="nav-item" style="display:none; color:var(--accent)" onclick="showSection('admin-sec', this)"><i class="fas fa-tools"></i> إدارة المنصة</div>
         </aside>
 
         <main class="main-content">
-            
-            <section id="subjects" class="section active-section">
-                <h2>اختر المادة:</h2>
-                <div class="card" onclick="showTab('teachers')">
-                    <h3>التحليل الوسيط</h3>
-                    <p style="color:#8892b0">انقر لمعاينة المدرسين والمحاضرات</p>
-                </div>
+            <section id="subjects-sec" class="section active-section">
+                <h2>المواد الدراسية:</h2>
+                <div id="subjects-list">
+                    </div>
             </section>
 
-            <section id="teachers" class="section">
-                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showTab('subjects')">← عودة</button>
-                <h2>مدرسين التحليل الوسيط:</h2>
-                <div class="card" onclick="showTab('lectures')">
-                    <div style="display:flex; align-items:center; gap:15px">
-                        <img src="IMG-20260117-WA0013.jpg" width="60" style="border-radius:50%">
-                        <h3>الأستاذ عمران البراج</h3>
+            <section id="teachers-sec" class="section">
+                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showSection('subjects-sec')">← عودة</button>
+                <h2 id="current-sub-title">مدرسين المادة:</h2>
+                <div id="teachers-list">
+                    <div class="card card-clickable" onclick="showVideos('عمران البراج')">
+                        <div style="display:flex; align-items:center; gap:20px">
+                            <img src="IMG-20260117-WA0013.jpg" width="70" style="border-radius:50%; border:2px solid var(--accent)">
+                            <h3>الأستاذ عمران البراج</h3>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section id="lectures" class="section">
-                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showTab('teachers')">← عودة</button>
-                <h2>المحاضرات (15 محاضرة):</h2>
-                <div id="lectures-container">
-                    </div>
+            <section id="videos-sec" class="section">
+                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showSection('teachers-sec')">← عودة</button>
+                <h2 id="video-title">المحاضرات:</h2>
+                <div id="lectures-container"></div>
             </section>
 
-            <section id="library" class="section">
-                <h2>المكتبة الرقمية</h2>
-                <p>الملفات ستظهر هنا عند رفعها من لوحة المدير.</p>
+            <section id="library-sec" class="section">
+                <h2>المكتبة والسنوات (PDF)</h2>
+                <div id="files-container"></div>
             </section>
 
-            <section id="support" class="section">
-                <div class="card" style="text-align:center">
-                    <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px"></i>
-                    <h2>تواصل مع الأستاذ عمران</h2>
-                    <a href="https://wa.me/962778393633" target="_blank" class="btn btn-whatsapp">ابدأ المحادثة على واتساب</a>
+            <section id="support-sec" class="section">
+                <div class="card" style="text-align:center; padding:50px 20px">
+                    <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:20px"></i>
+                    <h2>الدعم الفني المباشر</h2>
+                    <p>تواصل مع الأستاذ عمران مباشرة</p>
+                    <a href="https://wa.me/962778393633" target="_blank" class="btn btn-whatsapp" style="width:250px; margin:0 auto">تحدث معنا</a>
                 </div>
             </section>
 
-            <section id="admin" class="section">
-                <div class="card">
-                    <h2>لوحة تحكم عمران</h2>
-                    <p>هنا يمكنك مستقبلاً إضافة المزيد من المواد والملفات.</p>
+            <section id="admin-sec" class="section">
+                <h2 style="color:var(--accent)">لوحة تحكم المدير عمران 🛡️</h2>
+                <div class="admin-form">
+                    <h3>إضافة فيديو جديد</h3>
+                    <input type="text" id="adm-v-title" placeholder="عنوان المحاضرة">
+                    <input type="text" id="adm-v-id" placeholder="ID اليوتيوب (مثال: euOqZKztxhE)">
+                    <button class="btn btn-primary" onclick="adminAddVideo()">نشر الفيديو</button>
+                </div>
+                <div class="admin-form">
+                    <h3>إضافة مادة جديدة</h3>
+                    <input type="text" id="adm-sub-name" placeholder="اسم المادة">
+                    <button class="btn btn-primary" onclick="adminAddSubject()">إضافة المادة</button>
                 </div>
             </section>
-
         </main>
     </div>
 
     <script>
-        // قائمة المحاضرات الـ 15 المضافة مسبقاً
-        const allLectures = [
-            {id: "euOqZKztxhE", title: "المحاضرة 1: النهايات"},
-            {id: "cCQtBGM8TJE", title: "المحاضرة 2: الاتصال"},
-            {id: "4QtEFQ2iJVI", title: "المحاضرة 3: قواعد الاشتقاق"},
-            {id: "pCmGHpZsdC0", title: "المحاضرة 4: تطبيقات التفاضل"},
-            {id: "lTyhd6WhuK0", title: "المحاضرة 5: التكامل المحدود"},
-            {id: "6iyrEw2GDtU", title: "المحاضرة 6: المتجهات 1"},
-            {id: "L8fuoXreP94", title: "المحاضرة 7: المتجهات 2"},
-            {id: "UDa4WFNVU-E", title: "المحاضرة 8: المستويات"},
-            {id: "wn8G3KwmTlc", title: "المحاضرة 9: الدوال المتجهة"},
-            {id: "eb82juAI9m8", title: "المحاضرة 10: طول القوس"},
-            {id: "jPsr-q-ylvU", title: "المحاضرة 11: المشتقات الجزئية"},
-            {id: "MSlKNS6kfeg", title: "المحاضرة 12: قاعدة السلسلة"},
-            {id: "ZZ5cdT9AixQ", title: "المحاضرة 13: القيم القصوى"},
-            {id: "cihOdR8e3yc", title: "المحاضرة 14: التكامل الثنائي"},
-            {id: "QQbrdNU0mPw", title: "المحاضرة 15: المراجعة النهائية"}
+        // الـ 15 محاضرة الأساسية
+        const initialVideos = [
+            {id: "euOqZKztxhE", title: "المحاضرة 1: النهايات", teacher: "عمران البراج"},
+            {id: "cCQtBGM8TJE", title: "المحاضرة 2: الاتصال", teacher: "عمران البراج"},
+            {id: "4QtEFQ2iJVI", title: "المحاضرة 3: قواعد الاشتقاق", teacher: "عمران البراج"},
+            {id: "pCmGHpZsdC0", title: "المحاضرة 4: تطبيقات التفاضل", teacher: "عمران البراج"},
+            {id: "lTyhd6WhuK0", title: "المحاضرة 5: التكامل المحدود", teacher: "عمران البراج"},
+            {id: "6iyrEw2GDtU", title: "المحاضرة 6: المتجهات 1", teacher: "عمران البراج"},
+            {id: "L8fuoXreP94", title: "المحاضرة 7: المتجهات 2", teacher: "عمران البراج"},
+            {id: "UDa4WFNVU-E", title: "المحاضرة 8: المستويات", teacher: "عمران البراج"},
+            {id: "wn8G3KwmTlc", title: "المحاضرة 9: الدوال المتجهة", teacher: "عمران البراج"},
+            {id: "eb82juAI9m8", title: "المحاضرة 10: طول القوس", teacher: "عمران البراج"},
+            {id: "jPsr-q-ylvU", title: "المحاضرة 11: المشتقات الجزئية", teacher: "عمران البراج"},
+            {id: "MSlKNS6kfeg", title: "المحاضرة 12: قاعدة السلسلة", teacher: "عمران البراج"},
+            {id: "ZZ5cdT9AixQ", title: "المحاضرة 13: القيم القصوى", teacher: "عمران البراج"},
+            {id: "cihOdR8e3yc", title: "المحاضرة 14: التكامل الثنائي", teacher: "عمران البراج"},
+            {id: "QQbrdNU0mPw", title: "المحاضرة 15: المراجعة النهائية", teacher: "عمران البراج"}
         ];
 
-        function enterApp(name) {
+        let data = JSON.parse(localStorage.getItem('itqan_v4')) || {
+            subjects: ["التحليل الوسيط"],
+            videos: initialVideos,
+            files: []
+        };
+
+        // التحقق من الجلسة عند فتح الصفحة
+        window.onload = () => {
+            const user = localStorage.getItem('isLoggedIn');
+            if(user) {
+                if(user === 'admin') {
+                    showApp("المدير عمران البراج", true);
+                } else {
+                    showApp("طالب إتقان", false);
+                }
+            }
+        };
+
+        function handleLogin(role) {
+            localStorage.setItem('isLoggedIn', role);
+            showApp(role === 'admin' ? "المدير عمران البراج" : "طالب إتقان", role === 'admin');
+        }
+
+        function handleAdminLogin() {
+            const p = prompt("كلمة سر المدير:");
+            if(p === "Omran#05") handleLogin('admin');
+            else alert("خطأ!");
+        }
+
+        function showApp(name, isAdmin) {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('app').style.display = 'block';
-            document.getElementById('u-display').innerText = "مرحباً: " + name;
-            renderVids();
+            document.getElementById('u-display').innerText = name;
+            if(isAdmin) document.getElementById('admin-tab').style.display = 'flex';
+            renderSubjects();
         }
 
-        function adminLogin() {
-            const p = prompt("كلمة سر المدير:");
-            if(p === "Omran#05") {
-                enterApp("المدير عمران البراج");
-                document.getElementById('adm-nav').style.display = 'flex';
-            } else alert("خطأ!");
+        function logout() {
+            localStorage.clear();
+            location.reload();
         }
 
-        function showTab(id, el) {
+        function showSection(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
             if(el) {
@@ -218,18 +259,56 @@
             window.scrollTo(0,0);
         }
 
-        function renderVids() {
+        function renderSubjects() {
+            const list = document.getElementById('subjects-list');
+            list.innerHTML = '';
+            data.subjects.forEach(sub => {
+                list.innerHTML += `<div class="card card-clickable" onclick="showTeachers('${sub}')"><h3>${sub}</h3><p>عرض المدرسين</p></div>`;
+            });
+        }
+
+        function showTeachers(sub) {
+            document.getElementById('current-sub-title').innerText = "مدرسين " + sub;
+            showSection('teachers-sec');
+        }
+
+        function showVideos(teacher) {
+            document.getElementById('video-title').innerText = "محاضرات " + teacher;
             const container = document.getElementById('lectures-container');
             container.innerHTML = '';
-            allLectures.forEach((lec, index) => {
+            data.videos.forEach(v => {
                 container.innerHTML += `
-                    <div class="card" style="cursor:default">
-                        <h4>${lec.title}</h4>
-                        <div class="video-item"><div class="video-wrap">
-                            <iframe src="https://www.youtube.com/embed/${lec.id}"></iframe>
-                        </div></div>
+                    <div class="card">
+                        <h4>${v.title}</h4>
+                        <div class="video-box"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div>
                     </div>`;
             });
+            showSection('videos-sec');
+        }
+
+        // وظائف المدير
+        function adminAddVideo() {
+            const t = document.getElementById('adm-v-title').value;
+            const id = document.getElementById('adm-v-id').value;
+            if(t && id) {
+                data.videos.push({id: id, title: t, teacher: "عمران البراج"});
+                saveAndRefresh();
+                alert("تم النشر!");
+            }
+        }
+
+        function adminAddSubject() {
+            const s = document.getElementById('adm-sub-name').value;
+            if(s) {
+                data.subjects.push(s);
+                saveAndRefresh();
+                alert("تمت الإضافة!");
+            }
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('itqan_v4', JSON.stringify(data));
+            renderSubjects();
         }
     </script>
 </body>
