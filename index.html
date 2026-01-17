@@ -35,7 +35,6 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* ✅ التعديل 3: تحسين الأداء - إزالة transition العامة */
         }
 
         body {
@@ -47,8 +46,8 @@
             line-height: 1.6;
         }
 
-        /* ✅ التعديل 3: إضافة transition فقط للعناصر التفاعلية */
-        .btn, .nav-item, .card-hover, .tab, .file-item {
+        /* ✅ التعديل 3: تحسين الأداء - إضافة transition فقط للعناصر التفاعلية */
+        .btn, .nav-item, .card-hover, .tab, .file-item, .sidebar {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -551,7 +550,6 @@
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(100%);
-                transition: transform 0.3s ease;
                 background: var(--card);
                 backdrop-filter: blur(20px);
             }
@@ -1016,3 +1014,294 @@
                                     <label class="form-label">معرف اليوتيوب</label>
                                     <input type="text" id="add-video-id" class="form-control" placeholder="dQw4w9WgXcQ">
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label">المادة</label>
+                                    <select id="add-video-subject" class="form-control">
+                                        <option value="">اختر المادة</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">المعلم</label>
+                                    <select id="add-video-teacher" class="form-control">
+                                        <option value="">اختر المعلم</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="addVideo()">
+                                    <i class="fas fa-plus"></i> إضافة الفيديو
+                                </button>
+                            </div>
+                            
+                            <!-- إضافة ملف -->
+                            <div class="admin-card">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file-upload"></i> إضافة ملف</h4>
+                                <div class="form-group">
+                                    <label class="form-label">اسم الملف</label>
+                                    <input type="text" id="add-file-name" class="form-control" placeholder="اسم الملف">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">رابط الملف</label>
+                                    <input type="text" id="add-file-url" class="form-control" placeholder="https://example.com/file.pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">نوع الملف</label>
+                                    <select id="add-file-type" class="form-control">
+                                        <option value="pdf">PDF</option>
+                                        <option value="doc">مستند Word</option>
+                                        <option value="ppt">عرض تقديمي</option>
+                                        <option value="zip">ملف مضغوط</option>
+                                        <option value="other">أخرى</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="addFile()">
+                                    <i class="fas fa-plus"></i> إضافة الملف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- تبويب الإحصائيات -->
+                    <div id="admin-stats" class="admin-section" style="display: none;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-line"></i> إحصائيات المنصة</h3>
+                        <div class="admin-card">
+                            <div id="admin-stats-content">
+                                <!-- سيتم ملؤه بالجافاسكربت -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- تبويب الإعدادات -->
+                    <div id="admin-settings" class="admin-section" style="display: none;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-cog"></i> إعدادات النظام</h3>
+                        <div class="admin-card">
+                            <p style="color: var(--text-light); margin-bottom: 20px;">
+                                إعدادات النظام ستكون متاحة في النسخة الكاملة من المنصة.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ✅ التعديل 11: إضافة JavaScript -->
+    <script>
+        // بيانات التخزين
+        let platformData = JSON.parse(localStorage.getItem('github_docs_data')) || {
+            subjects: [
+                { id: 1, name: "الرياضيات المتقدمة", description: "مادة متخصصة في الرياضيات العليا" },
+                { id: 2, name: "الفيزياء الهندسية", description: "تطبيقات الفيزياء في المجالات الهندسية" }
+            ],
+            teachers: [
+                { id: 1, name: "عمران البراج", specialty: "الرياضيات", email: "teacher@example.com" }
+            ],
+            videos: [
+                { id: 1, title: "المحاضرة 1: مقدمة في النهايات", youtubeId: "euOqZKztxhE", subjectId: 1, teacherId: 1 }
+            ],
+            files: [
+                { id: 1, name: "ملخص الرياضيات", url: "#", type: "pdf", subjectId: 1 }
+            ]
+        };
+
+        let currentUser = null;
+        let isAdmin = false;
+
+        // دالة الدخول
+        function handleLogin(role) {
+            if (role === 'student') {
+                currentUser = { name: "طالب", role: "student" };
+                isAdmin = false;
+            } else if (role === 'admin') {
+                currentUser = { name: "المدير", role: "admin" };
+                isAdmin = true;
+                document.getElementById('admin-nav').style.display = 'flex';
+            }
+            
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('u-display').textContent = currentUser.name;
+            document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateStats();
+            
+            alert(`مرحباً ${currentUser.name}! تم تسجيل الدخول بنجاح.`);
+        }
+
+        // دالة دخول المدير
+        function handleAdminLogin() {
+            const password = prompt("أدخل كلمة مرور المدير:");
+            if (password === "Omran#05") {
+                handleLogin('admin');
+            } else if (password !== null) {
+                alert("كلمة المرور غير صحيحة!");
+            }
+        }
+
+        // دالة تسجيل الخروج
+        function logout() {
+            if (confirm("هل تريد تسجيل الخروج؟")) {
+                localStorage.removeItem('currentUser');
+                location.reload();
+            }
+        }
+
+        // دالة عرض القسم
+        function showSection(sectionId, element = null) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            
+            // إظهار القسم المطلوب
+            document.getElementById(sectionId).classList.add('active-section');
+            
+            // تحديث القائمة الجانبية
+            if (element) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                element.classList.add('active');
+            }
+            
+            // تحديث المحتوى
+            if (sectionId === 'dashboard') {
+                updateStats();
+            }
+        }
+
+        // دالة عرض تبويب المدير
+        function showAdminTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.getElementById(`admin-${tabId}`).style.display = 'block';
+        }
+
+        // دالة تصفية الفيديوهات
+        function filterVideos(filter) {
+            // سيتم تنفيذها لاحقاً
+        }
+
+        // دالة تصفية الملفات
+        function filterFiles(filter) {
+            // سيتم تنفيذها لاحقاً
+        }
+
+        // دالة تحديث الإحصائيات
+        function updateStats() {
+            document.getElementById('stat-subjects').textContent = platformData.subjects.length;
+            document.getElementById('stat-teachers').textContent = platformData.teachers.length;
+            document.getElementById('stat-videos').textContent = platformData.videos.length;
+            document.getElementById('stat-files').textContent = platformData.files.length;
+            
+            const now = new Date();
+            document.getElementById('last-login').textContent = `آخر دخول: ${now.toLocaleTimeString('ar-EG')}`;
+        }
+
+        // دالات الإضافة (مبدئية)
+        function addSubject() {
+            const name = document.getElementById('add-subject-name').value;
+            const desc = document.getElementById('add-subject-desc').value;
+            
+            if (name) {
+                const newSubject = {
+                    id: platformData.subjects.length + 1,
+                    name: name,
+                    description: desc
+                };
+                platformData.subjects.push(newSubject);
+                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
+                alert('تم إضافة المادة بنجاح!');
+                updateStats();
+            }
+        }
+
+        function addTeacher() {
+            const name = document.getElementById('add-teacher-name').value;
+            const specialty = document.getElementById('add-teacher-specialty').value;
+            const email = document.getElementById('add-teacher-email').value;
+            
+            if (name) {
+                const newTeacher = {
+                    id: platformData.teachers.length + 1,
+                    name: name,
+                    specialty: specialty,
+                    email: email
+                };
+                platformData.teachers.push(newTeacher);
+                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
+                alert('تم إضافة المعلم بنجاح!');
+                updateStats();
+            }
+        }
+
+        function addVideo() {
+            const title = document.getElementById('add-video-title').value;
+            const youtubeId = document.getElementById('add-video-id').value;
+            
+            if (title && youtubeId) {
+                const newVideo = {
+                    id: platformData.videos.length + 1,
+                    title: title,
+                    youtubeId: youtubeId,
+                    subjectId: 1,
+                    teacherId: 1
+                };
+                platformData.videos.push(newVideo);
+                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
+                alert('تم إضافة الفيديو بنجاح!');
+                updateStats();
+            }
+        }
+
+        function addFile() {
+            const name = document.getElementById('add-file-name').value;
+            const url = document.getElementById('add-file-url').value;
+            const type = document.getElementById('add-file-type').value;
+            
+            if (name && url) {
+                const newFile = {
+                    id: platformData.files.length + 1,
+                    name: name,
+                    url: url,
+                    type: type,
+                    subjectId: 1
+                };
+                platformData.files.push(newFile);
+                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
+                alert('تم إضافة الملف بنجاح!');
+                updateStats();
+            }
+        }
+
+        // دالة تبديل القائمة الجانبية
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // تحميل البيانات عند بدء التشغيل
+        window.onload = function() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                isAdmin = currentUser.role === 'admin';
+                
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                document.getElementById('u-display').textContent = currentUser.name;
+                document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
+                
+                if (isAdmin) {
+                    document.getElementById('admin-nav').style.display = 'flex';
+                }
+                
+                updateStats();
+            }
+        };
+    </script>
+</body>
+</html>
