@@ -6,181 +6,194 @@
     <title>منصة إتقان | الأستاذ عمران البراج</title>
     <style>
         :root {
-            --primary: #1a1c2c;
-            --accent: #4ecca3;
-            --glass-bg: rgba(255, 255, 255, 0.05);
+            --bg: #020c1b;
+            --accent: #64ffda;
+            --glass: rgba(17, 34, 64, 0.9);
             --sidebar-w: 280px;
         }
 
-        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
-            background-color: var(--primary);
-            color: #eeeeee;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: #e6f1ff;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* أنيميشن الخلفية الجديد: جزيئات سحابية */
-        #particle-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; background: linear-gradient(45deg, #1a1c2c, #4a192c);
-            overflow: hidden;
-        }
-        .bubble {
-            position: absolute; bottom: -100px; width: 40px; height: 40px;
-            background: rgba(255, 255, 255, 0.1); border-radius: 50%;
-            animation: rise 15s infinite ease-in;
-        }
-        @keyframes rise {
-            from { transform: translateY(0) rotate(0deg); opacity: 1; }
-            to { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+        /* أنيميشن خلفية متحركة خفيفة (نجوم تتحرك) */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 80%);
+            z-index: -1;
         }
 
-        /* Sidebar بتصميم زجاجي */
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-w);
-            background: rgba(26, 28, 44, 0.8);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            background: #020c1b;
+            border-left: 1px solid rgba(100, 255, 218, 0.1);
             position: fixed; height: 100vh; right: 0;
             display: flex; flex-direction: column; padding: 40px 20px; z-index: 100;
         }
 
-        .logo-box { text-align: center; margin-bottom: 50px; }
-        .logo-box img { 
-            width: 160px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: soft-glow 3s infinite alternate;
+        /* تم إلغاء شعار الزاوية ووضعه في المحتوى */
+        .sidebar-title {
+            color: var(--accent); font-size: 1.5rem; font-weight: bold;
+            text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px var(--accent);
         }
-        @keyframes soft-glow { from { filter: brightness(1); } to { filter: brightness(1.3); } }
 
         .nav-link {
-            padding: 16px 20px; margin: 12px 0; border-radius: 15px;
-            cursor: pointer; font-weight: bold; color: #aaa;
-            background: var(--glass-bg); display: flex; align-items: center; gap: 15px;
+            padding: 15px; margin: 8px 0; border-radius: 12px;
+            cursor: pointer; font-weight: bold; color: #8892b0;
+            border: 1px solid transparent; text-align: center;
         }
+
         .nav-link:hover, .nav-link.active {
-            color: white; background: var(--accent);
-            transform: scale(1.05); box-shadow: 0 10px 20px rgba(78, 204, 163, 0.3);
+            color: var(--accent); background: rgba(100, 255, 218, 0.1);
+            border-color: var(--accent); transform: scale(1.05);
         }
 
-        .main { margin-right: var(--sidebar-w); flex: 1; padding: 60px; width: 100%; }
-        .section { display: none; max-width: 1000px; margin: 0 auto; animation: fade-in 0.8s forwards; }
-        .active-section { display: block; }
-
-        @keyframes fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        /* البطاقات */
-        .glass-card {
-            background: var(--glass-bg); padding: 50px; border-radius: 30px;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        /* Content Area */
+        .main { margin-right: var(--sidebar-w); flex: 1; padding: 40px; width: 100%; }
+        
+        /* مكان الشعار الجديد: في منتصف أعلى المحتوى */
+        .main-logo-header {
+            text-align: center; margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .main-logo-header img {
+            width: 180px; border-radius: 20px;
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.2);
+            border: 2px solid var(--accent);
         }
 
-        .step-card {
-            background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px;
-            cursor: pointer; border: 2px solid transparent; margin-top: 30px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
-        .step-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+
+        .section { display: none; max-width: 900px; margin: 0 auto; }
+        .active-section { 
+            display: block; 
+            animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* الكروت المطورة بأنيميشن */
+        .card {
+            background: var(--glass); padding: 40px; border-radius: 25px;
+            border: 1px solid rgba(100, 255, 218, 0.1); text-align: center;
+            cursor: pointer; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(100, 255, 218, 0.15);
+        }
 
         .btn-back {
-            background: var(--accent); border: none; color: #1a1c2c;
-            padding: 12px 30px; border-radius: 12px; cursor: pointer; margin-bottom: 30px; font-weight: 800;
+            background: none; border: 1px solid var(--accent); color: var(--accent);
+            padding: 12px 25px; border-radius: 12px; cursor: pointer; 
+            margin-bottom: 30px; font-weight: bold;
         }
+        .btn-back:hover { background: var(--accent); color: var(--bg); }
+/* الفيديوهات */
+        .video-box { 
+            background: #112240; border-radius: 20px; margin-bottom: 35px; 
+            overflow: hidden; border: 1px solid rgba(100, 255, 218, 0.05);
+        }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; width: 100%; height: 100%; border: none; right: 0; }
 
-        /* الفيديوهات */
-        .video-box { background: rgba(0,0,0,0.4); border-radius: 25px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.05); }
-        .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; }
-        .iframe-wrap iframe { position: absolute; width: 100%; height: 100%; border: none; right: 0; }
-
-        @media (max-width: 850px) {
+        @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
-            .main { margin-right: 0; padding: 30px; }
+            .sidebar { width: 100%; height: auto; position: relative; border-left: none; padding: 20px; }
+            .main { margin-right: 0; padding: 20px; }
+            .main-logo-header img { width: 130px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="particle-bg"></div>
-
     <aside class="sidebar">
-        <div class="logo-box">
-            <img src="IMG-20260117-WA0013.jpg" alt="Logo">
-        </div>
+        <div class="sidebar-title">إتـقـان</div>
         <nav>
-            <div class="nav-link active" onclick="go('home', this)">🏠 الرئيسية</div>
-            <div class="nav-link" onclick="go('courses', this)">📚 المواد التعليمية</div>
-            <div class="nav-link" onclick="go('suggest', this)">💡 اقترح مادة</div>
+            <div class="nav-link active" onclick="go('home', this)">الرئيسية</div>
+            <div class="nav-link" onclick="go('courses', this)">المواد التعليمية</div>
+            <div class="nav-link" onclick="go('suggest', this)">اقترح مادة</div>
         </nav>
     </aside>
 
     <main class="main">
+        <div class="main-logo-header">
+            <img src="IMG-20260117-WA0013.jpg" alt="Logo">
+        </div>
+
         <section id="home" class="section active-section">
-            <div class="glass-card">
-                <h1 style="font-size: 3rem; color: var(--accent);">منصة إتقان الرقمية</h1>
-                <p style="font-size: 1.3rem; line-height: 2;">
-                    مرحباً بكم في الموقع التعليمي المتطور للأستاذ <strong>عمران البراج</strong>.<br>
-                    نسعى لتقديم أفضل تجربة تعليمية لطلاب جامعة البلقاء التطبيقية.
-                </p>
+            <div class="card">
+                <h1 style="color: var(--accent);">منصة إتقان الرقمية</h1>
+                <p style="font-size: 1.2rem; line-height: 1.8;">مرحباً بكم في الفضاء التعليمي للأستاذ <strong style="color: var(--accent);">عمران البراج</strong>.<br>نحن هنا لتبسيط مواد جامعة البلقاء التطبيقية بأعلى معايير الجودة.</p>
             </div>
         </section>
 
         <section id="courses" class="section">
-            <h2 style="text-align: center;">اختر المادة</h2>
-            <div class="step-card" onclick="go('teachers', null)">
-                <h1 style="margin:0;">التحليل الوسيط</h1>
-                <p>سلسلة دروس مخصصة لطلاب البلقاء</p>
+            <h2 class="accent-text" style="text-align: center; margin-bottom: 30px;">اختر المادة الدراسية:</h2>
+            <div class="card" onclick="go('subject-detail', null)">
+                <h2 style="font-size: 2rem;">التحليل الوسيط</h2>
+                <p style="color: #8892b0;">اضغط لمتابعة التفاصيل واختيار المدرس</p>
+            </div>
+        </section>
+
+        <section id="subject-detail" class="section">
+            <button class="btn-back" onclick="go('courses', null)">← العودة للمواد</button>
+            <div class="card" onclick="go('teachers', null)">
+                <h2 style="color: var(--accent);">مادة التحليل الوسيط</h2>
+                <p>لقد اخترت مادة التحليل الوسيط. الآن اضغط لاختيار المدرس.</p>
             </div>
         </section>
 
         <section id="teachers" class="section">
-            <button class="btn-back" onclick="go('courses', null)">← العودة للمواد</button>
-            <h2 style="text-align: center;">اختر المدرس</h2>
-            <div class="step-card" onclick="go('videos', null)">
-                <h1 style="margin:0; color: var(--accent);">الأستاذ عمران البراج</h1>
-                <p>اضغط للدخول إلى قائمة الـ 15 محاضرة</p>
+            <button class="btn-back" onclick="go('subject-detail', null)">← العودة لتفاصيل المادة</button>
+            <h2 class="accent-text" style="text-align: center; margin-bottom: 30px;">المدرسون المتاحون:</h2>
+            <div class="card" onclick="go('vids', null)">
+                <div style="font-size: 0.9rem; color: var(--accent); margin-bottom: 10px;">المدرس المعتمد</div>
+                <h2 style="font-size: 2.2rem;">الأستاذ عمران البراج</h2>
+                <p style="color: #8892b0;">اضغط لمشاهدة الـ 15 محاضرة كاملة</p>
             </div>
         </section>
 
-        <section id="videos" class="section">
-            <button class="btn-back" onclick="go('teachers', null)">← عودة لاختيار المدرس</button>
-            <div id="video-container"></div>
+        <section id="vids" class="section">
+            <button class="btn-back" onclick="go('teachers', null)">← العودة للمدرسين</button>
+            <div id="video-list"></div>
         </section>
 
         <section id="suggest" class="section">
-            <div class="glass-card">
-                <h2>صندوق الاقتراحات</h2>
-                <form action="https://formspree.io/f/YourID" method="POST" style="margin-top:20px;">
-                    <input type="text" placeholder="اسمك الكامل" style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;">
-                    <textarea placeholder="المادة التي تقترحها..." rows="4" style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;"></textarea>
-                    <button type="submit" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">إرسال الآن</button>
+            <div class="card">
+                <h2 class="accent-text">صندوق الاقتراحات</h2>
+                <form action="https://formspree.io/f/YourID" method="POST">
+                    <input type="text" placeholder="الاسم" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; background: #0a192f; border: 1px solid #233554; color: white;">
+                    <textarea placeholder="ما هي المادة التي تود شرحها؟" rows="4" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; background: #0a192f; border: 1px solid #233554; color: white;"></textarea>
+<button type="submit" style="width:100%; padding:18px; background:var(--accent); border:none; border-radius:12px; font-weight:bold; cursor:pointer; color: var(--bg);">إرسال الاقتراح</button>
                 </form>
             </div>
         </section>
     </main>
 
     <script>
-        // إنشاء فقاعات الخلفية المتحركة
-        const bg = document.getElementById('particle-bg');
-        for (let i = 0; i < 20; i++) {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.style.left = Math.random() * 100 + '%';
-            bubble.style.width = Math.random() * 60 + 20 + 'px';
-            bubble.style.height = bubble.style.width;
-            bubble.style.animationDelay = Math.random() * 10 + 's';
-            bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
-            bg.appendChild(bubble);
-        }
-
         function go(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
+            
             if(btn) {
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 btn.classList.add('active');
@@ -188,16 +201,16 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        const ids = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
-        const grid = document.getElementById('video-container');
-        ids.forEach((id, i) => {
-            grid.innerHTML += `
-                <div class="video-box">
-                    <div style="padding:15px; font-weight:bold; background:rgba(255,255,255,0.05);">محاضرة رقم ${i+1}</div>
-                    <div class="iframe-wrap">
+        const videoIds = ["euOqZKztxhE", "cCQtBGM8TJE", "4QtEFQ2iJVI", "pCmGHpZsdC0", "lTyhd6WhuK0", "6iyrEw2GDtU", "L8fuoXreP94", "UDa4WFNVU-E", "wn8G3KwmTlc", "eb82juAI9m8", "jPsr-q-ylvU", "MSlKNS6kfeg", "ZZ5cdT9AixQ", "cihOdR8e3yc", "QQbrdNU0mPw"];
+        const grid = document.getElementById('video-list');
+        videoIds.forEach((id, i) => {
+            grid.innerHTML += 
+                <div class="video-box animate-v">
+                    <div style="padding:18px; font-weight:bold; color: var(--accent); border-bottom: 1px solid rgba(100,255,218,0.1);">المحاضرة ${i+1}</div>
+                    <div class="video-container">
                         <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
                     </div>
-                </div>`;
+                </div>;
         });
     </script>
 </body>
