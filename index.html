@@ -12,304 +12,878 @@
             --accent: #00d2ff;
             --glass: rgba(17, 34, 64, 0.95);
             --text: #e6f1ff;
+            --success: #00d26a;
+            --danger: #ff4d6d;
+            --warning: #ffb143;
         }
 
-        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { 
+            box-sizing: border-box; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0; min-height: 100vh; overflow-x: hidden;
+            min-height: 100vh; 
+            overflow-x: hidden;
         }
 
         /* خلفية الأنيميشن */
         .stars-container {
-            position: fixed; inset: 0; z-index: -1;
+            position: fixed; 
+            inset: 0; 
+            z-index: -1;
             background: radial-gradient(circle at center, #0a192f 0%, #020c1b 100%);
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 3s infinite alternate;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
         }
         .glow-sphere {
-            position: absolute; width: 600px; height: 600px;
+            position: absolute; 
+            width: 600px; 
+            height: 600px;
             background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
-            border-radius: 50%; animation: float 15s infinite alternate;
+            border-radius: 50%; 
+            animation: float 15s infinite alternate ease-in-out;
         }
-        @keyframes float { from { transform: translate(-10%, -10%); } to { transform: translate(15%, 20%); } }
+        @keyframes float { 
+            0% { transform: translate(-10%, -10%) scale(1); } 
+            50% { transform: translate(5%, 10%) scale(1.05); }
+            100% { transform: translate(15%, 20%) scale(1); } 
+        }
 
         /* شاشة الدخول */
         #auth-screen {
-            position: fixed; inset: 0; z-index: 2000; background: var(--bg);
-            display: flex; align-items: center; justify-content: center;
+            position: fixed; 
+            inset: 0; 
+            z-index: 2000; 
+            background: var(--bg);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            padding: 20px;
         }
         .auth-card {
-            background: var(--glass); padding: 40px; border-radius: 35px;
-            text-align: center; border: 1px solid rgba(0, 210, 255, 0.3);
-            width: 90%; max-width: 420px; backdrop-filter: blur(20px);
+            background: var(--glass); 
+            padding: 40px; 
+            border-radius: 35px;
+            text-align: center; 
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            width: 100%; 
+            max-width: 420px; 
+            backdrop-filter: blur(20px);
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            animation: slideUp 0.5s ease;
         }
 
         /* الهيكل العام */
-        #app { display: none; padding-top: 85px; }
+        #app { 
+            display: none; 
+            padding-top: 85px; 
+        }
         .navbar {
-            position: fixed; top: 0; width: 100%; height: 75px; background: rgba(2, 12, 27, 0.98);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 5%;
-            z-index: 1000; border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 75px; 
+            background: rgba(2, 12, 27, 0.98);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 5%;
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .sidebar {
-            position: fixed; right: 0; width: 260px; height: 100vh; background: rgba(10, 25, 47, 0.98);
-            padding: 100px 20px 20px; border-left: 1px solid rgba(255,255,255,0.05); z-index: 999;
+            position: fixed; 
+            right: 0; 
+            width: 260px; 
+            height: 100vh; 
+            background: rgba(10, 25, 47, 0.98);
+            padding: 100px 20px 20px; 
+            border-left: 1px solid rgba(255,255,255,0.05); 
+            z-index: 999;
+            overflow-y: auto;
         }
         .nav-item {
-            padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 12px; color: #8892b0; font-weight: 600;
+            padding: 15px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-bottom: 12px;
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            color: #8892b0; 
+            font-weight: 600;
         }
-        .nav-item:hover, .nav-item.active { background: rgba(0, 210, 255, 0.12); color: var(--accent); }
+        .nav-item:hover, .nav-item.active { 
+            background: rgba(0, 210, 255, 0.12); 
+            color: var(--accent); 
+        }
 
-        .main-content { margin-right: 260px; padding: 30px; }
-        .section { display: none; animation: slideUp 0.5s ease; max-width: 900px; margin: 0 auto; }
-        .active-section { display: block; }
+        .main-content { 
+            margin-right: 260px; 
+            padding: 30px; 
+            min-height: calc(100vh - 85px);
+        }
+        .section { 
+            display: none; 
+            animation: slideUp 0.5s ease; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+        .active-section { 
+            display: block; 
+        }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { 
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
 
         /* الكروت */
         .card {
-            background: #112240; border-radius: 25px; padding: 30px; margin-bottom: 25px;
-            border: 1px solid rgba(0, 210, 255, 0.1); position: relative;
+            background: #112240; 
+            border-radius: 25px; 
+            padding: 30px; 
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 210, 255, 0.1); 
+            position: relative;
         }
-        .card-clickable { cursor: pointer; }
-        .card-clickable:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .card-clickable { 
+            cursor: pointer; 
+        }
+        .card-clickable:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--accent); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4); 
+        }
 
         /* الأزرار */
         .btn {
-            padding: 14px 25px; border-radius: 12px; border: none; font-weight: bold;
-            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            font-size: 1rem; text-decoration: none; width: 100%; margin-top: 10px;
+            padding: 14px 25px; 
+            border-radius: 12px; 
+            border: none; 
+            font-weight: bold;
+            cursor: pointer; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            font-size: 1rem; 
+            text-decoration: none; 
+            width: 100%; 
+            margin-top: 10px;
+            transition: all 0.3s;
         }
-        .btn-primary { background: linear-gradient(90deg, #3a7bd5, #00d2ff); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-primary { 
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff); 
+            color: white; 
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        }
+        .btn-outline { 
+            background: transparent; 
+            border: 1px solid var(--accent); 
+            color: var(--accent); 
+        }
+        .btn-outline:hover {
+            background: rgba(0, 210, 255, 0.1);
+        }
+        .btn-whatsapp { 
+            background: #25D366; 
+            color: white; 
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-warning {
+            background: var(--warning);
+            color: #020c1b;
+        }
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            width: auto;
+        }
 
         /* لوحة المدير */
-        .admin-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; margin-top: 20px; border: 1px dashed var(--accent); }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; background: #020c1b; border: 1px solid #1a3a5a; color: white; }
+        .admin-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .admin-form { 
+            background: rgba(0,0,0,0.2); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border: 1px dashed var(--accent); 
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            border-radius: 8px; 
+            background: #020c1b; 
+            border: 1px solid #1a3a5a; 
+            color: white; 
+            font-family: inherit;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
 
         /* الفيديوهات */
-        .video-box { border-radius: 20px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-top: 15px; border: 1px solid #1a3a5a; }
-        .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-box { 
+            border-radius: 20px; 
+            overflow: hidden; 
+            position: relative; 
+            padding-bottom: 56.25%; 
+            height: 0; 
+            margin-top: 15px; 
+            border: 1px solid #1a3a5a; 
+        }
+        .video-box iframe { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+        }
 
-        @media (max-width: 850px) { .sidebar { display: none; } .main-content { margin-right: 0; } }
+        /* الملفات */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .file-card {
+            background: rgba(17, 34, 64, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .file-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* عناصر القائمة */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* التنبيهات */
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-success {
+            background: rgba(0, 210, 106, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        .alert-danger {
+            background: rgba(255, 77, 109, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        /* التبويبات */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: #8892b0;
+            font-weight: 600;
+        }
+        .tab.active {
+            background: rgba(0, 210, 255, 0.15);
+            color: var(--accent);
+        }
+
+        /* الأدوات المساعدة */
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+
+        /* التجاوب */
+        @media (max-width: 850px) { 
+            .sidebar { 
+                display: none; 
+            } 
+            .main-content { 
+                margin-right: 0; 
+            }
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* زر القائمة المتنقلة */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            .sidebar {
+                display: none;
+                width: 100%;
+                right: -100%;
+                transition: right 0.3s;
+            }
+            .sidebar.active {
+                display: block;
+                right: 0;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="stars-container"><div class="glow-sphere"></div></div>
+    <div class="stars-container" id="stars-container">
+        <div class="glow-sphere"></div>
+    </div>
 
+    <!-- شاشة الدخول -->
     <div id="auth-screen">
         <div class="auth-card">
-            <img src="IMG-20260117-WA0013.jpg" width="120" style="border-radius: 20px; margin-bottom: 20px; border: 2px solid var(--accent);">
+            <img src="https://via.placeholder.com/120x120/00d2ff/020c1b?text=LOGO" width="120" style="border-radius: 20px; margin-bottom: 20px; border: 2px solid var(--accent);">
             <h2>منصة إتقان التعليمية</h2>
             <p style="color:#8892b0; margin-bottom: 25px;">مع الأستاذ عمران البراج</p>
-            <button class="btn btn-primary" onclick="handleLogin('student')">الدخول كطالب</button>
-            <button class="btn btn-outline" onclick="handleAdminLogin()">لوحة المدير</button>
+            <button class="btn btn-primary" onclick="handleLogin('student')">
+                <i class="fas fa-graduation-cap"></i> الدخول كطالب
+            </button>
+            <button class="btn btn-outline" onclick="handleAdminLogin()">
+                <i class="fas fa-user-shield"></i> لوحة المدير
+            </button>
         </div>
     </div>
 
+    <!-- التطبيق الرئيسي -->
     <div id="app">
         <nav class="navbar">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
             <div id="u-display" style="font-weight:bold; color:var(--accent)">عمران البراج</div>
-            <div style="display:flex; align-items:center; gap:10px">
-                <button onclick="logout()" style="background:none; border:none; color:#ff4d4d; cursor:pointer;"><i class="fas fa-sign-out-alt"></i></button>
-                <img src="IMG-20260117-WA0013.jpg" width="45" style="border-radius: 10px;">
+            <div class="flex">
+                <button onclick="logout()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1.2rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <img src="https://via.placeholder.com/45x45/00d2ff/020c1b?text=ع.ب" width="45" style="border-radius: 10px;">
             </div>
         </nav>
 
-        <aside class="sidebar">
-            <div class="nav-item active" onclick="showSection('subjects-sec', this)"><i class="fas fa-book"></i> المواد الدراسية</div>
-            <div class="nav-item" onclick="showSection('library-sec', this)"><i class="fas fa-file-pdf"></i> أوراقي وسنواتي</div>
-            <div class="nav-item" onclick="showSection('support-sec', this)"><i class="fas fa-headset"></i> الدعم الفني</div>
-            <div id="admin-tab" class="nav-item" style="display:none; color:var(--accent)" onclick="showSection('admin-sec', this)"><i class="fas fa-tools"></i> إدارة المنصة</div>
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('subjects-sec', this)">
+                <i class="fas fa-book"></i> المواد الدراسية
+            </div>
+            <div class="nav-item" onclick="showSection('library-sec', this)">
+                <i class="fas fa-file-pdf"></i> المكتبة والملفات
+            </div>
+            <div class="nav-item" onclick="showSection('teachers-sec', this)">
+                <i class="fas fa-chalkboard-teacher"></i> الأساتذة
+            </div>
+            <div class="nav-item" onclick="showSection('support-sec', this)">
+                <i class="fas fa-headset"></i> الدعم الفني
+            </div>
+            <div id="admin-tab" class="nav-item" style="display:none;" onclick="showSection('admin-sec', this)">
+                <i class="fas fa-tools"></i> إدارة المنصة
+            </div>
         </aside>
 
         <main class="main-content">
+            <!-- قسم المواد الدراسية -->
             <section id="subjects-sec" class="section active-section">
-                <h2>المواد الدراسية:</h2>
-                <div id="subjects-list">
-                    </div>
-            </section>
-
-            <section id="teachers-sec" class="section">
-                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showSection('subjects-sec')">← عودة</button>
-                <h2 id="current-sub-title">مدرسين المادة:</h2>
-                <div id="teachers-list">
-                    <div class="card card-clickable" onclick="showVideos('عمران البراج')">
-                        <div style="display:flex; align-items:center; gap:20px">
-                            <img src="IMG-20260117-WA0013.jpg" width="70" style="border-radius:50%; border:2px solid var(--accent)">
-                            <h3>الأستاذ عمران البراج</h3>
-                        </div>
-                    </div>
+                <div class="flex justify-between mb-20">
+                    <h2>المواد الدراسية</h2>
+                </div>
+                <div id="subjects-list" class="files-grid">
+                    <!-- سيتم ملؤه بالجافاسكربت -->
                 </div>
             </section>
 
-            <section id="videos-sec" class="section">
-                <button class="btn btn-outline" style="width:auto; margin-bottom:15px" onclick="showSection('teachers-sec')">← عودة</button>
-                <h2 id="video-title">المحاضرات:</h2>
-                <div id="lectures-container"></div>
-            </section>
-
+            <!-- قسم المكتبة -->
             <section id="library-sec" class="section">
-                <h2>المكتبة والسنوات (PDF)</h2>
-                <div id="files-container"></div>
+                <h2>المكتبة والملفات</h2>
+                <p style="color:#8892b0; margin-bottom: 20px;">جميع الملفات والموارد التعليمية المتاحة للتحميل</p>
+                <div id="files-container" class="files-grid">
+                    <!-- سيتم ملؤه بالجافاسكربت -->
+                </div>
             </section>
 
+            <!-- قسم الأساتذة -->
+            <section id="teachers-sec" class="section">
+                <h2>الأساتذة والمحاضرين</h2>
+                <p style="color:#8892b0; margin-bottom: 20px;">تعرف على فريق التدريس في منصة إتقان</p>
+                <div id="teachers-list" class="files-grid">
+                    <!-- سيتم ملؤه بالجافاسكربت -->
+                </div>
+            </section>
+
+            <!-- قسم الدعم الفني -->
             <section id="support-sec" class="section">
-                <div class="card" style="text-align:center; padding:50px 20px">
+                <div class="card text-center">
                     <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:20px"></i>
                     <h2>الدعم الفني المباشر</h2>
-                    <p>تواصل مع الأستاذ عمران مباشرة</p>
-                    <a href="https://wa.me/962778393633" target="_blank" class="btn btn-whatsapp" style="width:250px; margin:0 auto">تحدث معنا</a>
+                    <p style="margin-bottom: 20px; color:#8892b0">تواصل مع فريق الدعم مباشرة للحصول على المساعدة</p>
+                    <div class="flex" style="justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <a href="https://wa.me/962778393633" target="_blank" class="btn btn-whatsapp" style="width:250px">
+                            <i class="fab fa-whatsapp"></i> تحدث معنا
+                        </a>
+                        <a href="mailto:support@itqan.com" class="btn btn-outline" style="width:250px">
+                            <i class="fas fa-envelope"></i> راسلنا عبر البريد
+                        </a>
+                    </div>
                 </div>
             </section>
 
+            <!-- قسم إدارة المنصة -->
             <section id="admin-sec" class="section">
-                <h2 style="color:var(--accent)">لوحة تحكم المدير عمران 🛡️</h2>
-                <div class="admin-form">
-                    <h3>إضافة فيديو جديد</h3>
-                    <input type="text" id="adm-v-title" placeholder="عنوان المحاضرة">
-                    <input type="text" id="adm-v-id" placeholder="ID اليوتيوب (مثال: euOqZKztxhE)">
-                    <button class="btn btn-primary" onclick="adminAddVideo()">نشر الفيديو</button>
+                <h2 style="color:var(--accent); margin-bottom: 5px;">
+                    <i class="fas fa-user-shield"></i> لوحة تحكم المدير
+                </h2>
+                <p style="color:#8892b0; margin-bottom: 30px;">مرحباً <span id="admin-name"></span>، يمكنك إدارة جميع محتويات المنصة من هنا</p>
+                
+                <div class="tabs" id="admin-tabs">
+                    <button class="tab active" onclick="showAdminTab('subjects')">المواد</button>
+                    <button class="tab" onclick="showAdminTab('teachers')">الأساتذة</button>
+                    <button class="tab" onclick="showAdminTab('videos')">الفيديوهات</button>
+                    <button class="tab" onclick="showAdminTab('files')">الملفات</button>
+                    <button class="tab" onclick="showAdminTab('backup')">النسخ الاحتياطي</button>
                 </div>
-                <div class="admin-form">
-                    <h3>إضافة مادة جديدة</h3>
-                    <input type="text" id="adm-sub-name" placeholder="اسم المادة">
-                    <button class="btn btn-primary" onclick="adminAddSubject()">إضافة المادة</button>
+
+                <!-- تبويب إدارة المواد -->
+                <div id="admin-subjects" class="admin-tab-content">
+                    <div class="admin-form">
+                        <h3><i class="fas fa-plus-circle"></i> إضافة مادة جديدة</h3>
+                        <input type="text" id="adm-sub-name" placeholder="اسم المادة">
+                        <textarea id="adm-sub-desc" placeholder="وصف المادة"></textarea>
+                        <button class="btn btn-primary" onclick="adminAddSubject()">
+                            <i class="fas fa-plus"></i> إضافة المادة
+                        </button>
+                    </div>
+                    
+                    <h3 class="mt-20">المواد الحالية</h3>
+                    <div id="admin-subjects-list">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+
+                <!-- تبويب إدارة الأساتذة -->
+                <div id="admin-teachers" class="admin-tab-content" style="display:none">
+                    <div class="admin-form">
+                        <h3><i class="fas fa-plus-circle"></i> إضافة أستاذ جديد</h3>
+                        <input type="text" id="adm-teacher-name" placeholder="اسم الأستاذ">
+                        <input type="text" id="adm-teacher-subject" placeholder="التخصص">
+                        <textarea id="adm-teacher-desc" placeholder="نبذة عن الأستاذ"></textarea>
+                        <button class="btn btn-primary" onclick="adminAddTeacher()">
+                            <i class="fas fa-plus"></i> إضافة الأستاذ
+                        </button>
+                    </div>
+                    
+                    <h3 class="mt-20">الأساتذة الحاليون</h3>
+                    <div id="admin-teachers-list">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+
+                <!-- تبويب إدارة الفيديوهات -->
+                <div id="admin-videos" class="admin-tab-content" style="display:none">
+                    <div class="admin-form">
+                        <h3><i class="fas fa-plus-circle"></i> إضافة فيديو جديد</h3>
+                        <input type="text" id="adm-v-title" placeholder="عنوان المحاضرة">
+                        <input type="text" id="adm-v-id" placeholder="ID اليوتيوب (مثال: euOqZKztxhE)">
+                        <select id="adm-v-subject">
+                            <option value="">اختر المادة</option>
+                        </select>
+                        <select id="adm-v-teacher">
+                            <option value="">اختر الأستاذ</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="adminAddVideo()">
+                            <i class="fas fa-plus"></i> نشر الفيديو
+                        </button>
+                    </div>
+                    
+                    <h3 class="mt-20">الفيديوهات الحالية</h3>
+                    <div id="admin-videos-list">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+
+                <!-- تبويب إدارة الملفات -->
+                <div id="admin-files" class="admin-tab-content" style="display:none">
+                    <div class="admin-form">
+                        <h3><i class="fas fa-plus-circle"></i> إضافة ملف جديد</h3>
+                        <input type="text" id="adm-file-name" placeholder="اسم الملف">
+                        <input type="text" id="adm-file-url" placeholder="رابط الملف (URL)">
+                        <select id="adm-file-type">
+                            <option value="pdf">PDF</option>
+                            <option value="doc">DOC</option>
+                            <option value="zip">ZIP</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                        <select id="adm-file-subject">
+                            <option value="">اختر المادة (اختياري)</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="adminAddFile()">
+                            <i class="fas fa-plus"></i> إضافة الملف
+                        </button>
+                    </div>
+                    
+                    <h3 class="mt-20">الملفات الحالية</h3>
+                    <div id="admin-files-list">
+                        <!-- سيتم ملؤه بالجافاسكربت -->
+                    </div>
+                </div>
+
+                <!-- تبويب النسخ الاحتياطي -->
+                <div id="admin-backup" class="admin-tab-content" style="display:none">
+                    <div class="card">
+                        <h3><i class="fas fa-database"></i> النسخ الاحتياطي</h3>
+                        <p style="margin-bottom: 20px; color:#8892b0">يمكنك استيراد أو تصدير بيانات المنصة</p>
+                        
+                        <div class="flex" style="gap: 15px; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="exportData()">
+                                <i class="fas fa-download"></i> تصدير البيانات
+                            </button>
+                            <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">
+                                <i class="fas fa-upload"></i> استيراد البيانات
+                            </button>
+                            <button class="btn btn-danger" onclick="resetData()">
+                                <i class="fas fa-trash"></i> إعادة الضبط
+                            </button>
+                        </div>
+                        
+                        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+                        
+                        <div class="alert alert-success" id="backup-alert" style="display:none; margin-top:20px">
+                            <i class="fas fa-check-circle"></i> <span id="backup-message"></span>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // الـ 15 محاضرة الأساسية
-        const initialVideos = [
-            {id: "euOqZKztxhE", title: "المحاضرة 1: النهايات", teacher: "عمران البراج"},
-            {id: "cCQtBGM8TJE", title: "المحاضرة 2: الاتصال", teacher: "عمران البراج"},
-            {id: "4QtEFQ2iJVI", title: "المحاضرة 3: قواعد الاشتقاق", teacher: "عمران البراج"},
-            {id: "pCmGHpZsdC0", title: "المحاضرة 4: تطبيقات التفاضل", teacher: "عمران البراج"},
-            {id: "lTyhd6WhuK0", title: "المحاضرة 5: التكامل المحدود", teacher: "عمران البراج"},
-            {id: "6iyrEw2GDtU", title: "المحاضرة 6: المتجهات 1", teacher: "عمران البراج"},
-            {id: "L8fuoXreP94", title: "المحاضرة 7: المتجهات 2", teacher: "عمران البراج"},
-            {id: "UDa4WFNVU-E", title: "المحاضرة 8: المستويات", teacher: "عمران البراج"},
-            {id: "wn8G3KwmTlc", title: "المحاضرة 9: الدوال المتجهة", teacher: "عمران البراج"},
-            {id: "eb82juAI9m8", title: "المحاضرة 10: طول القوس", teacher: "عمران البراج"},
-            {id: "jPsr-q-ylvU", title: "المحاضرة 11: المشتقات الجزئية", teacher: "عمران البراج"},
-            {id: "MSlKNS6kfeg", title: "المحاضرة 12: قاعدة السلسلة", teacher: "عمران البراج"},
-            {id: "ZZ5cdT9AixQ", title: "المحاضرة 13: القيم القصوى", teacher: "عمران البراج"},
-            {id: "cihOdR8e3yc", title: "المحاضرة 14: التكامل الثنائي", teacher: "عمران البراج"},
-            {id: "QQbrdNU0mPw", title: "المحاضرة 15: المراجعة النهائية", teacher: "عمران البراج"}
-        ];
-
-        let data = JSON.parse(localStorage.getItem('itqan_v4')) || {
-            subjects: ["التحليل الوسيط"],
-            videos: initialVideos,
-            files: []
+        // ==================== تهيئة البيانات ====================
+        let platformData = JSON.parse(localStorage.getItem('itqan_platform_v2')) || {
+            subjects: [
+                {
+                    id: 1,
+                    name: "التحليل الوسيط",
+                    description: "مادة التحليل الوسيط تشمل دراسة النهايات والاتصال والتفاضل والتكامل",
+                    created: new Date().toISOString()
+                }
+            ],
+            teachers: [
+                {
+                    id: 1,
+                    name: "عمران البراج",
+                    subject: "الرياضيات",
+                    description: "مدرس رياضيات متخصص في الرياضيات العليا والتحليل",
+                    created: new Date().toISOString()
+                }
+            ],
+            videos: [
+                {id: 1, youtubeId: "euOqZKztxhE", title: "المحاضرة 1: النهايات", subjectId: 1, teacherId: 1, created: new Date().toISOString()},
+                {id: 2, youtubeId: "cCQtBGM8TJE", title: "المحاضرة 2: الاتصال", subjectId: 1, teacherId: 1, created: new Date().toISOString()},
+                {id: 3, youtubeId: "4QtEFQ2iJVI", title: "المحاضرة 3: قواعد الاشتقاق", subjectId: 1, teacherId: 1, created: new Date().toISOString()},
+                {id: 4, youtubeId: "pCmGHpZsdC0", title: "المحاضرة 4: تطبيقات التفاضل", subjectId: 1, teacherId: 1, created: new Date().toISOString()},
+                {id: 5, youtubeId: "lTyhd6WhuK0", title: "المحاضرة 5: التكامل المحدود", subjectId: 1, teacherId: 1, created: new Date().toISOString()}
+            ],
+            files: [
+                {id: 1, name: "ملخص التحليل الوسيط", url: "#", type: "pdf", subjectId: 1, created: new Date().toISOString()},
+                {id: 2, name: "نماذج امتحانات سابقة", url: "#", type: "pdf", subjectId: 1, created: new Date().toISOString()},
+                {id: 3, name: "تمارين محلولة", url: "#", type: "doc", subjectId: 1, created: new Date().toISOString()}
+            ],
+            nextId: {
+                subjects: 2,
+                teachers: 2,
+                videos: 6,
+                files: 4
+            }
         };
 
-        // التحقق من الجلسة عند فتح الصفحة
+        let currentUser = null;
+        let isAdmin = false;
+
+        // ==================== وظائف التهيئة ====================
+        function initStars() {
+            const container = document.getElementById('stars-container');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('itqan_platform_v2', JSON.stringify(platformData));
+        }
+
+        // ==================== نظام المصادقة ====================
         window.onload = () => {
-            const user = localStorage.getItem('isLoggedIn');
+            initStars();
+            const user = localStorage.getItem('itqan_user');
             if(user) {
-                if(user === 'admin') {
-                    showApp("المدير عمران البراج", true);
-                } else {
-                    showApp("طالب إتقان", false);
-                }
+                const userData = JSON.parse(user);
+                currentUser = userData;
+                isAdmin = userData.role === 'admin';
+                showApp(userData.name, isAdmin);
             }
         };
 
         function handleLogin(role) {
-            localStorage.setItem('isLoggedIn', role);
-            showApp(role === 'admin' ? "المدير عمران البراج" : "طالب إتقان", role === 'admin');
+            let userData;
+            if(role === 'admin') {
+                userData = {
+                    name: "المدير عمران البراج",
+                    role: "admin",
+                    loginTime: new Date().toISOString()
+                };
+            } else {
+                userData = {
+                    name: "طالب إتقان",
+                    role: "student",
+                    loginTime: new Date().toISOString()
+                };
+            }
+            
+            localStorage.setItem('itqan_user', JSON.stringify(userData));
+            currentUser = userData;
+            isAdmin = role === 'admin';
+            showApp(userData.name, isAdmin);
         }
 
         function handleAdminLogin() {
-            const p = prompt("كلمة سر المدير:");
-            if(p === "Omran#05") handleLogin('admin');
-            else alert("خطأ!");
+            const password = prompt("كلمة سر المدير:");
+            if(password === "Omran#05") {
+                handleLogin('admin');
+            } else {
+                alert("كلمة السر غير صحيحة!");
+            }
         }
 
-        function showApp(name, isAdmin) {
+        function showApp(name, admin) {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('app').style.display = 'block';
             document.getElementById('u-display').innerText = name;
-            if(isAdmin) document.getElementById('admin-tab').style.display = 'flex';
-            renderSubjects();
+            
+            if(admin) {
+                document.getElementById('admin-tab').style.display = 'flex';
+                document.getElementById('admin-name').innerText = name;
+            }
+            
+            renderAll();
         }
 
         function logout() {
-            localStorage.clear();
+            localStorage.removeItem('itqan_user');
             location.reload();
         }
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // ==================== التنقل بين الأقسام ====================
         function showSection(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
+            
             if(el) {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
             }
+            
+            // إغلاق القائمة الجانبية على الهواتف
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+            
             window.scrollTo(0,0);
+            renderAll();
+        }
+
+        function showAdminTab(tabName) {
+            // تحديث التبويبات النشطة
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // إظهار المحتوى المناسب
+            document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(`admin-${tabName}`).style.display = 'block';
+            
+            // إعادة عرض المحتوى عند الحاجة
+            if(tabName === 'subjects') renderAdminSubjects();
+            else if(tabName === 'teachers') renderAdminTeachers();
+            else if(tabName === 'videos') renderAdminVideos();
+            else if(tabName === 'files') renderAdminFiles();
+        }
+
+        // ==================== وظائف العرض ====================
+        function renderAll() {
+            renderSubjects();
+            renderTeachers();
+            renderFiles();
+            if(isAdmin) {
+                renderAdminSubjects();
+                renderAdminTeachers();
+                renderAdminVideos();
+                renderAdminFiles();
+                populateSelects();
+            }
         }
 
         function renderSubjects() {
             const list = document.getElementById('subjects-list');
             list.innerHTML = '';
-            data.subjects.forEach(sub => {
-                list.innerHTML += `<div class="card card-clickable" onclick="showTeachers('${sub}')"><h3>${sub}</h3><p>عرض المدرسين</p></div>`;
+            
+            platformData.subjects.forEach(subject => {
+                const subjectVideos = platformData.videos.filter(v => v.subjectId === subject.id);
+                const subjectFiles = platformData.files.filter(f => f.subjectId === subject.id);
+                
+                list.innerHTML += `
+                    <div class="card card-clickable" onclick="showSubjectDetails(${subject.id})">
+                        <div class="file-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3>${subject.name}</h3>
+                        <p style="color:#8892b0; margin: 10px 0;">${subject.description || 'لا يوجد وصف'}</p>
+                        <div style="display:flex; gap:15px; margin-top:10px; font-size:0.9rem; color:#8892b0">
+                            <span><i class="fas fa-video"></i> ${subjectVideos.length}</span>
+                            <span><i class="fas fa-file"></i> ${subjectFiles.length}</span>
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        function showTeachers(sub) {
-            document.getElementById('current-sub-title').innerText = "مدرسين " + sub;
-            showSection('teachers-sec');
+        function renderTeachers() {
+            const list = document.getElementById('teachers-list');
+            list.innerHTML = '';
+            
+            platformData.teachers.forEach(teacher => {
+                const teacherVideos = platformData.videos.filter(v => v.teacherId === teacher.id);
+                
+                list.innerHTML += `
+                    <div class="card card-clickable" onclick="showTeacherVideos(${teacher.id})">
+                        <div class="file-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>${teacher.name}</h3>
+                        <p style="color:#8892b0; margin: 10px 0;">${teacher.subject || 'لا يوجد تخصص'}</p>
+                        <p style="color:#8892b0; font-size:0.9rem;">${teacher.description || 'لا يوجد وصف'}</p>
+                        <div style="margin-top:10px; font-size:0.9rem; color:var(--accent)">
+                            <i class="fas fa-video"></i> ${teacherVideos.length} محاضرة
+                        </div>
+                    </div>
+                `;
+            });
         }
 
-        function showVideos(teacher) {
-            document.getElementById('video-title').innerText = "محاضرات " + teacher;
-            const container = document.getElementById('lectures-container');
+        function renderFiles() {
+            const container = document.getElementById('files-container');
             container.innerHTML = '';
-            data.videos.forEach(v => {
+            
+            platformData.files.forEach(file => {
+                const subject = platformData.subjects.find(s => s.id === file.subjectId);
+                const icon = getFileIcon(file.type);
+                
                 container.innerHTML += `
-                    <div class="card">
-                        <h4>${v.title}</h4>
-                        <div class="video-box"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div>
-                    </div>`;
-            });
-            showSection('videos-sec');
-        }
-
-        // وظائف المدير
-        function adminAddVideo() {
-            const t = document.getElementById('adm-v-title').value;
-            const id = document.getElementById('adm-v-id').value;
-            if(t && id) {
-                data.videos.push({id: id, title: t, teacher: "عمران البراج"});
-                saveAndRefresh();
-                alert("تم النشر!");
-            }
-        }
-
-        function adminAddSubject() {
-            const s = document.getElementById('adm-sub-name').value;
-            if(s) {
-                data.subjects.push(s);
-                saveAndRefresh();
-                alert("تمت الإضافة!");
-            }
-        }
-
-        function saveAndRefresh() {
-            localStorage.setItem('itqan_v4', JSON.stringify(data));
-            renderSubjects();
-        }
-    </script>
-</body>
-</html>
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="${icon}"></i>
+                        </div>
+                        <h4>${file.name}</h4>
+                        <p style="color:#8892b0; margin: 10px 
