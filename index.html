@@ -14,156 +14,388 @@
             --text: #e6f1ff;
             --success: #00d26a;
             --danger: #ff4d6d;
+            --warning: #ffb143;
         }
 
-        * { box-sizing: border-box; transition: 0.3s; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            min-height: 100vh;
+            min-height: 100vh; 
             overflow-x: hidden;
         }
 
-        /* خلفية النجوم المتحركة */
-        .stars-container { position: fixed; inset: 0; z-index: -1; background: #020c1b; overflow: hidden; }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: twinkle 3s infinite alternate; }
-        @keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 0.8; } }
+        /* خلفية الأنيميشن */
+        .stars-container {
+            position: fixed; 
+            inset: 0; 
+            z-index: -1;
+            background: radial-gradient(circle at center, #0a192f 0%, #020c1b 100%);
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 3s infinite alternate;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+        .glow-sphere {
+            position: absolute; 
+            width: 600px; 
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%; 
+            animation: float 15s infinite alternate ease-in-out;
+        }
+        @keyframes float { 
+            0% { transform: translate(-10%, -10%) scale(1); } 
+            50% { transform: translate(5%, 10%) scale(1.05); }
+            100% { transform: translate(15%, 20%) scale(1); } 
+        }
 
         /* شاشة الدخول */
-        #auth-screen { position: fixed; inset: 0; z-index: 2000; background: var(--bg); display: flex; align-items: center; justify-content: center; }
-        .auth-card { background: var(--glass); padding: 40px; border-radius: 30px; text-align: center; border: 1px solid var(--accent); width: 90%; max-width: 400px; }
+        #auth-screen {
+            position: fixed; 
+            inset: 0; 
+            z-index: 2000; 
+            background: var(--bg);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card {
+            background: var(--glass); 
+            padding: 40px; 
+            border-radius: 35px;
+            text-align: center; 
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            width: 100%; 
+            max-width: 420px; 
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            animation: slideUp 0.5s ease;
+        }
 
-        /* الهيكل الرئيسي */
-        #app { display: none; padding-top: 85px; }
-        .navbar { position: fixed; top: 0; width: 100%; height: 75px; background: rgba(2, 12, 27, 0.95); display: flex; justify-content: space-between; align-items: center; padding: 0 5%; z-index: 1000; border-bottom: 1px solid rgba(0, 210, 255, 0.2); }
-        
-        .sidebar { position: fixed; right: 0; width: 260px; height: 100vh; background: #0a192f; padding: 100px 20px; z-index: 999; }
-        .nav-item { padding: 15px; border-radius: 12px; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; color: #8892b0; }
-        .nav-item.active { background: rgba(0, 210, 255, 0.1); color: var(--accent); }
+        /* الهيكل العام */
+        #app { 
+            display: none; 
+            padding-top: 85px; 
+        }
+        .navbar {
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 75px; 
+            background: rgba(2, 12, 27, 0.98);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 5%;
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
 
-        .main-content { margin-right: 260px; padding: 30px; }
-        .section { display: none; animation: fadeIn 0.5s; }
-        .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .sidebar {
+            position: fixed; 
+            right: 0; 
+            width: 260px; 
+            height: 100vh; 
+            background: rgba(10, 25, 47, 0.98);
+            padding: 100px 20px 20px; 
+            border-left: 1px solid rgba(255,255,255,0.05); 
+            z-index: 999;
+            overflow-y: auto;
+        }
+        .nav-item {
+            padding: 15px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-bottom: 12px;
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            color: #8892b0; 
+            font-weight: 600;
+        }
+        .nav-item:hover, .nav-item.active { 
+            background: rgba(0, 210, 255, 0.12); 
+            color: var(--accent); 
+        }
 
-        /* الكروت والتصميم */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: #112240; border-radius: 20px; padding: 25px; border: 1px solid rgba(0, 210, 255, 0.1); cursor: pointer; }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        
-        .btn { padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .main-content { 
+            margin-right: 260px; 
+            padding: 30px; 
+            min-height: calc(100vh - 85px);
+        }
+        .section { 
+            display: none; 
+            animation: slideUp 0.5s ease; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+        .active-section { 
+            display: block; 
+        }
+
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* الكروت */
+        .card {
+            background: #112240; 
+            border-radius: 25px; 
+            padding: 30px; 
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 210, 255, 0.1); 
+            position: relative;
+        }
+        .card-clickable { cursor: pointer; }
+        .card-clickable:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--accent); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4); 
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 14px 25px; 
+            border-radius: 12px; 
+            border: none; 
+            font-weight: bold;
+            cursor: pointer; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            font-size: 1rem; 
+            text-decoration: none; 
+            width: 100%; 
+            margin-top: 10px;
+        }
         .btn-primary { background: linear-gradient(90deg, #3a7bd5, #00d2ff); color: white; }
-        .btn-danger { background: var(--danger); color: white; margin-top: 5px; font-size: 0.8rem; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-danger { background: var(--danger); color: white; width: auto; padding: 5px 15px; font-size: 0.8rem; }
+        .btn-whatsapp { background: #25D366; color: white; }
 
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #020c1b; border: 1px solid #1a3a5a; color: white; }
+        /* لوحة المدير */
+        .admin-form { 
+            background: rgba(0,0,0,0.2); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border: 1px dashed var(--accent); 
+        }
+        input, select, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; 
+            background: #020c1b; border: 1px solid #1a3a5a; color: white;
+        }
 
-        /* فيديوهات */
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 15px; overflow: hidden; margin-top: 15px; }
-        .video-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        /* الفيديوهات */
+        .video-box { 
+            border-radius: 20px; overflow: hidden; position: relative; 
+            padding-bottom: 56.25%; height: 0; margin-top: 15px; border: 1px solid #1a3a5a; 
+        }
+        .video-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
-        @media (max-width: 850px) { .sidebar { display: none; } .main-content { margin-right: 0; } }
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .file-card {
+            background: rgba(17, 34, 64, 0.8); border-radius: 15px; padding: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2); text-align: center;
+        }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .tab { padding: 10px 20px; border-radius: 8px; cursor: pointer; background: transparent; border: none; color: #8892b0; }
+        .tab.active { background: rgba(0, 210, 255, 0.15); color: var(--accent); }
+
+        @media (max-width: 850px) { 
+            .sidebar { display: none; } 
+            .main-content { margin-right: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="stars-container" id="stars-container"></div>
+    <div class="stars-container" id="stars-container">
+        <div class="glow-sphere"></div>
+    </div>
 
     <div id="auth-screen">
         <div class="auth-card">
-            <h2>منصة إتقان</h2>
-            <p style="margin-bottom: 20px;">الأستاذ عمران البراج</p>
-            <button class="btn btn-primary" onclick="handleLogin('student')">دخول الطلاب</button>
-            <button class="btn" style="color:var(--accent)" onclick="handleAdminLogin()">لوحة الإدارة</button>
+            <img src="https://via.placeholder.com/120x120/00d2ff/020c1b?text=ITQAN" width="120" style="border-radius: 20px; margin-bottom: 20px; border: 2px solid var(--accent);">
+            <h2>منصة إتقان التعليمية</h2>
+            <p style="color:#8892b0; margin-bottom: 25px;">مع الأستاذ عمران البراج</p>
+            <button class="btn btn-primary" onclick="handleLogin('student')">
+                <i class="fas fa-graduation-cap"></i> الدخول كطالب
+            </button>
+            <button class="btn btn-outline" onclick="handleAdminLogin()">
+                <i class="fas fa-user-shield"></i> لوحة المدير
+            </button>
         </div>
     </div>
 
     <div id="app">
         <nav class="navbar">
-            <div id="u-display" style="color:var(--accent); font-weight:bold;">عمران البراج</div>
-            <button onclick="logout()" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-power-off"></i> خروج</button>
+            <div id="u-display" style="font-weight:bold; color:var(--accent)">عمران البراج</div>
+            <div style="display:flex; align-items:center; gap:15px">
+                <button onclick="logout()" style="background:none; border:none; color:#ff4d4d; cursor:pointer;">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
         </nav>
 
-        <aside class="sidebar">
-            <div class="nav-item active" onclick="showSection('subjects-sec', this)"><i class="fas fa-book"></i> المواد</div>
-            <div class="nav-item" onclick="showSection('library-sec', this)"><i class="fas fa-file-pdf"></i> المكتبة</div>
-            <div id="admin-tab" class="nav-item" style="display:none; color:gold" onclick="showSection('admin-sec', this)"><i class="fas fa-tools"></i> الإدارة</div>
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('subjects-sec', this)">
+                <i class="fas fa-book"></i> المواد الدراسية
+            </div>
+            <div class="nav-item" onclick="showSection('library-sec', this)">
+                <i class="fas fa-file-pdf"></i> المكتبة والملفات
+            </div>
+            <div class="nav-item" onclick="showSection('teachers-sec', this)">
+                <i class="fas fa-chalkboard-teacher"></i> الأساتذة
+            </div>
+            <div class="nav-item" onclick="showSection('support-sec', this)">
+                <i class="fas fa-headset"></i> الدعم الفني
+            </div>
+            <div id="admin-tab" class="nav-item" style="display:none; color:gold" onclick="showSection('admin-sec', this)">
+                <i class="fas fa-tools"></i> إدارة المنصة
+            </div>
         </aside>
 
         <main class="main-content">
             <section id="subjects-sec" class="section active-section">
                 <h2>المواد الدراسية</h2>
-                <div id="subjects-list" class="grid" style="margin-top:20px"></div>
+                <div id="subjects-list" class="files-grid"></div>
             </section>
 
-            <section id="details-sec" class="section">
-                <button class="btn" style="width:auto" onclick="showSection('subjects-sec')">← عودة للمواد</button>
-                <h2 id="current-subject-name" style="margin-top:20px"></h2>
-                <div id="lectures-list" class="grid" style="margin-top:20px"></div>
+            <section id="subject-details-sec" class="section">
+                <button class="btn btn-outline" style="width:auto" onclick="showSection('subjects-sec')">
+                    <i class="fas fa-arrow-right"></i> عودة للمواد
+                </button>
+                <h2 id="current-subject-title" style="margin-top:20px"></h2>
+                <div id="subject-videos-list" class="files-grid"></div>
+            </section>
+
+            <section id="library-sec" class="section">
+                <h2>المكتبة والملفات</h2>
+                <div id="files-container" class="files-grid"></div>
+            </section>
+
+            <section id="teachers-sec" class="section">
+                <h2>فريق التدريس</h2>
+                <div id="teachers-list" class="files-grid"></div>
+            </section>
+
+            <section id="support-sec" class="section">
+                <div class="card text-center" style="text-align:center">
+                    <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:20px"></i>
+                    <h2>الدعم الفني المباشر</h2>
+                    <a href="https://wa.me/962778393633" target="_blank" class="btn btn-whatsapp" style="max-width:300px; margin: 20px auto;">
+                        تواصل عبر واتساب
+                    </a>
+                </div>
             </section>
 
             <section id="admin-sec" class="section">
-                <h2 style="color:var(--accent)">إدارة المحتوى</h2>
-                <div class="grid" style="margin-top:20px">
-                    <div class="card" style="cursor:default">
-                        <h3>إضافة فيديو</h3>
-                        <input type="text" id="v-title" placeholder="عنوان الفيديو">
-                        <input type="text" id="v-id" placeholder="ID اليوتيوب">
-                        <select id="v-sub"></select>
-                        <button class="btn btn-primary" onclick="addVideo()">حفظ الفيديو</button>
-                    </div>
-                    <div class="card" style="cursor:default">
+                <h2>لوحة تحكم المدير</h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="showAdminTab('sub')">المواد</button>
+                    <button class="tab" onclick="showAdminTab('vid')">الفيديوهات</button>
+                    <button class="tab" onclick="showAdminTab('teach')">الأساتذة</button>
+                    <button class="tab" onclick="showAdminTab('backup')">الإعدادات</button>
+                </div>
+
+                <div id="admin-sub" class="admin-tab-content">
+                    <div class="admin-form">
                         <h3>إضافة مادة</h3>
-                        <input type="text" id="s-name" placeholder="اسم المادة">
-                        <button class="btn btn-primary" onclick="addSubject()">حفظ المادة</button>
+                        <input type="text" id="new-sub-name" placeholder="اسم المادة">
+                        <textarea id="new-sub-desc" placeholder="وصف المادة"></textarea>
+                        <button class="btn btn-primary" onclick="adminAddSubject()">حفظ المادة</button>
+                    </div>
+                    <div id="admin-subs-list"></div>
+                </div>
+
+                <div id="admin-vid" class="admin-tab-content" style="display:none">
+                    <div class="admin-form">
+                        <h3>إضافة فيديو</h3>
+                        <input type="text" id="new-vid-title" placeholder="عنوان الفيديو">
+                        <input type="text" id="new-vid-id" placeholder="ID اليوتيوب">
+                        <select id="new-vid-sub"></select>
+                        <button class="btn btn-primary" onclick="adminAddVideo()">نشر الفيديو</button>
+                    </div>
+                    <div id="admin-vids-list"></div>
+                </div>
+
+                <div id="admin-backup" class="admin-tab-content" style="display:none">
+                    <div class="card">
+                        <h3>تصدير واستيراد البيانات</h3>
+                        <button class="btn btn-outline" onclick="exportData()">تحميل نسخة احتياطية (JSON)</button>
+                        <button class="btn btn-danger" onclick="resetPlatform()">إعادة ضبط المصنع</button>
                     </div>
                 </div>
-                <h3 style="margin-top:30px">المحتوى الحالي (للحذف)</h3>
-                <div id="admin-manage-list" style="margin-top:15px"></div>
             </section>
         </main>
     </div>
 
     <script>
-        // البيانات الافتراضية
+        // نظام البيانات
         let platformData = JSON.parse(localStorage.getItem('itqan_v3')) || {
-            subjects: [{id: 1, name: "التحليل الوسيط"}],
-            videos: [
-                {title: "المحاضرة 1: النهايات", youtubeId: "euOqZKztxhE", subjectId: 1},
-                {title: "المحاضرة 2: الاتصال", youtubeId: "cCQtBGM8TJE", subjectId: 1}
-            ]
+            subjects: [{id: 1, name: "التحليل الوسيط", description: "شرح كامل لمادة التحليل"}],
+            videos: [{title: "المحاضرة الأولى", youtubeId: "euOqZKztxhE", subjectId: 1}],
+            teachers: [{name: "عمران البراج", subject: "رياضيات"}],
+            files: []
         };
 
         window.onload = () => {
-            renderStars();
-            const user = localStorage.getItem('itqan_user');
-            if(user) {
-                const userData = JSON.parse(user);
-                showApp(userData.name, userData.role === 'admin');
+            initStars();
+            const savedUser = localStorage.getItem('itqan_user');
+            if(savedUser) {
+                const user = JSON.parse(savedUser);
+                showApp(user.name, user.role === 'admin');
             }
         };
 
-        function renderStars() {
+        function initStars() {
             const container = document.getElementById('stars-container');
-            for(let i=0; i<100; i++) {
-                const s = document.createElement('div');
-                s.className = 'star';
-                s.style.width = s.style.height = Math.random()*3+'px';
-                s.style.left = Math.random()*100+'%';
-                s.style.top = Math.random()*100+'%';
-                container.appendChild(s);
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = Math.random() * 3 + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                container.appendChild(star);
             }
         }
 
         function handleLogin(role) {
-            const userData = { name: role==='admin'?'عمران البراج':'طالب إتقان', role: role };
-            localStorage.setItem('itqan_user', JSON.stringify(userData));
-            showApp(userData.name, role === 'admin');
+            const user = { name: role === 'admin' ? "المدير عمران" : "طالب إتقان", role: role };
+            localStorage.setItem('itqan_user', JSON.stringify(user));
+            showApp(user.name, role === 'admin');
         }
 
         function handleAdminLogin() {
             if(prompt("كلمة السر:") === "Omran#05") handleLogin('admin');
+            else alert("خطأ!");
         }
 
         function showApp(name, isAdmin) {
@@ -171,8 +403,7 @@
             document.getElementById('app').style.display = 'block';
             document.getElementById('u-display').innerText = name;
             if(isAdmin) document.getElementById('admin-tab').style.display = 'flex';
-            renderSubjects();
-            populateSelects();
+            renderAll();
         }
 
         function logout() { localStorage.clear(); location.reload(); }
@@ -184,86 +415,125 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
             }
-            if(id === 'admin-sec') renderAdminList();
+        }
+
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById('admin-' + tab).style.display = 'block';
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // الرندرة (العرض)
+        function renderAll() {
+            renderSubjects();
+            renderTeachers();
+            if(localStorage.getItem('itqan_user') && JSON.parse(localStorage.getItem('itqan_user')).role === 'admin') {
+                renderAdminData();
+            }
         }
 
         function renderSubjects() {
             const list = document.getElementById('subjects-list');
             list.innerHTML = '';
-            platformData.subjects.forEach(sub => {
+            platformData.subjects.forEach(s => {
                 list.innerHTML += `
-                    <div class="card" onclick="viewSubject(${sub.id}, '${sub.name}')">
-                        <i class="fas fa-folder-open fa-2x" style="color:var(--accent)"></i>
-                        <h3 style="margin-top:15px">${sub.name}</h3>
-                        <p style="font-size:0.8rem; color:#8892b0">انقر لعرض المحاضرات</p>
+                    <div class="card card-clickable" onclick="openSubject(${s.id}, '${s.name}')">
+                        <i class="fas fa-book-open fa-2x" style="color:var(--accent)"></i>
+                        <h3 style="margin-top:15px">${s.name}</h3>
+                        <p>${s.description}</p>
                     </div>`;
             });
         }
 
-        function viewSubject(id, name) {
-            document.getElementById('current-subject-name').innerText = name;
-            const list = document.getElementById('lectures-list');
+        function openSubject(id, name) {
+            document.getElementById('current-subject-title').innerText = name;
+            const list = document.getElementById('subject-videos-list');
             list.innerHTML = '';
-            const filtered = platformData.videos.filter(v => v.subjectId == id);
-            filtered.forEach(v => {
+            const vids = platformData.videos.filter(v => v.subjectId == id);
+            if(vids.length === 0) list.innerHTML = "<p>لا يوجد فيديوهات مضافة بعد.</p>";
+            vids.forEach(v => {
                 list.innerHTML += `
-                    <div class="card" style="cursor:default">
+                    <div class="card">
                         <h4>${v.title}</h4>
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/${v.youtubeId}"></iframe>
+                        <div class="video-box">
+                            <iframe src="https://www.youtube.com/embed/${v.youtubeId}" allowfullscreen></iframe>
                         </div>
                     </div>`;
             });
-            showSection('details-sec');
+            showSection('subject-details-sec');
         }
 
-        // وظائف المدير
-        function populateSelects() {
-            const sel = document.getElementById('v-sub');
-            sel.innerHTML = platformData.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        function renderTeachers() {
+            const list = document.getElementById('teachers-list');
+            list.innerHTML = platformData.teachers.map(t => `
+                <div class="file-card">
+                    <i class="fas fa-user-circle fa-3x"></i>
+                    <h3>${t.name}</h3>
+                    <p>${t.subject}</p>
+                </div>
+            `).join('');
         }
 
-        function addSubject() {
-            const name = document.getElementById('s-name').value;
+        // لوحة المدير - دوال الإضافة
+        function adminAddSubject() {
+            const name = document.getElementById('new-sub-name').value;
+            const desc = document.getElementById('new-sub-desc').value;
             if(name) {
-                platformData.subjects.push({id: Date.now(), name: name});
-                save();
-                renderSubjects();
-                populateSelects();
-                alert("تمت إضافة المادة");
+                platformData.subjects.push({id: Date.now(), name, description: desc});
+                saveAndRefresh();
             }
         }
 
-        function addVideo() {
-            const title = document.getElementById('v-title').value;
-            const vid = document.getElementById('v-id').value;
-            const subId = document.getElementById('v-sub').value;
+        function adminAddVideo() {
+            const title = document.getElementById('new-vid-title').value;
+            const vid = document.getElementById('new-vid-id').value;
+            const subId = document.getElementById('new-vid-sub').value;
             if(title && vid) {
                 platformData.videos.push({title, youtubeId: vid, subjectId: subId});
-                save();
-                alert("تم نشر الفيديو");
+                saveAndRefresh();
             }
         }
 
-        function renderAdminList() {
-            const list = document.getElementById('admin-manage-list');
-            list.innerHTML = '<h4>الفيديوهات الحالية:</h4>';
-            platformData.videos.forEach((v, index) => {
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; background:#112240; padding:10px; margin-bottom:5px; border-radius:8px">
-                    <span>${v.title}</span>
-                    <button class="btn-danger" onclick="deleteVideo(${index})">حذف</button>
-                </div>`;
-            });
+        function renderAdminData() {
+            // تحديث قائمة المواد في السيلكت
+            const sel = document.getElementById('new-vid-sub');
+            sel.innerHTML = platformData.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            
+            // قائمة الحذف
+            const subList = document.getElementById('admin-subs-list');
+            subList.innerHTML = '<h4>المواد الحالية (حذف):</h4>' + platformData.subjects.map((s, i) => `
+                <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #333">
+                    <span>${s.name}</span>
+                    <button class="btn-danger" onclick="deleteSub(${i})">حذف</button>
+                </div>
+            `).join('');
         }
 
-        function deleteVideo(index) {
-            platformData.videos.splice(index, 1);
-            save();
-            renderAdminList();
+        function deleteSub(index) {
+            platformData.subjects.splice(index, 1);
+            saveAndRefresh();
         }
 
-        function save() {
+        function saveAndRefresh() {
             localStorage.setItem('itqan_v3', JSON.stringify(platformData));
+            renderAll();
+            alert("تم التحديث بنجاح");
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(platformData));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "itqan_backup.json");
+            dlAnchorElem.click();
+        }
+
+        function resetPlatform() {
+            if(confirm("هل أنت متأكد؟ سيتم حذف كل البيانات!")) {
+                localStorage.removeItem('itqan_v3');
+                location.reload();
+            }
         }
     </script>
 </body>
