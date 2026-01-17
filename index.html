@@ -3,482 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ✅ التعديل 1: إصلاح الخطأ الإملائي في العنوان -->
-    <title>GitHub Docs | منصة إتقان التعليمية</title>
+    <title>منصة إتقان التعليمية | Excellence Education Platform</title>
     
-    <!-- ✅ التعديل 2: إضافة meta description -->
-    <meta name="description" content="منصة إتقان التعليمية - نظام إدارة تعليمي متكامل">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        /* ===== VARIABLES ===== */
         :root {
-            --primary: #2ea44f;
-            --primary-dark: #22863a;
-            --secondary: #0366d6;
-            --accent: #f9826c;
-            --bg: #0d1117;
-            --card: #161b22;
-            --sidebar: #0d1117;
-            --text: #c9d1d9;
-            --text-light: #8b949e;
-            --border: #30363d;
-            --success: #2ea44f;
-            --danger: #f85149;
-            --warning: #f0883e;
-            --info: #58a6ff;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #60a5fa;
+            --secondary: #10b981;
+            --secondary-dark: #059669;
+            --accent: #8b5cf6;
+            --accent-dark: #7c3aed;
+            --bg: #0f172a;
+            --bg-light: #1e293b;
+            --bg-lighter: #334155;
+            --card: #1e293b;
+            --sidebar: #0f172a;
+            --text: #f1f5f9;
+            --text-light: #cbd5e1;
+            --text-lighter: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s ease;
         }
 
+        /* ===== RESET & BASE ===== */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
+            font-family: 'Tajawal', sans-serif;
             background: var(--bg);
             color: var(--text);
-            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
-            line-height: 1.6;
         }
 
-        /* ✅ التعديل 3: تحسين الأداء - إضافة transition فقط للعناصر التفاعلية */
-        .btn, .nav-item, .card-hover, .tab, .file-item, .sidebar {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* خلفية متحركة مستوحاة من GitHub */
-        .github-bg {
+        /* ===== BACKGROUND ANIMATION ===== */
+        .bg-animation {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(46, 164, 79, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(3, 102, 214, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(249, 130, 108, 0.05) 0%, transparent 50%);
-            background-color: var(--bg);
             overflow: hidden;
         }
 
-        .code-grid {
+        .bg-gradient {
             position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(88, 166, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: rotate 60s linear infinite;
         }
 
-        @keyframes gridMove {
-            0% { transform: translateY(0) translateX(0); }
-            100% { transform: translateY(20px) translateX(20px); }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* شاشة الدخول */
+        /* ===== AUTH SCREEN ===== */
         #auth-screen {
             position: fixed;
-            inset: 0;
-            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: var(--bg);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            z-index: 10000;
             padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
         }
 
         .auth-card {
             background: var(--card);
-            padding: 40px;
-            border-radius: 12px;
+            border-radius: var(--radius);
+            padding: 40px 35px;
+            box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.5s ease;
+            text-align: center;
+            animation: slideUp 0.5s ease;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+        .logo-container {
             margin-bottom: 30px;
         }
 
-        .brand-icon {
-            font-size: 2.5rem;
+        .logo-icon {
+            font-size: 3.5rem;
             color: var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .brand-text {
-            font-size: 2rem;
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .logo-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .welcome-text {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-light);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            color: var(--primary-light);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ===== APP LAYOUT ===== */
+        #app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* شريط التنقل */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 64px;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-brand {
+        .nav-user {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .nav-brand-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
-        /* القائمة الجانبية */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             right: 0;
-            top: 64px;
-            width: 260px;
-            height: calc(100vh - 64px);
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
             background: var(--sidebar);
             border-left: 1px solid var(--border);
-            padding: 24px 0;
+            padding: 25px 0;
             z-index: 999;
             overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            padding: 0 25px 10px;
+            color: var(--text-lighter);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .nav-item {
-            padding: 12px 24px;
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 14px 25px;
             color: var(--text-light);
+            text-decoration: none;
             cursor: pointer;
+            transition: var(--transition);
             border-right: 3px solid transparent;
         }
 
         .nav-item:hover {
-            background: rgba(88, 166, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text);
-            border-right-color: var(--primary);
+            border-right-color: var(--primary-light);
         }
 
         .nav-item.active {
-            background: rgba(46, 164, 79, 0.1);
-            color: var(--primary);
+            background: rgba(37, 99, 235, 0.15);
+            color: var(--primary-light);
             border-right-color: var(--primary);
         }
 
-        .nav-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 16px 24px;
+        .nav-item i {
+            width: 20px;
+            text-align: center;
         }
 
-        /* المحتوى الرئيسي */
+        /* Main Content */
         .main-content {
-            margin-right: 260px;
-            padding: 32px;
-            min-height: calc(100vh - 64px);
+            margin-right: 280px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+            padding-top: 90px;
         }
 
+        /* ===== SECTIONS ===== */
         .section {
             display: none;
-            animation: slideUp 0.3s ease;
+            animation: fadeIn 0.4s ease;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .active-section {
+        .section.active {
             display: block;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* الكروت */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-title i {
+            color: var(--primary);
+            margin-left: 10px;
+        }
+
+        /* ===== CARDS ===== */
         .card {
             background: var(--card);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .card-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--text);
         }
 
-        .card-hover {
-            cursor: pointer;
+        .card-body {
+            color: var(--text-light);
         }
 
-        .card-hover:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        /* الأزرار */
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            border: none;
-            font-family: inherit;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 164, 79, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .btn-outline:hover {
-            background: rgba(88, 166, 255, 0.1);
-            border-color: var(--secondary);
-            color: var(--secondary);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-        }
-
-        /* الشبكات */
+        /* ===== GRID SYSTEM ===== */
         .grid {
             display: grid;
-            gap: 20px;
+            gap: 25px;
         }
 
-        .grid-cols-1 {
-            grid-template-columns: 1fr;
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        /* ===== STATS CARDS ===== */
+        .stats-container {
+            margin: 30px 0;
         }
 
-        .grid-cols-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .grid-cols-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .grid-cols-4 {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        @media (max-width: 1024px) {
-            .grid-cols-4 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .grid-cols-3, .grid-cols-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .grid-cols-2, .grid-cols-3, .grid-cols-4 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* العناصر التفاعلية */
-        .file-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-bottom: 8px;
-            cursor: pointer;
-        }
-
-        .file-item:hover {
-            background: rgba(88, 166, 255, 0.1);
-            border-color: var(--secondary);
-        }
-
-        .file-icon {
-            margin-left: 12px;
-            color: var(--secondary);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .badge-success {
-            background: rgba(46, 164, 79, 0.2);
-            color: var(--success);
-        }
-
-        .badge-info {
-            background: rgba(88, 166, 255, 0.2);
-            color: var(--info);
-        }
-
-        .badge-warning {
-            background: rgba(240, 136, 62, 0.2);
-            color: var(--warning);
-        }
-
-        /* الفيديوهات */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 8px;
-            background: var(--bg);
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--card));
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: var(--radius);
             border: 1px solid var(--border);
         }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* التبويبات */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-            overflow-x: auto;
-        }
-
-        .tab {
-            padding: 12px 24px;
-            border: none;
-            background: none;
-            color: var(--text-light);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            white-space: nowrap;
-        }
-
-        .tab:hover {
-            color: var(--text);
-        }
-
-        .tab.active {
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             color: var(--primary);
-            border-bottom-color: var(--primary);
         }
 
-        /* أشكال التنبيه */
-        .alert {
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 5px;
         }
 
-        .alert-success {
-            background: rgba(46, 164, 79, 0.1);
-            border-color: var(--success);
-            color: var(--success);
+        .stat-label {
+            color: var(--text-light);
+            font-size: 1rem;
         }
 
-        .alert-danger {
-            background: rgba(248, 81, 73, 0.1);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        /* النماذج */
+        /* ===== FORMS ===== */
         .form-group {
             margin-bottom: 20px;
         }
@@ -492,590 +479,951 @@
 
         .form-control {
             width: 100%;
-            padding: 10px 12px;
-            background: var(--bg);
+            padding: 12px 16px;
+            background: var(--bg-light);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: var(--radius-sm);
             color: var(--text);
             font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(46, 164, 79, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
 
-        /* لوحة المدير */
-        .admin-panel {
-            display: grid;
-            gap: 24px;
-        }
-
-        .admin-card {
-            background: var(--card);
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-light);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
         }
 
-        .admin-section {
-            margin-bottom: 32px;
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
         }
 
-        /* الإحصائيات */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 25px;
+            overflow-x: auto;
         }
 
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
+        .tab {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            color: var(--text-lighter);
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: var(--transition);
         }
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
             color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== LISTS ===== */
+        .list-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .list-item:hover {
+            background: var(--bg-lighter);
+            border-color: var(--primary-light);
+        }
+
+        .list-item-content h4 {
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .list-item-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ===== VIDEOS ===== */
+        .videos-container {
+            margin-top: 20px;
+        }
+
+        .video-card {
+            overflow: hidden;
+        }
+
+        .video-preview {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .video-preview iframe {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info h4 {
+            color: var(--text);
             margin-bottom: 8px;
         }
 
-        /* التجاوب */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(100%);
-                background: var(--card);
-                backdrop-filter: blur(20px);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-right: 0;
-                padding: 24px;
-            }
+        .video-meta {
+            display: flex;
+            gap: 15px;
+            color: var(--text-lighter);
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 0 16px;
-            }
-
-            .main-content {
-                padding: 16px;
-            }
+        /* ===== FILES ===== */
+        .files-container {
+            margin-top: 20px;
         }
 
-        /* زر القائمة المتنقلة */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
+        .file-card {
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .file-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .file-name {
             color: var(--text);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 8px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        @media (max-width: 1024px) {
-            .mobile-menu-btn {
-                display: block;
-            }
+        .file-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
 
-        /* مؤشر التحميل */
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
+        /* ===== TEACHERS ===== */
+        .teacher-card {
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .teacher-avatar {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .teacher-name {
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
-        /* تخصيص شريط التمرير */
+        .teacher-subject {
+            color: var(--primary-light);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .teacher-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        /* ===== SUBJECTS ===== */
+        .subject-card {
+            padding: 25px 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .subject-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .subject-name {
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subject-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .subject-stats {
+            display: flex;
+            gap: 15px;
+            color: var(--text-lighter);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--info);
+            color: var(--info);
+        }
+
+        /* ===== SUPPORT SECTION ===== */
+        .support-card {
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .support-icon {
+            font-size: 3.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .support-text {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg);
+            background: var(--bg-light);
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--border);
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
+            background: var(--border-light);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .grid-4 { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .main-content { padding: 25px; padding-top: 80px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 15px; height: 60px; }
+            .sidebar { 
+                transform: translateX(100%); 
+                width: 280px; 
+                top: 60px;
+                height: calc(100vh - 60px);
+            }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-right: 0; padding-top: 70px; }
+            .mobile-menu-btn { display: block; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .auth-card { padding: 30px 25px; }
+            .btn { padding: 12px 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { padding: 0 10px; }
+            .main-content { padding: 15px; padding-top: 70px; }
+            .card { padding: 20px; }
+            .section-title { font-size: 1.5rem; }
+            .auth-card { padding: 25px 20px; }
+            .logo-text { font-size: 1.8rem; }
+            .logo-icon { font-size: 3rem; }
+        }
+
+        /* ===== UTILITIES ===== */
+        .text-center { text-align: center; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .mt-20 { margin-top: 20px; }
+        .mt-30 { margin-top: 30px; }
+        .d-none { display: none !important; }
+        .d-flex { display: flex; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-10 { gap: 10px; }
+        .gap-15 { gap: 15px; }
+        .w-100 { width: 100%; }
+
+        /* ===== LOADING ===== */
+        .loader {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-
-    <!-- خلفية GitHub -->
-    <div class="github-bg">
-        <div class="code-grid"></div>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-gradient"></div>
     </div>
 
-    <!-- شاشة الدخول -->
+    <!-- Authentication Screen -->
     <div id="auth-screen">
-        <div class="auth-card">
-            <div class="brand">
-                <i class="fab fa-github brand-icon"></i>
-                <!-- ✅ التعديل 4: إصلاح الخطأ الإملائي في الشعار -->
-                <span class="brand-text">GitHub Docs</span>
-            </div>
-            
-            <h2 style="text-align: center; margin-bottom: 8px;">منصة إتقان التعليمية</h2>
-            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">
-                نظام إدارة تعليمي متكامل
-            </p>
-            
-            <!-- ✅ التعديل 5: استبدال بيانات التواصل الشخصية -->
-            <button class="btn btn-primary" onclick="handleLogin('student')" style="width: 100%; margin-bottom: 12px;">
-                <i class="fas fa-user-graduate"></i> الدخول كطالب
-            </button>
-            
-            <button class="btn btn-outline" onclick="handleAdminLogin()" style="width: 100%;">
-                <i class="fas fa-user-shield"></i> دخول المدير
-            </button>
-            
-            <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
-                <p style="color: var(--text-light); font-size: 0.9rem; text-align: center;">
-                    <i class="fas fa-info-circle"></i> كلمة مرور المدير: Omran#05 (للعرض التوضيحي فقط)
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h1 class="logo-text">منصة إتقان التعليمية</h1>
+                    <p class="logo-subtitle">Excellence Education Platform</p>
+                </div>
+                
+                <p class="welcome-text">
+                    مرحباً بكم في منصة إتقان التعليمية، حيث نقدم لكم أفضل المناهج التعليمية 
+                    وأحدث طرق التدريس التفاعلية لتحقيق أعلى مستويات التميز الأكاديمي.
                 </p>
+                
+                <div class="d-flex flex-column gap-15">
+                    <button class="btn btn-primary" onclick="handleLogin('student')">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>الدخول كطالب</span>
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="handleAdminLogin()">
+                        <i class="fas fa-user-shield"></i>
+                        <span>دخول المدير</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- التطبيق الرئيسي -->
+    <!-- Main Application -->
     <div id="app">
-        <!-- شريط التنقل -->
+        <!-- Navigation Bar -->
         <nav class="navbar">
-            <div class="nav-brand">
+            <div class="nav-left">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <i class="fab fa-github nav-brand-icon"></i>
-                <div>
-                    <!-- ✅ التعديل 6: إصلاح الخطأ الإملائي في شريط التنقل -->
-                    <div style="font-weight: 700; font-size: 1.1rem;">GitHub Docs</div>
-                    <div style="font-size: 0.85rem; color: var(--text-light);" id="u-display">طالب</div>
-                </div>
+                <div class="nav-logo">منصة إتقان</div>
             </div>
             
-            <div class="user-menu">
+            <div class="nav-user">
                 <div class="user-avatar" id="user-avatar">ط</div>
                 <button class="btn btn-outline btn-sm" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
+                    <span class="d-none d-md-inline">تسجيل خروج</span>
                 </button>
             </div>
         </nav>
 
-        <!-- القائمة الجانبية -->
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="nav-item active" onclick="showSection('dashboard', this)">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>الرئيسية</span>
+            <div class="nav-section">
+                <div class="nav-section-title">القائمة الرئيسية</div>
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="nav-item" onclick="showSection('subjects')">
+                    <i class="fas fa-book"></i>
+                    <span>المواد الدراسية</span>
+                </div>
+                <div class="nav-item" onclick="showSection('videos')">
+                    <i class="fas fa-video"></i>
+                    <span>الفيديوهات التعليمية</span>
+                </div>
+                <div class="nav-item" onclick="showSection('files')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>أوراقي وسنواتي</span>
+                </div>
+                <div class="nav-item" onclick="showSection('teachers')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>المعلمين</span>
+                </div>
             </div>
             
-            <div class="nav-item" onclick="showSection('subjects', this)">
-                <i class="fas fa-book"></i>
-                <span>المواد الدراسية</span>
-            </div>
-            
-            <div class="nav-item" onclick="showSection('videos', this)">
-                <i class="fas fa-video"></i>
-                <span>الفيديوهات التعليمية</span>
-            </div>
-            
-            <div class="nav-item" onclick="showSection('library', this)">
-                <i class="fas fa-folder-open"></i>
-                <span>المكتبة</span>
-            </div>
-            
-            <div class="nav-item" onclick="showSection('teachers', this)">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <span>المعلمين</span>
-            </div>
-            
-            <div class="nav-divider"></div>
-            
-            <div class="nav-item" onclick="showSection('support', this)">
-                <i class="fas fa-headset"></i>
-                <span>الدعم الفني</span>
-            </div>
-            
-            <div id="admin-nav" class="nav-item" style="display: none;" onclick="showSection('admin', this)">
-                <i class="fas fa-cogs"></i>
-                <span>لوحة التحكم</span>
+            <div class="nav-section">
+                <div class="nav-section-title">الدعم والإدارة</div>
+                <div class="nav-item" onclick="showSection('support')">
+                    <i class="fas fa-headset"></i>
+                    <span>الدعم الفني</span>
+                </div>
+                <div class="nav-item d-none" id="admin-nav-item" onclick="showSection('admin')">
+                    <i class="fas fa-cogs"></i>
+                    <span>لوحة التحكم</span>
+                </div>
             </div>
         </aside>
 
-        <!-- المحتوى الرئيسي -->
+        <!-- Main Content -->
         <main class="main-content">
-            <!-- قسم الرئيسية -->
-            <section id="dashboard" class="section active-section">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        لوحة التحكم
+                    </h2>
+                    <div id="last-login" class="alert alert-info" style="margin: 0; padding: 8px 16px;">
+                        <i class="fas fa-clock"></i>
+                        <span>آخر دخول: اليوم</span>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="grid grid-4">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-number" id="stats-subjects">0</div>
+                            <div class="stat-label">المواد الدراسية</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="stat-number" id="stats-teachers">0</div>
+                            <div class="stat-label">المعلمين</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="stat-number" id="stats-videos">0</div>
+                            <div class="stat-label">الفيديوهات</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file"></i>
+                            </div>
+                            <div class="stat-number" id="stats-files">0</div>
+                            <div class="stat-label">الملفات</div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-tachometer-alt"></i> لوحة التحكم
-                        </h2>
-                        <div class="badge badge-success" id="last-login"></div>
+                        <h3 class="card-title">آخر النشاطات</h3>
                     </div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number" id="stat-subjects">0</div>
-                            <div>المواد الدراسية</div>
+                    <div class="card-body">
+                        <div id="recent-activity">
+                            <p class="text-center" style="color: var(--text-light);">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                جاري تحميل النشاطات...
+                            </p>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="stat-teachers">0</div>
-                            <div>المعلمين</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="stat-videos">0</div>
-                            <div>الفيديوهات</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="stat-files">0</div>
-                            <div>الملفات</div>
-                        </div>
-                    </div>
-                    
-                    <div id="recent-activity">
-                        <!-- سيتم ملؤه بالجافاسكربت -->
                     </div>
                 </div>
             </section>
 
-            <!-- قسم المواد الدراسية -->
+            <!-- Subjects Section -->
             <section id="subjects" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-book"></i> المواد الدراسية
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
-                        </button>
-                    </div>
-                    
-                    <div class="grid grid-cols-3" id="subjects-container">
-                        <!-- سيتم ملؤه بالجافاسكربت -->
-                    </div>
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-book"></i>
+                        المواد الدراسية
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة
+                    </button>
+                </div>
+                
+                <div id="subjects-container" class="grid grid-3">
+                    <!-- Subjects will be loaded here -->
                 </div>
             </section>
 
-            <!-- قسم الفيديوهات -->
+            <!-- Videos Section -->
             <section id="videos" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-video"></i> الفيديوهات التعليمية
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
-                        </button>
-                    </div>
-                    
-                    <div class="tabs" id="video-tabs">
-                        <button class="tab active" onclick="filterVideos('all')">الكل</button>
-                        <button class="tab" onclick="filterVideos('recent')">الأحدث</button>
-                        <button class="tab" onclick="filterVideos('popular')">الأكثر مشاهدة</button>
-                    </div>
-                    
-                    <div class="grid grid-cols-2" id="videos-container">
-                        <!-- سيتم ملؤه بالجافاسكربت -->
-                    </div>
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-video"></i>
+                        الفيديوهات التعليمية
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة
+                    </button>
+                </div>
+                
+                <div class="tabs mb-30">
+                    <button class="tab active" onclick="filterVideos('all')">جميع الفيديوهات</button>
+                    <button class="tab" onclick="filterVideos('recent')">الأحدث</button>
+                    <button class="tab" onclick="filterVideos('popular')">الأكثر مشاهدة</button>
+                </div>
+                
+                <div id="videos-container" class="grid grid-2">
+                    <!-- Videos will be loaded here -->
                 </div>
             </section>
 
-            <!-- قسم المكتبة -->
-            <section id="library" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-folder-open"></i> المكتبة
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
+            <!-- Files Section -->
+            <section id="files" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-file-alt"></i>
+                        أوراقي وسنواتي
+                    </h2>
+                    <div class="d-flex gap-10">
+                        <button class="btn btn-outline" onclick="showSection('dashboard')">
+                            <i class="fas fa-arrow-right"></i>
+                            عودة
                         </button>
                     </div>
-                    
-                    <div class="tabs" id="library-tabs">
-                        <button class="tab active" onclick="filterFiles('all')">الكل</button>
-                        <button class="tab" onclick="filterFiles('pdf')">PDF</button>
-                        <button class="tab" onclick="filterFiles('doc')">مستندات</button>
-                        <button class="tab" onclick="filterFiles('other')">أخرى</button>
-                    </div>
-                    
-                    <div id="files-container">
-                        <!-- سيتم ملؤه بالجافاسكربت -->
-                    </div>
+                </div>
+                
+                <div class="tabs mb-30">
+                    <button class="tab active" onclick="filterFiles('all')">جميع الملفات</button>
+                    <button class="tab" onclick="filterFiles('pdf')">PDF</button>
+                    <button class="tab" onclick="filterFiles('doc')">مستندات</button>
+                    <button class="tab" onclick="filterFiles('zip')">ملفات مضغوطة</button>
+                </div>
+                
+                <div id="files-container" class="grid grid-3">
+                    <!-- Files will be loaded here -->
                 </div>
             </section>
 
-            <!-- قسم المعلمين -->
+            <!-- Teachers Section -->
             <section id="teachers" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-chalkboard-teacher"></i> المعلمين
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
-                        </button>
-                    </div>
-                    
-                    <div class="grid grid-cols-3" id="teachers-container">
-                        <!-- سيتم ملؤه بالجافاسكربت -->
-                    </div>
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        المعلمين
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة
+                    </button>
+                </div>
+                
+                <div id="teachers-container" class="grid grid-3">
+                    <!-- Teachers will be loaded here -->
                 </div>
             </section>
 
-            <!-- قسم الدعم الفني -->
+            <!-- Support Section -->
             <section id="support" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-headset"></i> الدعم الفني
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
-                        </button>
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-headset"></i>
+                        الدعم الفني
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة
+                    </button>
+                </div>
+                
+                <div class="card support-card">
+                    <div class="support-icon">
+                        <i class="fab fa-whatsapp"></i>
                     </div>
-                    
-                    <div class="grid grid-cols-2" style="gap: 24px;">
-                        <div class="card">
-                            <h3 style="margin-bottom: 16px;"><i class="fab fa-whatsapp"></i> الدعم المباشر</h3>
-                            <p style="color: var(--text-light); margin-bottom: 20px;">
-                                تواصل مع فريق الدعم عبر واتساب للحصول على مساعدة فورية
-                            </p>
-                            <!-- ✅ التعديل 7: استبدال رقم واتساب حقيقي -->
-                            <a href="https://wa.me/1234567890" target="_blank" class="btn btn-success" style="width: 100%;">
-                                <i class="fab fa-whatsapp"></i> ابدأ محادثة
-                            </a>
-                        </div>
-                        
-                        <div class="card">
-                            <h3 style="margin-bottom: 16px;"><i class="fas fa-envelope"></i> البريد الإلكتروني</h3>
-                            <p style="color: var(--text-light); margin-bottom: 20px;">
-                                أرسل استفساراتك أو مشاكلك الفنية عبر البريد الإلكتروني
-                            </p>
-                            <!-- ✅ التعديل 8: استبدال إيميل حقيقي -->
-                            <a href="mailto:support@example.com" class="btn btn-primary" style="width: 100%;">
-                                <i class="fas fa-paper-plane"></i> إرسال بريد
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- ✅ التعديل 9: إضافة ملاحظة أمان -->
-                    <div class="alert alert-success" style="margin-top: 20px;">
-                        <i class="fas fa-shield-alt"></i>
-                        <div>
-                            <strong>ملاحظة أمان:</strong> هذا مشروع توضيحي للعرض على GitHub.
-                            في المشروع الحقيقي، يجب إضافة نظام مصادقة Back-end آمن.
-                        </div>
-                    </div>
+                    <h3 class="card-title mb-20">الدعم الفني المباشر</h3>
+                    <p class="support-text">
+                        نحن هنا لمساعدتك! يمكنك التواصل مع فريق الدعم الفني عبر واتساب 
+                        للحصول على مساعدة فورية في أي وقت، من الساعة 8 صباحاً حتى 10 مساءً.
+                    </p>
+                    <a href="https://wa.me/0778393633" target="_blank" class="btn btn-success" style="max-width: 300px; margin: 0 auto;">
+                        <i class="fab fa-whatsapp"></i>
+                        تواصل معنا عبر واتساب
+                    </a>
                 </div>
             </section>
 
-            <!-- قسم لوحة تحكم المدير -->
+            <!-- Admin Section -->
             <section id="admin" class="section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-cogs"></i> لوحة تحكم المدير
-                        </h2>
-                        <button class="btn btn-outline btn-sm" onclick="showSection('dashboard')">
-                            <i class="fas fa-arrow-right"></i> عودة
-                        </button>
-                    </div>
-                    
-                    <!-- ✅ التعديل 10: إضافة تحذير أمان -->
-                    <div class="alert alert-warning" style="margin-bottom: 20px;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div>
-                            <strong>تنبيه أمان:</strong> هذا النظام للأغراض التوضيحية فقط.
-                            في التطبيق الحقيقي، يجب إضافة نظام مصادقة Back-end مناسب.
-                        </div>
-                    </div>
-                    
-                    <div class="tabs" id="admin-tabs">
-                        <button class="tab active" onclick="showAdminTab('manage')">الإدارة</button>
-                        <button class="tab" onclick="showAdminTab('add')">إضافة محتوى</button>
-                        <button class="tab" onclick="showAdminTab('stats')">الإحصائيات</button>
-                        <button class="tab" onclick="showAdminTab('settings')">الإعدادات</button>
-                    </div>
-                    
-                    <!-- تبويب الإدارة -->
-                    <div id="admin-manage" class="admin-section">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-tasks"></i> إدارة المحتوى</h3>
-                        
-                        <div class="grid grid-cols-2" style="gap: 20px;">
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book"></i> المواد الدراسية</h4>
-                                <div id="admin-subjects-list">
-                                    <!-- سيتم ملؤه بالجافاسكربت -->
-                                </div>
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-cogs"></i>
+                        لوحة تحكم المدير
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة
+                    </button>
+                </div>
+                
+                <!-- Admin Tabs -->
+                <div class="tabs mb-30">
+                    <button class="tab active" onclick="showAdminTab('subjects')">إدارة المواد</button>
+                    <button class="tab" onclick="showAdminTab('teachers')">إدارة المعلمين</button>
+                    <button class="tab" onclick="showAdminTab('videos')">إدارة الفيديوهات</button>
+                    <button class="tab" onclick="showAdminTab('files')">إدارة الملفات</button>
+                    <button class="tab" onclick="showAdminTab('settings')">الإحصائيات</button>
+                </div>
+                
+                <!-- Manage Subjects -->
+                <div id="admin-subjects" class="tab-content active">
+                    <div class="grid grid-2 gap-25">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-plus-circle"></i>
+                                    إضافة مادة جديدة
+                                </h3>
                             </div>
-                            
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-chalkboard-teacher"></i> المعلمين</h4>
-                                <div id="admin-teachers-list">
-                                    <!-- سيتم ملؤه بالجافاسكربت -->
-                                </div>
-                            </div>
-                            
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video"></i> الفيديوهات</h4>
-                                <div id="admin-videos-list">
-                                    <!-- سيتم ملؤه بالجافاسكربت -->
-                                </div>
-                            </div>
-                            
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file"></i> الملفات</h4>
-                                <div id="admin-files-list">
-                                    <!-- سيتم ملؤه بالجافاسكربت -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- تبويب الإضافة -->
-                    <div id="admin-add" class="admin-section" style="display: none;">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> إضافة محتوى جديد</h3>
-                        
-                        <div class="grid grid-cols-2" style="gap: 20px;">
-                            <!-- إضافة مادة -->
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-book-medical"></i> إضافة مادة</h4>
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">اسم المادة</label>
-                                    <input type="text" id="add-subject-name" class="form-control" placeholder="أدخل اسم المادة">
+                                    <input type="text" id="admin-subject-name" class="form-control" placeholder="أدخل اسم المادة">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">وصف المادة</label>
-                                    <textarea id="add-subject-desc" class="form-control" rows="3" placeholder="وصف مختصر للمادة"></textarea>
+                                    <textarea id="admin-subject-desc" class="form-control" placeholder="أدخل وصفاً للمادة"></textarea>
                                 </div>
-                                <button class="btn btn-primary" onclick="addSubject()">
-                                    <i class="fas fa-plus"></i> إضافة المادة
+                                <button class="btn btn-primary" onclick="adminAddSubject()">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة المادة
                                 </button>
                             </div>
-                            
-                            <!-- إضافة معلم -->
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-user-plus"></i> إضافة معلم</h4>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    المواد الحالية
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-subjects-list" class="list-container">
+                                    <!-- Subjects list will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Manage Teachers -->
+                <div id="admin-teachers" class="tab-content">
+                    <div class="grid grid-2 gap-25">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-user-plus"></i>
+                                    إضافة معلم جديد
+                                </h3>
+                            </div>
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">اسم المعلم</label>
-                                    <input type="text" id="add-teacher-name" class="form-control" placeholder="أدخل اسم المعلم">
+                                    <input type="text" id="admin-teacher-name" class="form-control" placeholder="أدخل اسم المعلم">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">التخصص</label>
-                                    <input type="text" id="add-teacher-specialty" class="form-control" placeholder="تخصص المعلم">
+                                    <input type="text" id="admin-teacher-specialty" class="form-control" placeholder="تخصص المعلم">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">البريد الإلكتروني</label>
-                                    <input type="email" id="add-teacher-email" class="form-control" placeholder="email@example.com">
+                                    <input type="email" id="admin-teacher-email" class="form-control" placeholder="email@example.com">
                                 </div>
-                                <button class="btn btn-primary" onclick="addTeacher()">
-                                    <i class="fas fa-plus"></i> إضافة المعلم
+                                <div class="form-group">
+                                    <label class="form-label">وصف مختصر</label>
+                                    <textarea id="admin-teacher-desc" class="form-control" placeholder="وصف مختصر عن المعلم"></textarea>
+                                </div>
+                                <button class="btn btn-primary" onclick="adminAddTeacher()">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة المعلم
                                 </button>
                             </div>
-                            
-                            <!-- إضافة فيديو -->
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-video-plus"></i> إضافة فيديو</h4>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    المعلمين الحاليين
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-teachers-list" class="list-container">
+                                    <!-- Teachers list will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Manage Videos -->
+                <div id="admin-videos" class="tab-content">
+                    <div class="grid grid-2 gap-25">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-video-plus"></i>
+                                    إضافة فيديو جديد
+                                </h3>
+                            </div>
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">عنوان الفيديو</label>
-                                    <input type="text" id="add-video-title" class="form-control" placeholder="عنوان الفيديو">
+                                    <input type="text" id="admin-video-title" class="form-control" placeholder="أدخل عنوان الفيديو">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">معرف اليوتيوب</label>
-                                    <input type="text" id="add-video-id" class="form-control" placeholder="dQw4w9WgXcQ">
+                                    <label class="form-label">معرف اليوتيوب (ID)</label>
+                                    <input type="text" id="admin-video-id" class="form-control" placeholder="مثال: dQw4w9WgXcQ">
+                                    <small style="color: var(--text-lighter); display: block; margin-top: 5px;">
+                                        ID هو الجزء بعد v= في رابط اليوتيوب
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">المادة</label>
-                                    <select id="add-video-subject" class="form-control">
+                                    <select id="admin-video-subject" class="form-select">
                                         <option value="">اختر المادة</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">المعلم</label>
-                                    <select id="add-video-teacher" class="form-control">
+                                    <select id="admin-video-teacher" class="form-select">
                                         <option value="">اختر المعلم</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-primary" onclick="addVideo()">
-                                    <i class="fas fa-plus"></i> إضافة الفيديو
+                                <button class="btn btn-primary" onclick="adminAddVideo()">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة الفيديو
                                 </button>
                             </div>
-                            
-                            <!-- إضافة ملف -->
-                            <div class="admin-card">
-                                <h4 style="margin-bottom: 16px;"><i class="fas fa-file-upload"></i> إضافة ملف</h4>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    الفيديوهات الحالية
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-videos-list" class="list-container">
+                                    <!-- Videos list will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Manage Files -->
+                <div id="admin-files" class="tab-content">
+                    <div class="grid grid-2 gap-25">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-file-upload"></i>
+                                    إضافة ملف جديد
+                                </h3>
+                            </div>
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">اسم الملف</label>
-                                    <input type="text" id="add-file-name" class="form-control" placeholder="اسم الملف">
+                                    <input type="text" id="admin-file-name" class="form-control" placeholder="أدخل اسم الملف">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">رابط الملف</label>
-                                    <input type="text" id="add-file-url" class="form-control" placeholder="https://example.com/file.pdf">
+                                    <input type="text" id="admin-file-url" class="form-control" placeholder="https://example.com/file.pdf">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">نوع الملف</label>
-                                    <select id="add-file-type" class="form-control">
+                                    <select id="admin-file-type" class="form-select">
                                         <option value="pdf">PDF</option>
                                         <option value="doc">مستند Word</option>
                                         <option value="ppt">عرض تقديمي</option>
                                         <option value="zip">ملف مضغوط</option>
+                                        <option value="image">صورة</option>
                                         <option value="other">أخرى</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-primary" onclick="addFile()">
-                                    <i class="fas fa-plus"></i> إضافة الملف
+                                <div class="form-group">
+                                    <label class="form-label">المادة (اختياري)</label>
+                                    <select id="admin-file-subject" class="form-select">
+                                        <option value="">اختر المادة (اختياري)</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="adminAddFile()">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة الملف
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- تبويب الإحصائيات -->
-                    <div id="admin-stats" class="admin-section" style="display: none;">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-line"></i> إحصائيات المنصة</h3>
-                        <div class="admin-card">
-                            <div id="admin-stats-content">
-                                <!-- سيتم ملؤه بالجافاسكربت -->
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    الملفات الحالية
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-files-list" class="list-container">
+                                    <!-- Files list will be loaded here -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- تبويب الإعدادات -->
-                    <div id="admin-settings" class="admin-section" style="display: none;">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-cog"></i> إعدادات النظام</h3>
-                        <div class="admin-card">
-                            <p style="color: var(--text-light); margin-bottom: 20px;">
-                                إعدادات النظام ستكون متاحة في النسخة الكاملة من المنصة.
-                            </p>
+                </div>
+                
+                <!-- Statistics -->
+                <div id="admin-settings" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-bar"></i>
+                                إحصائيات المنصة
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-4 mb-30">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="admin-stats-subjects">0</div>
+                                    <div class="stat-label">المواد الدراسية</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="admin-stats-teachers">0</div>
+                                    <div class="stat-label">المعلمين</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="admin-stats-videos">0</div>
+                                    <div class="stat-label">الفيديوهات</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="admin-stats-files">0</div>
+                                    <div class="stat-label">الملفات</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">نسخ احتياطي للبيانات</label>
+                                <div class="d-flex gap-10">
+                                    <button class="btn btn-outline" onclick="exportData()">
+                                        <i class="fas fa-download"></i>
+                                        تصدير البيانات
+                                    </button>
+                                    <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">
+                                        <i class="fas fa-upload"></i>
+                                        استيراد البيانات
+                                    </button>
+                                    <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)">
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info mt-20">
+                                <i class="fas fa-info-circle"></i>
+                                <div>
+                                    <strong>ملاحظة:</strong> البيانات محفوظة في المتصفح. لتخزين دائم، قم بتصدير البيانات بانتظام.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1083,207 +1431,157 @@
         </main>
     </div>
 
-    <!-- ✅ التعديل 11: إضافة JavaScript -->
+    <!-- JavaScript -->
     <script>
-        // بيانات التخزين
-        let platformData = JSON.parse(localStorage.getItem('github_docs_data')) || {
+        // ============================================
+        // DATA MANAGEMENT
+        // ============================================
+        const STORAGE_KEY = 'itqan_platform_data';
+        let platformData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
             subjects: [
-                { id: 1, name: "الرياضيات المتقدمة", description: "مادة متخصصة في الرياضيات العليا" },
-                { id: 2, name: "الفيزياء الهندسية", description: "تطبيقات الفيزياء في المجالات الهندسية" }
+                { 
+                    id: 1, 
+                    name: "الرياضيات المتقدمة", 
+                    description: "مادة متخصصة في الرياضيات العليا والتطبيقات العملية",
+                    created: new Date().toISOString()
+                },
+                { 
+                    id: 2, 
+                    name: "الفيزياء الهندسية", 
+                    description: "تطبيقات الفيزياء في المجالات الهندسية والصناعية",
+                    created: new Date().toISOString()
+                }
             ],
             teachers: [
-                { id: 1, name: "عمران البراج", specialty: "الرياضيات", email: "teacher@example.com" }
+                { 
+                    id: 1, 
+                    name: "عمران البراج", 
+                    specialty: "الرياضيات والفيزياء",
+                    email: "teacher@itqan.com",
+                    description: "مدرس متخصص في الرياضيات العليا والفيزياء مع خبرة 10 سنوات في التدريس الجامعي",
+                    created: new Date().toISOString()
+                }
             ],
             videos: [
-                { id: 1, title: "المحاضرة 1: مقدمة في النهايات", youtubeId: "euOqZKztxhE", subjectId: 1, teacherId: 1 }
+                { 
+                    id: 1, 
+                    title: "المحاضرة 1: مقدمة في النهايات", 
+                    youtubeId: "euOqZKztxhE",
+                    subjectId: 1,
+                    teacherId: 1,
+                    views: 1250,
+                    created: new Date().toISOString()
+                },
+                { 
+                    id: 2, 
+                    title: "المحاضرة 2: قواعد الاشتقاق", 
+                    youtubeId: "4QtEFQ2iJVI",
+                    subjectId: 1,
+                    teacherId: 1,
+                    views: 980,
+                    created: new Date().toISOString()
+                }
             ],
             files: [
-                { id: 1, name: "ملخص الرياضيات", url: "#", type: "pdf", subjectId: 1 }
-            ]
+                { 
+                    id: 1, 
+                    name: "ملخص الرياضيات المتقدمة", 
+                    url: "#", 
+                    type: "pdf",
+                    subjectId: 1,
+                    size: "2.4 MB",
+                    downloads: 340,
+                    created: new Date().toISOString()
+                },
+                { 
+                    id: 2, 
+                    name: "نماذج امتحانات سابقة", 
+                    url: "#", 
+                    type: "pdf",
+                    subjectId: 1,
+                    size: "1.8 MB",
+                    downloads: 210,
+                    created: new Date().toISOString()
+                }
+            ],
+            nextId: {
+                subjects: 3,
+                teachers: 2,
+                videos: 3,
+                files: 3
+            }
         };
 
         let currentUser = null;
         let isAdmin = false;
 
-        // دالة الدخول
-        function handleLogin(role) {
-            if (role === 'student') {
-                currentUser = { name: "طالب", role: "student" };
-                isAdmin = false;
-            } else if (role === 'admin') {
-                currentUser = { name: "المدير", role: "admin" };
-                isAdmin = true;
-                document.getElementById('admin-nav').style.display = 'flex';
-            }
-            
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            document.getElementById('u-display').textContent = currentUser.name;
-            document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
-            
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(platformData));
             updateStats();
-            
-            alert(`مرحباً ${currentUser.name}! تم تسجيل الدخول بنجاح.`);
         }
 
-        // دالة دخول المدير
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
+        function handleLogin(role) {
+            if (role === 'student') {
+                currentUser = {
+                    name: "طالب إتقان",
+                    role: "student",
+                    avatar: "ط"
+                };
+                isAdmin = false;
+            } else if (role === 'admin') {
+                currentUser = {
+                    name: "المدير عمران",
+                    role: "admin",
+                    avatar: "م"
+                };
+                isAdmin = true;
+                document.getElementById('admin-nav-item').classList.remove('d-none');
+            }
+            
+            // Hide auth screen, show app
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            
+            // Update UI
+            document.getElementById('user-avatar').textContent = currentUser.avatar;
+            
+            // Store login info
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Update last login
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('last-login').innerHTML = `<i class="fas fa-clock"></i><span>آخر دخول: ${timeStr}</span>`;
+            
+            // Load initial data
+            updateStats();
+            loadDashboardContent();
+            
+            // Show success message
+            showAlert(`مرحباً ${currentUser.name}!`, 'success');
+        }
+
         function handleAdminLogin() {
-            const password = prompt("أدخل كلمة مرور المدير:");
+            const password = prompt("🔐 أدخل كلمة مرور المدير:");
             if (password === "Omran#05") {
                 handleLogin('admin');
             } else if (password !== null) {
-                alert("كلمة المرور غير صحيحة!");
+                showAlert("كلمة المرور غير صحيحة!", 'danger');
             }
         }
 
-        // دالة تسجيل الخروج
         function logout() {
-            if (confirm("هل تريد تسجيل الخروج؟")) {
+            if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
                 localStorage.removeItem('currentUser');
                 location.reload();
             }
         }
 
-        // دالة عرض القسم
-        function showSection(sectionId, element = null) {
-            // إخفاء جميع الأقسام
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active-section');
-            });
-            
-            // إظهار القسم المطلوب
-            document.getElementById(sectionId).classList.add('active-section');
-            
-            // تحديث القائمة الجانبية
-            if (element) {
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                element.classList.add('active');
-            }
-            
-            // تحديث المحتوى
-            if (sectionId === 'dashboard') {
-                updateStats();
-            }
-        }
-
-        // دالة عرض تبويب المدير
-        function showAdminTab(tabId) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            document.getElementById(`admin-${tabId}`).style.display = 'block';
-        }
-
-        // دالة تصفية الفيديوهات
-        function filterVideos(filter) {
-            // سيتم تنفيذها لاحقاً
-        }
-
-        // دالة تصفية الملفات
-        function filterFiles(filter) {
-            // سيتم تنفيذها لاحقاً
-        }
-
-        // دالة تحديث الإحصائيات
-        function updateStats() {
-            document.getElementById('stat-subjects').textContent = platformData.subjects.length;
-            document.getElementById('stat-teachers').textContent = platformData.teachers.length;
-            document.getElementById('stat-videos').textContent = platformData.videos.length;
-            document.getElementById('stat-files').textContent = platformData.files.length;
-            
-            const now = new Date();
-            document.getElementById('last-login').textContent = `آخر دخول: ${now.toLocaleTimeString('ar-EG')}`;
-        }
-
-        // دالات الإضافة (مبدئية)
-        function addSubject() {
-            const name = document.getElementById('add-subject-name').value;
-            const desc = document.getElementById('add-subject-desc').value;
-            
-            if (name) {
-                const newSubject = {
-                    id: platformData.subjects.length + 1,
-                    name: name,
-                    description: desc
-                };
-                platformData.subjects.push(newSubject);
-                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
-                alert('تم إضافة المادة بنجاح!');
-                updateStats();
-            }
-        }
-
-        function addTeacher() {
-            const name = document.getElementById('add-teacher-name').value;
-            const specialty = document.getElementById('add-teacher-specialty').value;
-            const email = document.getElementById('add-teacher-email').value;
-            
-            if (name) {
-                const newTeacher = {
-                    id: platformData.teachers.length + 1,
-                    name: name,
-                    specialty: specialty,
-                    email: email
-                };
-                platformData.teachers.push(newTeacher);
-                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
-                alert('تم إضافة المعلم بنجاح!');
-                updateStats();
-            }
-        }
-
-        function addVideo() {
-            const title = document.getElementById('add-video-title').value;
-            const youtubeId = document.getElementById('add-video-id').value;
-            
-            if (title && youtubeId) {
-                const newVideo = {
-                    id: platformData.videos.length + 1,
-                    title: title,
-                    youtubeId: youtubeId,
-                    subjectId: 1,
-                    teacherId: 1
-                };
-                platformData.videos.push(newVideo);
-                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
-                alert('تم إضافة الفيديو بنجاح!');
-                updateStats();
-            }
-        }
-
-        function addFile() {
-            const name = document.getElementById('add-file-name').value;
-            const url = document.getElementById('add-file-url').value;
-            const type = document.getElementById('add-file-type').value;
-            
-            if (name && url) {
-                const newFile = {
-                    id: platformData.files.length + 1,
-                    name: name,
-                    url: url,
-                    type: type,
-                    subjectId: 1
-                };
-                platformData.files.push(newFile);
-                localStorage.setItem('github_docs_data', JSON.stringify(platformData));
-                alert('تم إضافة الملف بنجاح!');
-                updateStats();
-            }
-        }
-
-        // دالة تبديل القائمة الجانبية
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        // تحميل البيانات عند بدء التشغيل
+        // Check if user is already logged in
         window.onload = function() {
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
@@ -1292,16 +1590,884 @@
                 
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
-                document.getElementById('u-display').textContent = currentUser.name;
-                document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
+                document.getElementById('user-avatar').textContent = currentUser.avatar;
                 
                 if (isAdmin) {
-                    document.getElementById('admin-nav').style.display = 'flex';
+                    document.getElementById('admin-nav-item').classList.remove('d-none');
                 }
                 
                 updateStats();
+                loadDashboardContent();
             }
         };
+
+        // ============================================
+        // UI FUNCTIONS
+        // ============================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update sidebar active item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate corresponding nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            for (let item of navItems) {
+                if (item.textContent.includes(getSectionName(sectionId))) {
+                    item.classList.add('active');
+                    break;
+                }
+            }
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+            
+            // Load section content
+            switch(sectionId) {
+                case 'dashboard':
+                    loadDashboardContent();
+                    break;
+                case 'subjects':
+                    loadSubjects();
+                    break;
+                case 'videos':
+                    loadVideos();
+                    break;
+                case 'files':
+                    loadFiles();
+                    break;
+                case 'teachers':
+                    loadTeachers();
+                    break;
+                case 'admin':
+                    loadAdminData();
+                    break;
+            }
+        }
+
+        function getSectionName(sectionId) {
+            const names = {
+                'dashboard': 'الرئيسية',
+                'subjects': 'المواد الدراسية',
+                'videos': 'الفيديوهات التعليمية',
+                'files': 'أوراقي وسنواتي',
+                'teachers': 'المعلمين',
+                'support': 'الدعم الفني',
+                'admin': 'لوحة التحكم'
+            };
+            return names[sectionId] || '';
+        }
+
+        function showAdminTab(tabId) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`admin-${tabId}`).classList.add('active');
+            
+            // Load tab data if needed
+            if (tabId === 'subjects') loadAdminSubjects();
+            else if (tabId === 'teachers') loadAdminTeachers();
+            else if (tabId === 'videos') loadAdminVideos();
+            else if (tabId === 'files') loadAdminFiles();
+            else if (tabId === 'settings') loadAdminStats();
+        }
+
+        function showAlert(message, type = 'info') {
+            // Remove existing alerts
+            const existingAlerts = document.querySelectorAll('.alert-toast');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            // Create new alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-toast`;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '80px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.style.maxWidth = '350px';
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // ============================================
+        // DATA LOADING FUNCTIONS
+        // ============================================
+        function updateStats() {
+            document.getElementById('stats-subjects').textContent = platformData.subjects.length;
+            document.getElementById('stats-teachers').textContent = platformData.teachers.length;
+            document.getElementById('stats-videos').textContent = platformData.videos.length;
+            document.getElementById('stats-files').textContent = platformData.files.length;
+        }
+
+        function loadDashboardContent() {
+            // Update stats
+            updateStats();
+            
+            // Load recent activity
+            const recentActivity = document.getElementById('recent-activity');
+            const activities = [
+                { icon: 'video', text: 'تم إضافة فيديو جديد: المحاضرة 3', time: 'قبل ساعتين' },
+                { icon: 'file', text: 'تم رفع ملف جديد: ملخص الرياضيات', time: 'قبل 5 ساعات' },
+                { icon: 'user', text: 'تم تسجيل دخول جديد', time: 'قبل يوم' },
+                { icon: 'book', text: 'تم إضافة مادة جديدة: الفيزياء الهندسية', time: 'قبل يومين' }
+            ];
+            
+            let html = '';
+            activities.forEach(activity => {
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4><i class="fas fa-${activity.icon}"></i> ${activity.text}</h4>
+                            <p>${activity.time}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            recentActivity.innerHTML = html;
+        }
+
+        function loadSubjects() {
+            const container = document.getElementById('subjects-container');
+            let html = '';
+            
+            platformData.subjects.forEach(subject => {
+                const videosCount = platformData.videos.filter(v => v.subjectId === subject.id).length;
+                const filesCount = platformData.files.filter(f => f.subjectId === subject.id).length;
+                
+                html += `
+                    <div class="card subject-card" onclick="showSubjectDetails(${subject.id})">
+                        <div class="subject-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="subject-name">${subject.name}</h3>
+                        <p class="subject-desc">${subject.description}</p>
+                        <div class="subject-stats">
+                            <span><i class="fas fa-video"></i> ${videosCount} فيديو</span>
+                            <span><i class="fas fa-file"></i> ${filesCount} ملف</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light); grid-column: 1/-1;">لا توجد مواد حالياً</p>';
+        }
+
+        function showSubjectDetails(subjectId) {
+            const subject = platformData.subjects.find(s => s.id === subjectId);
+            if (!subject) return;
+            
+            const subjectVideos = platformData.videos.filter(v => v.subjectId === subjectId);
+            const subjectFiles = platformData.files.filter(f => f.subjectId === subjectId);
+            
+            let content = `
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-book"></i>
+                        ${subject.name}
+                    </h2>
+                    <button class="btn btn-outline" onclick="showSection('subjects')">
+                        <i class="fas fa-arrow-right"></i>
+                        عودة للمواد
+                    </button>
+                </div>
+                
+                <div class="card mb-30">
+                    <div class="card-header">
+                        <h3 class="card-title">عن المادة</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>${subject.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            if (subjectVideos.length > 0) {
+                content += `
+                    <h3 class="mb-20"><i class="fas fa-video"></i> محاضرات المادة</h3>
+                    <div class="grid grid-2 mb-30">
+                `;
+                
+                subjectVideos.forEach(video => {
+                    const teacher = platformData.teachers.find(t => t.id === video.teacherId);
+                    content += `
+                        <div class="card video-card">
+                            <div class="video-preview">
+                                <iframe src="https://www.youtube.com/embed/${video.youtubeId}" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>${video.title}</h4>
+                                <div class="video-meta">
+                                    <span><i class="fas fa-user"></i> ${teacher ? teacher.name : 'غير معروف'}</span>
+                                    <span><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                content += '</div>';
+            }
+            
+            if (subjectFiles.length > 0) {
+                content += `
+                    <h3 class="mb-20"><i class="fas fa-file"></i> ملفات المادة</h3>
+                    <div class="grid grid-3">
+                `;
+                
+                subjectFiles.forEach(file => {
+                    const icon = getFileIcon(file.type);
+                    content += `
+                        <div class="card file-card">
+                            <div class="file-icon">
+                                <i class="${icon}"></i>
+                            </div>
+                            <h4 class="file-name">${file.name}</h4>
+                            <p class="file-meta">${file.type.toUpperCase()} • ${file.size || 'غير معروف'}</p>
+                            <a href="${file.url}" target="_blank" class="btn btn-outline btn-sm">
+                                <i class="fas fa-download"></i>
+                                تحميل
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                content += '</div>';
+            }
+            
+            // Create temporary section
+            const tempSection = document.createElement('div');
+            tempSection.id = 'subject-details';
+            tempSection.className = 'section active';
+            tempSection.innerHTML = content;
+            
+            // Replace current section
+            const mainContent = document.querySelector('.main-content');
+            const currentSection = document.querySelector('.section.active');
+            mainContent.replaceChild(tempSection, currentSection);
+        }
+
+        function getFileIcon(type) {
+            const icons = {
+                'pdf': 'fas fa-file-pdf',
+                'doc': 'fas fa-file-word',
+                'ppt': 'fas fa-file-powerpoint',
+                'zip': 'fas fa-file-archive',
+                'image': 'fas fa-file-image',
+                'other': 'fas fa-file'
+            };
+            return icons[type] || icons.other;
+        }
+
+        function loadVideos(filter = 'all') {
+            const container = document.getElementById('videos-container');
+            let videos = [...platformData.videos];
+            
+            // Apply filter
+            if (filter === 'recent') {
+                videos.sort((a, b) => new Date(b.created) - new Date(a.created));
+            } else if (filter === 'popular') {
+                videos.sort((a, b) => (b.views || 0) - (a.views || 0));
+            }
+            
+            let html = '';
+            videos.forEach(video => {
+                const subject = platformData.subjects.find(s => s.id === video.subjectId);
+                const teacher = platformData.teachers.find(t => t.id === video.teacherId);
+                
+                html += `
+                    <div class="card video-card">
+                        <div class="video-preview">
+                            <iframe src="https://www.youtube.com/embed/${video.youtubeId}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>${video.title}</h4>
+                            <div class="video-meta">
+                                <span><i class="fas fa-book"></i> ${subject ? subject.name : 'غير معروف'}</span>
+                                <span><i class="fas fa-user"></i> ${teacher ? teacher.name : 'غير معروف'}</span>
+                                <span><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light); grid-column: 1/-1;">لا توجد فيديوهات حالياً</p>';
+        }
+
+        function filterVideos(filter) {
+            // Update tabs
+            document.querySelectorAll('#videos .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadVideos(filter);
+        }
+
+        function loadFiles(filter = 'all') {
+            const container = document.getElementById('files-container');
+            let files = [...platformData.files];
+            
+            // Apply filter
+            if (filter !== 'all') {
+                files = files.filter(f => f.type === filter);
+            }
+            
+            let html = '';
+            files.forEach(file => {
+                const subject = platformData.subjects.find(s => s.id === file.subjectId);
+                const icon = getFileIcon(file.type);
+                
+                html += `
+                    <div class="card file-card">
+                        <div class="file-icon">
+                            <i class="${icon}"></i>
+                        </div>
+                        <h4 class="file-name">${file.name}</h4>
+                        <p class="file-meta">
+                            ${subject ? subject.name : 'عام'} • ${file.type.toUpperCase()} • ${file.size || 'غير معروف'}
+                        </p>
+                        <a href="${file.url}" target="_blank" class="btn btn-outline btn-sm">
+                            <i class="fas fa-download"></i>
+                            تحميل
+                        </a>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light); grid-column: 1/-1;">لا توجد ملفات حالياً</p>';
+        }
+
+        function filterFiles(filter) {
+            // Update tabs
+            document.querySelectorAll('#files .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadFiles(filter);
+        }
+
+        function loadTeachers() {
+            const container = document.getElementById('teachers-container');
+            let html = '';
+            
+            platformData.teachers.forEach(teacher => {
+                const videosCount = platformData.videos.filter(v => v.teacherId === teacher.id).length;
+                
+                html += `
+                    <div class="card teacher-card">
+                        <div class="teacher-avatar">
+                            ${teacher.name.charAt(0)}
+                        </div>
+                        <h3 class="teacher-name">${teacher.name}</h3>
+                        <p class="teacher-subject">${teacher.specialty}</p>
+                        <p class="teacher-desc">${teacher.description}</p>
+                        <div class="subject-stats">
+                            <span><i class="fas fa-video"></i> ${videosCount} محاضرة</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light); grid-column: 1/-1;">لا يوجد معلمين حالياً</p>';
+        }
+
+        // ============================================
+        // ADMIN FUNCTIONS
+        // ============================================
+        function loadAdminData() {
+            populateSubjectSelects();
+            loadAdminSubjects();
+            loadAdminTeachers();
+            loadAdminVideos();
+            loadAdminFiles();
+            loadAdminStats();
+        }
+
+        function populateSubjectSelects() {
+            // Populate all subject selects
+            const selects = [
+                'admin-video-subject',
+                'admin-file-subject',
+                'add-video-subject',
+                'add-file-subject'
+            ];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">اختر المادة</option>' +
+                        platformData.subjects.map(subject => 
+                            `<option value="${subject.id}">${subject.name}</option>`
+                        ).join('');
+                }
+            });
+            
+            // Populate teacher selects
+            const teacherSelects = [
+                'admin-video-teacher',
+                'add-video-teacher'
+            ];
+            
+            teacherSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">اختر المعلم</option>' +
+                        platformData.teachers.map(teacher => 
+                            `<option value="${teacher.id}">${teacher.name}</option>`
+                        ).join('');
+                }
+            });
+        }
+
+        function loadAdminSubjects() {
+            const container = document.getElementById('admin-subjects-list');
+            let html = '';
+            
+            platformData.subjects.forEach(subject => {
+                const videosCount = platformData.videos.filter(v => v.subjectId === subject.id).length;
+                const filesCount = platformData.files.filter(f => f.subjectId === subject.id).length;
+                
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4>${subject.name}</h4>
+                            <p>${subject.description}</p>
+                            <small style="color: var(--text-lighter);">
+                                <i class="fas fa-video"></i> ${videosCount} فيديو • 
+                                <i class="fas fa-file"></i> ${filesCount} ملف
+                            </small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-danger btn-sm" onclick="adminDeleteSubject(${subject.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light);">لا توجد مواد حالياً</p>';
+        }
+
+        function loadAdminTeachers() {
+            const container = document.getElementById('admin-teachers-list');
+            let html = '';
+            
+            platformData.teachers.forEach(teacher => {
+                const videosCount = platformData.videos.filter(v => v.teacherId === teacher.id).length;
+                
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4>${teacher.name}</h4>
+                            <p>${teacher.specialty} • ${teacher.email}</p>
+                            <p style="font-size: 0.9rem;">${teacher.description}</p>
+                            <small style="color: var(--text-lighter);">
+                                <i class="fas fa-video"></i> ${videosCount} فيديو
+                            </small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-danger btn-sm" onclick="adminDeleteTeacher(${teacher.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light);">لا يوجد معلمين حالياً</p>';
+        }
+
+        function loadAdminVideos() {
+            const container = document.getElementById('admin-videos-list');
+            let html = '';
+            
+            platformData.videos.forEach(video => {
+                const subject = platformData.subjects.find(s => s.id === video.subjectId);
+                const teacher = platformData.teachers.find(t => t.id === video.teacherId);
+                
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4>${video.title}</h4>
+                            <p>${subject ? subject.name : 'غير معروف'} • ${teacher ? teacher.name : 'غير معروف'}</p>
+                            <small style="color: var(--text-lighter);">
+                                YouTube ID: ${video.youtubeId} • المشاهدات: ${video.views || 0}
+                            </small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-danger btn-sm" onclick="adminDeleteVideo(${video.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light);">لا توجد فيديوهات حالياً</p>';
+        }
+
+        function loadAdminFiles() {
+            const container = document.getElementById('admin-files-list');
+            let html = '';
+            
+            platformData.files.forEach(file => {
+                const subject = platformData.subjects.find(s => s.id === file.subjectId);
+                const icon = getFileIcon(file.type);
+                
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4><i class="${icon}"></i> ${file.name}</h4>
+                            <p>${subject ? subject.name : 'عام'} • ${file.type.toUpperCase()}</p>
+                            <small style="color: var(--text-lighter);">
+                                ${file.url} • التحميلات: ${file.downloads || 0}
+                            </small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-danger btn-sm" onclick="adminDeleteFile(${file.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<p class="text-center" style="color: var(--text-light);">لا توجد ملفات حالياً</p>';
+        }
+
+        function loadAdminStats() {
+            document.getElementById('admin-stats-subjects').textContent = platformData.subjects.length;
+            document.getElementById('admin-stats-teachers').textContent = platformData.teachers.length;
+            document.getElementById('admin-stats-videos').textContent = platformData.videos.length;
+            document.getElementById('admin-stats-files').textContent = platformData.files.length;
+        }
+
+        // ============================================
+        // ADMIN ADD FUNCTIONS
+        // ============================================
+        function adminAddSubject() {
+            const name = document.getElementById('admin-subject-name').value.trim();
+            const desc = document.getElementById('admin-subject-desc').value.trim();
+            
+            if (!name) {
+                showAlert('الرجاء إدخال اسم المادة', 'danger');
+                return;
+            }
+            
+            const newSubject = {
+                id: platformData.nextId.subjects++,
+                name: name,
+                description: desc,
+                created: new Date().toISOString()
+            };
+            
+            platformData.subjects.push(newSubject);
+            saveData();
+            loadAdminSubjects();
+            populateSubjectSelects();
+            
+            // Clear form
+            document.getElementById('admin-subject-name').value = '';
+            document.getElementById('admin-subject-desc').value = '';
+            
+            showAlert('تم إضافة المادة بنجاح', 'success');
+        }
+
+        function adminAddTeacher() {
+            const name = document.getElementById('admin-teacher-name').value.trim();
+            const specialty = document.getElementById('admin-teacher-specialty').value.trim();
+            const email = document.getElementById('admin-teacher-email').value.trim();
+            const desc = document.getElementById('admin-teacher-desc').value.trim();
+            
+            if (!name) {
+                showAlert('الرجاء إدخال اسم المعلم', 'danger');
+                return;
+            }
+            
+            const newTeacher = {
+                id: platformData.nextId.teachers++,
+                name: name,
+                specialty: specialty,
+                email: email,
+                description: desc,
+                created: new Date().toISOString()
+            };
+            
+            platformData.teachers.push(newTeacher);
+            saveData();
+            loadAdminTeachers();
+            populateSubjectSelects();
+            
+            // Clear form
+            document.getElementById('admin-teacher-name').value = '';
+            document.getElementById('admin-teacher-specialty').value = '';
+            document.getElementById('admin-teacher-email').value = '';
+            document.getElementById('admin-teacher-desc').value = '';
+            
+            showAlert('تم إضافة المعلم بنجاح', 'success');
+        }
+
+        function adminAddVideo() {
+            const title = document.getElementById('admin-video-title').value.trim();
+            const youtubeId = document.getElementById('admin-video-id').value.trim();
+            const subjectId = parseInt(document.getElementById('admin-video-subject').value);
+            const teacherId = parseInt(document.getElementById('admin-video-teacher').value);
+            
+            if (!title || !youtubeId) {
+                showAlert('الرجاء إدخال عنوان الفيديو ومعرف اليوتيوب', 'danger');
+                return;
+            }
+            
+            const newVideo = {
+                id: platformData.nextId.videos++,
+                title: title,
+                youtubeId: youtubeId,
+                subjectId: subjectId || null,
+                teacherId: teacherId || null,
+                views: 0,
+                created: new Date().toISOString()
+            };
+            
+            platformData.videos.push(newVideo);
+            saveData();
+            loadAdminVideos();
+            
+            // Clear form
+            document.getElementById('admin-video-title').value = '';
+            document.getElementById('admin-video-id').value = '';
+            document.getElementById('admin-video-subject').value = '';
+            document.getElementById('admin-video-teacher').value = '';
+            
+            showAlert('تم إضافة الفيديو بنجاح', 'success');
+        }
+
+        function adminAddFile() {
+            const name = document.getElementById('admin-file-name').value.trim();
+            const url = document.getElementById('admin-file-url').value.trim();
+            const type = document.getElementById('admin-file-type').value;
+            const subjectId = document.getElementById('admin-file-subject').value ? 
+                parseInt(document.getElementById('admin-file-subject').value) : null;
+            
+            if (!name || !url) {
+                showAlert('الرجاء إدخال اسم الملف ورابطه', 'danger');
+                return;
+            }
+            
+            const newFile = {
+                id: platformData.nextId.files++,
+                name: name,
+                url: url,
+                type: type,
+                subjectId: subjectId,
+                size: 'غير معروف',
+                downloads: 0,
+                created: new Date().toISOString()
+            };
+            
+            platformData.files.push(newFile);
+            saveData();
+            loadAdminFiles();
+            
+            // Clear form
+            document.getElementById('admin-file-name').value = '';
+            document.getElementById('admin-file-url').value = '';
+            document.getElementById('admin-file-type').value = 'pdf';
+            document.getElementById('admin-file-subject').value = '';
+            
+            showAlert('تم إضافة الملف بنجاح', 'success');
+        }
+
+        // ============================================
+        // ADMIN DELETE FUNCTIONS
+        // ============================================
+        function adminDeleteSubject(id) {
+            if (!confirm('هل أنت متأكد من حذف هذه المادة؟ سيتم حذف جميع الفيديوهات والملفات المرتبطة بها.')) {
+                return;
+            }
+            
+            // Delete subject
+            platformData.subjects = platformData.subjects.filter(s => s.id !== id);
+            
+            // Delete related videos
+            platformData.videos = platformData.videos.filter(v => v.subjectId !== id);
+            
+            // Delete related files
+            platformData.files = platformData.files.filter(f => f.subjectId !== id);
+            
+            saveData();
+            loadAdminSubjects();
+            populateSubjectSelects();
+            showAlert('تم حذف المادة بنجاح', 'success');
+        }
+
+        function adminDeleteTeacher(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا المعلم؟ سيتم إزالة اسمه من جميع الفيديوهات المرتبطة به.')) {
+                return;
+            }
+            
+            // Delete teacher
+            platformData.teachers = platformData.teachers.filter(t => t.id !== id);
+            
+            // Remove teacher from videos
+            platformData.videos.forEach(video => {
+                if (video.teacherId === id) {
+                    video.teacherId = null;
+                }
+            });
+            
+            saveData();
+            loadAdminTeachers();
+            populateSubjectSelects();
+            showAlert('تم حذف المعلم بنجاح', 'success');
+        }
+
+        function adminDeleteVideo(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الفيديو؟')) {
+                return;
+            }
+            
+            platformData.videos = platformData.videos.filter(v => v.id !== id);
+            saveData();
+            loadAdminVideos();
+            showAlert('تم حذف الفيديو بنجاح', 'success');
+        }
+
+        function adminDeleteFile(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الملف؟')) {
+                return;
+            }
+            
+            platformData.files = platformData.files.filter(f => f.id !== id);
+            saveData();
+            loadAdminFiles();
+            showAlert('تم حذف الملف بنجاح', 'success');
+        }
+
+        // ============================================
+        // BACKUP FUNCTIONS
+        // ============================================
+        function exportData() {
+            const dataStr = JSON.stringify(platformData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `itqan_backup_${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showAlert('تم تصدير البيانات بنجاح', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (!importedData.subjects || !importedData.teachers || !importedData.videos || !importedData.files) {
+                        throw new Error('ملف بيانات غير صالح');
+                    }
+                    
+                    if (confirm('هل تريد استبدال البيانات الحالية؟ سيتم فقدان جميع البيانات الحالية.')) {
+                        platformData = importedData;
+                        saveData();
+                        loadAdminData();
+                        showAlert('تم استيراد البيانات بنجاح', 'success');
+                    }
+                } catch (error) {
+                    showAlert('خطأ في ملف البيانات: ' + error.message, 'danger');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                const sidebar = document.getElementById('sidebar');
+                const mobileBtn = document.querySelector('.mobile-menu-btn');
+                
+                if (window.innerWidth <= 768 && 
+                    sidebar.classList.contains('active') &&
+                    !sidebar.contains(event.target) &&
+                    !mobileBtn.contains(event.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+            
+            // Close sidebar on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+            
+            // Initialize tooltips
+            const buttons = document.querySelectorAll('[title]');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    if (this.title) {
+                        // You can add tooltip implementation here if needed
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
