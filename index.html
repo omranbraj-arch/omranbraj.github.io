@@ -1,25 +1,3 @@
-// firebase-config.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
-    authDomain: "itqan-platform-4b7cc.firebaseapp.com",
-    databaseURL: "https://itqan-platform-4b7cc-default-rtdb.firebaseio.com",
-    projectId: "itqan-platform-4b7cc",
-    storageBucket: "itqan-platform-4b7cc.firebasestorage.app",
-    messagingSenderId: "59657931493",
-    appId: "1:59657931493:web:695e8fb4053156aad1220c",
-    measurementId: "G-81TN8CX9ZH"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-
-// Export Firebase functions
-export { database, ref, set, onValue };
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
