@@ -1,3 +1,25 @@
+// firebase-config.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
+    authDomain: "itqan-platform-4b7cc.firebaseapp.com",
+    databaseURL: "https://itqan-platform-4b7cc-default-rtdb.firebaseio.com",
+    projectId: "itqan-platform-4b7cc",
+    storageBucket: "itqan-platform-4b7cc.firebasestorage.app",
+    messagingSenderId: "59657931493",
+    appId: "1:59657931493:web:695e8fb4053156aad1220c",
+    measurementId: "G-81TN8CX9ZH"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+// Export Firebase functions
+export { database, ref, set, onValue };
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1421,7 +1443,7 @@
                             <div class="alert alert-info mt-20">
                                 <i class="fas fa-info-circle"></i>
                                 <div>
-                                    <strong>ملاحظة:</strong> البيانات محفوظة في المتصفح. لتخزين دائم، قم بتصدير البيانات بانتظام.
+                                    <strong>ملاحظة:</strong> البيانات محفوظة في السحابة (Firebase) وتظهر تلقائياً لجميع المستخدمين.
                                 </div>
                             </div>
                         </div>
@@ -1432,93 +1454,123 @@
     </div>
 
     <!-- JavaScript -->
-    <script>
+    <script type="module">
         // ============================================
-        // DATA MANAGEMENT
+        // FIREBASE IMPORTS
         // ============================================
-        const STORAGE_KEY = 'itqan_platform_data';
-        let platformData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-            subjects: [
-                { 
-                    id: 1, 
-                    name: "الرياضيات المتقدمة", 
-                    description: "مادة متخصصة في الرياضيات العليا والتطبيقات العملية",
-                    created: new Date().toISOString()
-                },
-                { 
-                    id: 2, 
-                    name: "الفيزياء الهندسية", 
-                    description: "تطبيقات الفيزياء في المجالات الهندسية والصناعية",
-                    created: new Date().toISOString()
-                }
-            ],
-            teachers: [
-                { 
-                    id: 1, 
-                    name: "عمران البراج", 
-                    specialty: "الرياضيات والفيزياء",
-                    email: "teacher@itqan.com",
-                    description: "مدرس متخصص في الرياضيات العليا والفيزياء مع خبرة 10 سنوات في التدريس الجامعي",
-                    created: new Date().toISOString()
-                }
-            ],
-            videos: [
-                { 
-                    id: 1, 
-                    title: "المحاضرة 1: مقدمة في النهايات", 
-                    youtubeId: "euOqZKztxhE",
-                    subjectId: 1,
-                    teacherId: 1,
-                    views: 1250,
-                    created: new Date().toISOString()
-                },
-                { 
-                    id: 2, 
-                    title: "المحاضرة 2: قواعد الاشتقاق", 
-                    youtubeId: "4QtEFQ2iJVI",
-                    subjectId: 1,
-                    teacherId: 1,
-                    views: 980,
-                    created: new Date().toISOString()
-                }
-            ],
-            files: [
-                { 
-                    id: 1, 
-                    name: "ملخص الرياضيات المتقدمة", 
-                    url: "#", 
-                    type: "pdf",
-                    subjectId: 1,
-                    size: "2.4 MB",
-                    downloads: 340,
-                    created: new Date().toISOString()
-                },
-                { 
-                    id: 2, 
-                    name: "نماذج امتحانات سابقة", 
-                    url: "#", 
-                    type: "pdf",
-                    subjectId: 1,
-                    size: "1.8 MB",
-                    downloads: 210,
-                    created: new Date().toISOString()
-                }
-            ],
-            nextId: {
-                subjects: 3,
-                teachers: 2,
-                videos: 3,
-                files: 3
-            }
+        import { database, ref, set, onValue } from './firebase-config.js';
+        
+        // ============================================
+        // FIREBASE PATHS
+        // ============================================
+        const DB_PATHS = {
+            subjects: 'subjects',
+            teachers: 'teachers',
+            videos: 'videos',
+            files: 'files',
+            nextId: 'nextId'
         };
 
+        // ============================================
+        // DATA MANAGEMENT (FIREBASE VERSION)
+        // ============================================
+        let platformData = {
+            subjects: [],
+            teachers: [],
+            videos: [],
+            files: [],
+            nextId: {
+                subjects: 1,
+                teachers: 1,
+                videos: 1,
+                files: 1
+            }
+        };
+        
         let currentUser = null;
         let isAdmin = false;
-
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(platformData));
-            updateStats();
+        let currentSection = 'dashboard';
+        
+        // ============================================
+        // FIREBASE FUNCTIONS
+        // ============================================
+        // تحميل البيانات من Firebase
+        function loadFromFirebase() {
+            try {
+                // تحميل المواضيع
+                onValue(ref(database, DB_PATHS.subjects), (snapshot) => {
+                    platformData.subjects = snapshot.val() || [];
+                    updateStats();
+                    if (currentSection === 'subjects') loadSubjects();
+                    if (currentSection === 'admin') loadAdminSubjects();
+                });
+                
+                // تحميل المعلمين
+                onValue(ref(database, DB_PATHS.teachers), (snapshot) => {
+                    platformData.teachers = snapshot.val() || [];
+                    updateStats();
+                    if (currentSection === 'teachers') loadTeachers();
+                    if (currentSection === 'admin') loadAdminTeachers();
+                });
+                
+                // تحميل الفيديوهات
+                onValue(ref(database, DB_PATHS.videos), (snapshot) => {
+                    platformData.videos = snapshot.val() || [];
+                    updateStats();
+                    if (currentSection === 'videos') loadVideos();
+                    if (currentSection === 'admin') loadAdminVideos();
+                });
+                
+                // تحميل الملفات
+                onValue(ref(database, DB_PATHS.files), (snapshot) => {
+                    platformData.files = snapshot.val() || [];
+                    updateStats();
+                    if (currentSection === 'files') loadFiles();
+                    if (currentSection === 'admin') loadAdminFiles();
+                });
+                
+                // تحميل nextId
+                onValue(ref(database, DB_PATHS.nextId), (snapshot) => {
+                    if (snapshot.exists()) {
+                        platformData.nextId = snapshot.val();
+                    }
+                });
+                
+                console.log('✅ تم تحميل البيانات من Firebase');
+                showAlert('تم الاتصال بالسحابة بنجاح', 'success');
+            } catch (error) {
+                console.error('❌ خطأ في تحميل البيانات:', error);
+                showAlert('خطأ في تحميل البيانات من السحابة', 'danger');
+            }
+        }
+        
+        // حفظ البيانات إلى Firebase
+        async function saveToFirebase(path, data) {
+            try {
+                await set(ref(database, path), data);
+                return true;
+            } catch (error) {
+                console.error('❌ خطأ في حفظ البيانات:', error);
+                showAlert('خطأ في حفظ البيانات إلى السحابة', 'danger');
+                return false;
+            }
+        }
+        
+        // حفظ كائن كامل
+        async function saveAllData() {
+            try {
+                await Promise.all([
+                    saveToFirebase(DB_PATHS.subjects, platformData.subjects),
+                    saveToFirebase(DB_PATHS.teachers, platformData.teachers),
+                    saveToFirebase(DB_PATHS.videos, platformData.videos),
+                    saveToFirebase(DB_PATHS.files, platformData.files),
+                    saveToFirebase(DB_PATHS.nextId, platformData.nextId)
+                ]);
+                return true;
+            } catch (error) {
+                console.error('❌ خطأ في حفظ جميع البيانات:', error);
+                return false;
+            }
         }
 
         // ============================================
@@ -1556,6 +1608,9 @@
             const now = new Date();
             const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
             document.getElementById('last-login').innerHTML = `<i class="fas fa-clock"></i><span>آخر دخول: ${timeStr}</span>`;
+            
+            // Load data from Firebase
+            loadFromFirebase();
             
             // Load initial data
             updateStats();
@@ -1596,8 +1651,13 @@
                     document.getElementById('admin-nav-item').classList.remove('d-none');
                 }
                 
-                updateStats();
-                loadDashboardContent();
+                // Load data from Firebase
+                loadFromFirebase();
+                
+                // Update last login
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('last-login').innerHTML = `<i class="fas fa-clock"></i><span>آخر دخول: ${timeStr}</span>`;
             }
         };
 
@@ -1609,6 +1669,8 @@
         }
 
         function showSection(sectionId) {
+            currentSection = sectionId;
+            
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
@@ -2029,9 +2091,7 @@
             // Populate all subject selects
             const selects = [
                 'admin-video-subject',
-                'admin-file-subject',
-                'add-video-subject',
-                'add-file-subject'
+                'admin-file-subject'
             ];
             
             selects.forEach(selectId => {
@@ -2046,8 +2106,7 @@
             
             // Populate teacher selects
             const teacherSelects = [
-                'admin-video-teacher',
-                'add-video-teacher'
+                'admin-video-teacher'
             ];
             
             teacherSelects.forEach(selectId => {
@@ -2186,9 +2245,9 @@
         }
 
         // ============================================
-        // ADMIN ADD FUNCTIONS
+        // ADMIN ADD FUNCTIONS (FIREBASE VERSION)
         // ============================================
-        function adminAddSubject() {
+        async function adminAddSubject() {
             const name = document.getElementById('admin-subject-name').value.trim();
             const desc = document.getElementById('admin-subject-desc').value.trim();
             
@@ -2204,9 +2263,14 @@
                 created: new Date().toISOString()
             };
             
+            // Update local data
             platformData.subjects.push(newSubject);
-            saveData();
-            loadAdminSubjects();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.subjects, platformData.subjects);
+            await saveToFirebase(DB_PATHS.nextId, platformData.nextId);
+            
+            // Update UI
             populateSubjectSelects();
             
             // Clear form
@@ -2216,7 +2280,7 @@
             showAlert('تم إضافة المادة بنجاح', 'success');
         }
 
-        function adminAddTeacher() {
+        async function adminAddTeacher() {
             const name = document.getElementById('admin-teacher-name').value.trim();
             const specialty = document.getElementById('admin-teacher-specialty').value.trim();
             const email = document.getElementById('admin-teacher-email').value.trim();
@@ -2236,9 +2300,14 @@
                 created: new Date().toISOString()
             };
             
+            // Update local data
             platformData.teachers.push(newTeacher);
-            saveData();
-            loadAdminTeachers();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.teachers, platformData.teachers);
+            await saveToFirebase(DB_PATHS.nextId, platformData.nextId);
+            
+            // Update UI
             populateSubjectSelects();
             
             // Clear form
@@ -2250,7 +2319,7 @@
             showAlert('تم إضافة المعلم بنجاح', 'success');
         }
 
-        function adminAddVideo() {
+        async function adminAddVideo() {
             const title = document.getElementById('admin-video-title').value.trim();
             const youtubeId = document.getElementById('admin-video-id').value.trim();
             const subjectId = parseInt(document.getElementById('admin-video-subject').value);
@@ -2271,9 +2340,12 @@
                 created: new Date().toISOString()
             };
             
+            // Update local data
             platformData.videos.push(newVideo);
-            saveData();
-            loadAdminVideos();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.videos, platformData.videos);
+            await saveToFirebase(DB_PATHS.nextId, platformData.nextId);
             
             // Clear form
             document.getElementById('admin-video-title').value = '';
@@ -2284,7 +2356,7 @@
             showAlert('تم إضافة الفيديو بنجاح', 'success');
         }
 
-        function adminAddFile() {
+        async function adminAddFile() {
             const name = document.getElementById('admin-file-name').value.trim();
             const url = document.getElementById('admin-file-url').value.trim();
             const type = document.getElementById('admin-file-type').value;
@@ -2307,9 +2379,12 @@
                 created: new Date().toISOString()
             };
             
+            // Update local data
             platformData.files.push(newFile);
-            saveData();
-            loadAdminFiles();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.files, platformData.files);
+            await saveToFirebase(DB_PATHS.nextId, platformData.nextId);
             
             // Clear form
             document.getElementById('admin-file-name').value = '';
@@ -2321,94 +2396,101 @@
         }
 
         // ============================================
-        // ADMIN DELETE FUNCTIONS
+        // ADMIN DELETE FUNCTIONS (FIREBASE VERSION)
         // ============================================
-        function adminDeleteSubject(id) {
+        async function adminDeleteSubject(id) {
             if (!confirm('هل أنت متأكد من حذف هذه المادة؟ سيتم حذف جميع الفيديوهات والملفات المرتبطة بها.')) {
                 return;
             }
             
-            // Delete subject
+            // Delete subject locally
             platformData.subjects = platformData.subjects.filter(s => s.id !== id);
-            
-            // Delete related videos
+            // Delete related videos locally
             platformData.videos = platformData.videos.filter(v => v.subjectId !== id);
-            
-            // Delete related files
+            // Delete related files locally
             platformData.files = platformData.files.filter(f => f.subjectId !== id);
             
-            saveData();
-            loadAdminSubjects();
-            populateSubjectSelects();
+            // Save to Firebase
+            await saveAllData();
+            
             showAlert('تم حذف المادة بنجاح', 'success');
         }
 
-        function adminDeleteTeacher(id) {
+        async function adminDeleteTeacher(id) {
             if (!confirm('هل أنت متأكد من حذف هذا المعلم؟ سيتم إزالة اسمه من جميع الفيديوهات المرتبطة به.')) {
                 return;
             }
             
-            // Delete teacher
+            // Delete teacher locally
             platformData.teachers = platformData.teachers.filter(t => t.id !== id);
-            
-            // Remove teacher from videos
+            // Remove teacher from videos locally
             platformData.videos.forEach(video => {
                 if (video.teacherId === id) {
                     video.teacherId = null;
                 }
             });
             
-            saveData();
-            loadAdminTeachers();
-            populateSubjectSelects();
+            // Save to Firebase
+            await saveAllData();
+            
             showAlert('تم حذف المعلم بنجاح', 'success');
         }
 
-        function adminDeleteVideo(id) {
+        async function adminDeleteVideo(id) {
             if (!confirm('هل أنت متأكد من حذف هذا الفيديو؟')) {
                 return;
             }
             
+            // Delete video locally
             platformData.videos = platformData.videos.filter(v => v.id !== id);
-            saveData();
-            loadAdminVideos();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.videos, platformData.videos);
+            
             showAlert('تم حذف الفيديو بنجاح', 'success');
         }
 
-        function adminDeleteFile(id) {
+        async function adminDeleteFile(id) {
             if (!confirm('هل أنت متأكد من حذف هذا الملف؟')) {
                 return;
             }
             
+            // Delete file locally
             platformData.files = platformData.files.filter(f => f.id !== id);
-            saveData();
-            loadAdminFiles();
+            
+            // Save to Firebase
+            await saveToFirebase(DB_PATHS.files, platformData.files);
+            
             showAlert('تم حذف الملف بنجاح', 'success');
         }
 
         // ============================================
         // BACKUP FUNCTIONS
         // ============================================
-        function exportData() {
-            const dataStr = JSON.stringify(platformData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `itqan_backup_${new Date().toISOString().slice(0,10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showAlert('تم تصدير البيانات بنجاح', 'success');
+        async function exportData() {
+            try {
+                const dataStr = JSON.stringify(platformData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `itqan_backup_${new Date().toISOString().slice(0,10)}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showAlert('تم تصدير البيانات بنجاح', 'success');
+            } catch (error) {
+                showAlert('خطأ في تصدير البيانات', 'danger');
+            }
         }
 
-        function importData(event) {
+        async function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
             
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     
@@ -2419,8 +2501,7 @@
                     
                     if (confirm('هل تريد استبدال البيانات الحالية؟ سيتم فقدان جميع البيانات الحالية.')) {
                         platformData = importedData;
-                        saveData();
-                        loadAdminData();
+                        await saveAllData();
                         showAlert('تم استيراد البيانات بنجاح', 'success');
                     }
                 } catch (error) {
@@ -2465,31 +2546,100 @@
                     if (this.title) {
                         // You can add tooltip implementation here if needed
                     }
-                });<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyTfVJ2sx-OGUx_ny1_W1QRvzkjA7_aAQ",
-    authDomain: "itqan-platform-4b7cc.firebaseapp.com",
-    databaseURL: "https://itqan-platform-4b7cc-default-rtdb.firebaseio.com",
-    projectId: "itqan-platform-4b7cc",
-    storageBucket: "itqan-platform-4b7cc.firebasestorage.app",
-    messagingSenderId: "59657931493",
-    appId: "1:59657931493:web:695e8fb4053156aad1220c",
-    measurementId: "G-81TN8CX9ZH"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+                });
             });
+        });
+
+        // Initialize Firebase Data
+        async function initializeFirebaseData() {
+            // Check if data exists in Firebase
+            onValue(ref(database, DB_PATHS.subjects), (snapshot) => {
+                if (!snapshot.exists()) {
+                    // Create default data if Firebase is empty
+                    const defaultData = {
+                        subjects: [
+                            { 
+                                id: 1, 
+                                name: "الرياضيات المتقدمة", 
+                                description: "مادة متخصصة في الرياضيات العليا والتطبيقات العملية",
+                                created: new Date().toISOString()
+                            },
+                            { 
+                                id: 2, 
+                                name: "الفيزياء الهندسية", 
+                                description: "تطبيقات الفيزياء في المجالات الهندسية والصناعية",
+                                created: new Date().toISOString()
+                            }
+                        ],
+                        teachers: [
+                            { 
+                                id: 1, 
+                                name: "عمران البراج", 
+                                specialty: "الرياضيات والفيزياء",
+                                email: "teacher@itqan.com",
+                                description: "مدرس متخصص في الرياضيات العليا والفيزياء مع خبرة 10 سنوات في التدريس الجامعي",
+                                created: new Date().toISOString()
+                            }
+                        ],
+                        videos: [
+                            { 
+                                id: 1, 
+                                title: "المحاضرة 1: مقدمة في النهايات", 
+                                youtubeId: "euOqZKztxhE",
+                                subjectId: 1,
+                                teacherId: 1,
+                                views: 1250,
+                                created: new Date().toISOString()
+                            },
+                            { 
+                                id: 2, 
+                                title: "المحاضرة 2: قواعد الاشتقاق", 
+                                youtubeId: "4QtEFQ2iJVI",
+                                subjectId: 1,
+                                teacherId: 1,
+                                views: 980,
+                                created: new Date().toISOString()
+                            }
+                        ],
+                        files: [
+                            { 
+                                id: 1, 
+                                name: "ملخص الرياضيات المتقدمة", 
+                                url: "#", 
+                                type: "pdf",
+                                subjectId: 1,
+                                size: "2.4 MB",
+                                downloads: 340,
+                                created: new Date().toISOString()
+                            },
+                            { 
+                                id: 2, 
+                                name: "نماذج امتحانات سابقة", 
+                                url: "#", 
+                                type: "pdf",
+                                subjectId: 1,
+                                size: "1.8 MB",
+                                downloads: 210,
+                                created: new Date().toISOString()
+                            }
+                        ],
+                        nextId: {
+                            subjects: 3,
+                            teachers: 2,
+                            videos: 3,
+                            files: 3
+                        }
+                    };
+                    
+                    // Save default data to Firebase
+                    saveAllData(defaultData);
+                }
+            }, { onlyOnce: true });
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            setTimeout(initializeFirebaseData, 1000);
         });
     </script>
 </body>
